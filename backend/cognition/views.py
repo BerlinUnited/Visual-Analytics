@@ -53,7 +53,7 @@ class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
 
         # Prepare the data for bulk insert
         rows_tuples = [
-            (row['log_id'], row['frame_number'], row['representation_name'], json.dumps(row['representation_data']))
+            (row['frame'], json.dumps(row['representation_data']))
             for row in request.data
         ]
 

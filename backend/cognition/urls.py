@@ -10,6 +10,6 @@ urlpatterns = [
 
 router = routers.DefaultRouter()
 router.register("cognitionframe",views.CognitionFrameViewSet)
-router.register(r'api/cognition/(?P<model_name>\w+)', views.DynamicModelViewSet, basename='dynamicmodel')
+router.register('cognition/(?P<model_name>[^/.]+)', views.DynamicModelViewSet, basename='dynamicmodel')
 
 urlpatterns += router.urls

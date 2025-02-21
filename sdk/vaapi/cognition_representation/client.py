@@ -86,9 +86,7 @@ class CognitionRepresentationClient:
         self,
         id: int,
         *,
-        log_id: typing.Optional[int] = OMIT,
-        frame_number: typing.Optional[int] = OMIT,
-        representation_name: typing.Optional[str] = OMIT,
+        frame: typing.Optional[int] = OMIT,
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionRepresentation:
@@ -98,9 +96,7 @@ class CognitionRepresentationClient:
             f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/",
             method="PATCH",
             json={
-                "log_id": log_id,
-                "frame_number": frame_number,
-                "representation_name": representation_name,
+                "frame": frame,
                 "representation_data": representation_data,
             },
             request_options=request_options,
@@ -116,7 +112,6 @@ class CognitionRepresentationClient:
 
     def list(
             self, 
-            #log_id: int, *, 
             request_options: typing.Optional[RequestOptions] = None,
             **filters: typing.Any) -> typing.List[CognitionRepresentation]:
         """
@@ -150,7 +145,11 @@ class CognitionRepresentationClient:
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request(f"api/cognition/{self.endpoint}/", method="GET", request_options=request_options,params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            f"api/cognition/{self.endpoint}/",
+            method="GET",
+            request_options=request_options,
+            params=query_params)
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(typing.List[CognitionRepresentation], _response.json())  # type: ignore
@@ -162,9 +161,7 @@ class CognitionRepresentationClient:
     def create(
         self,
         *,
-        log_id: typing.Optional[int] = OMIT,
-        frame_number: typing.Optional[int] = OMIT,
-        representation_name: typing.Optional[str] = OMIT,
+        frame: typing.Optional[int] = OMIT,
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionRepresentation:
@@ -182,9 +179,7 @@ class CognitionRepresentationClient:
             f"api/cognition/{self.endpoint}/",
             method="POST",
             json={
-                "log_id": log_id,
-                "frame_number": frame_number,
-                "representation_name": representation_name,
+                "frame": frame,
                 "representation_data": representation_data,
             },
             request_options=request_options,

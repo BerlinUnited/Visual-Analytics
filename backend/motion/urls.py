@@ -10,6 +10,6 @@ urlpatterns = [
 
 router = routers.DefaultRouter()
 router.register("motionframe",views.MotionFrameViewSet)
-router.register(r'api/motion/(?P<model_name>\w+)', views.DynamicModelViewSet, basename='dynamicmodel')
+router.register(r'api/motion/(?P<model_name>[^/.]+)', views.DynamicModelViewSet, basename='dynamicmodel')
 
 urlpatterns += router.urls

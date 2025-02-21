@@ -26,6 +26,9 @@ class BallModel(models.Model):
     
     class Meta:
         verbose_name_plural = "Ball Model"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_ballmodel')
+        ]
 
 
 class BallCandidates(models.Model):
@@ -37,6 +40,9 @@ class BallCandidates(models.Model):
     
     class Meta:
         verbose_name_plural = "Ball Candidates"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_ballcandidates')
+        ]
 
 
 class BallCandidatesTop(models.Model):
@@ -48,6 +54,9 @@ class BallCandidatesTop(models.Model):
     
     class Meta:
         verbose_name_plural = "Ball Candidates Top"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_ballcandidatestop')
+        ]
 
 
 class CameraMatrix(models.Model):
@@ -59,6 +68,9 @@ class CameraMatrix(models.Model):
     
     class Meta:
         verbose_name_plural = "Camera Matrix"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_cameramatrix')
+        ]
 
 
 class CameraMatrixTop(models.Model):
@@ -70,6 +82,9 @@ class CameraMatrixTop(models.Model):
     
     class Meta:
         verbose_name_plural = "Camera Matrix Top"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_cameramatrixtop')
+        ]
 
 
 class OdometryData(models.Model):
@@ -81,6 +96,9 @@ class OdometryData(models.Model):
     
     class Meta:
         verbose_name_plural = "Odometry Data"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_odometrydata')
+        ]
 
 
 class FieldPercept(models.Model):
@@ -92,6 +110,9 @@ class FieldPercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Field Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_fieldpercept')
+        ]
 
 
 class FieldPerceptTop(models.Model):
@@ -103,6 +124,9 @@ class FieldPerceptTop(models.Model):
     
     class Meta:
         verbose_name_plural = "Field Percept Top"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_fieldpercepttop')
+        ]
 
 
 class GoalPercept(models.Model):
@@ -114,6 +138,9 @@ class GoalPercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Goal Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_goalpercept')
+        ]
 
 
 class GoalPerceptTop(models.Model):
@@ -125,6 +152,9 @@ class GoalPerceptTop(models.Model):
     
     class Meta:
         verbose_name_plural = "Goal Percept Top"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_goalpercepttop')
+        ]
 
 
 class MultiBallPercept(models.Model):
@@ -136,6 +166,9 @@ class MultiBallPercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Multi Ball Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_multiballpercept')
+        ]
 
 
 class RansacLinePercept(models.Model):
@@ -147,6 +180,9 @@ class RansacLinePercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Ransac Line Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_ransaclinepercept')
+        ]
 
 
 class ShortLinePercept(models.Model):
@@ -158,6 +194,9 @@ class ShortLinePercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Short Line Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_shortlinepercept')
+        ]
 
 
 class ScanLineEdgelPercept(models.Model):
@@ -169,6 +208,9 @@ class ScanLineEdgelPercept(models.Model):
     
     class Meta:
         verbose_name_plural = "Scanline Edgel Percept"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_scanlineedgelpercept')
+        ]
 
 
 class ScanLineEdgelPerceptTop(models.Model):
@@ -180,6 +222,9 @@ class ScanLineEdgelPerceptTop(models.Model):
     
     class Meta:
         verbose_name_plural = "Scanline Edgel Percept Top"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_scanlineedgelpercepttop')
+        ]
 
 
 class RansacCirclePercept2018(models.Model):
@@ -191,3 +236,6 @@ class RansacCirclePercept2018(models.Model):
     
     class Meta:
         verbose_name_plural = "Ransac Circle Percept 2018"
+        constraints = [
+            models.UniqueConstraint(fields=['frame'], name='unique_frame_id_ransaccirclepercept2018')
+        ]

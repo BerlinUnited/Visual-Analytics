@@ -87,10 +87,7 @@ class MotionRepresentationClient:
         self,
         id: int,
         *,
-        log_id: typing.Optional[int] = OMIT,
-        sensor_frame_number: typing.Optional[int] = OMIT,
-        sensor_frame_time: typing.Optional[int] = OMIT,
-        representation_name: typing.Optional[str] = OMIT,
+        frame: typing.Optional[int] = OMIT,
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MotionRepresentation:
@@ -100,10 +97,7 @@ class MotionRepresentationClient:
             f"api/{self.endpoint}/{jsonable_encoder(id)}/",
             method="PATCH",
             json={
-                "log_id": log_id,
-                "sensor_frame_number": sensor_frame_number,
-                "sensor_frame_time": sensor_frame_time,
-                "representation_name": representation_name,
+                "frame": frame,
                 "representation_data": representation_data,
             },
             request_options=request_options,
@@ -164,10 +158,7 @@ class MotionRepresentationClient:
     def create(
         self,
         *,
-        log_id: typing.Optional[int] = OMIT,
-        sensor_frame_number: typing.Optional[int] = OMIT,
-        sensor_frame_time: typing.Optional[int] = OMIT,
-        representation_name: typing.Optional[str] = OMIT,
+        frame: typing.Optional[int] = OMIT,
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MotionRepresentation:
@@ -177,10 +168,7 @@ class MotionRepresentationClient:
             f"api/motion/{self.endpoint}/",
             method="POST",
             json={
-                "log_id": log_id,
-                "sensor_frame_number": sensor_frame_number,
-                "sensor_frame_time": sensor_frame_time,
-                "representation_name": representation_name,
+                "frame": frame,
                 "representation_data": representation_data,
             },
             request_options=request_options,
