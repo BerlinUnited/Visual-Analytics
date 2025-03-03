@@ -83,9 +83,9 @@ class ImageListView(DetailView):
         if filtered_frames:
             first_image = (
                 NaoImage.objects.filter(
-                    log=self.object, frame__frame_number__in=filtered_frames.frames["frame_list"]
+                    frame__log=self.object, frame__frame_number__in=filtered_frames.frames["frame_list"]
                 )
-                .order_by("frame_number")
+                .order_by("frame__frame_number")
                 .first()
             )
         else:
@@ -127,12 +127,13 @@ class ImageDetailView(View):
             user=self.request.user,
         ).first()
         if frames:
+            print(type(frames))
             context["frame_numbers"] = (
                 NaoImage.objects.filter(
-                    log=log_id, frame_number__in=frames.frames["frame_list"]
+                    frame__log=log_id, frame__frame_number__in=frames.frames["frame_list"]
                 )
-                .order_by("frame_number")
-                .values_list("frame_number", flat=True)
+                .order_by("frame__frame_number")
+                .values_list("frame__frame_number", flat=True)
                 .distinct()
             )
         else:
