@@ -21,9 +21,14 @@ from .models import (
     RansacCirclePercept2018,
 )
 
-class CognitionFrameAdmin(admin.ModelAdmin):
+class CognitionFrameAdmin(ModelAdmin):
+    search_fields = ["id", "log_id", "frame_number"]
     list_display = ("get_log_id", "get_frame_id", "frame_number")
+    ordering = ['-id'] # removes a warning when using this model with autocomplete_fields
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by('-id')
+    
     def get_log_id(self, obj):
         return obj.log.id
     
@@ -34,7 +39,7 @@ class CognitionFrameAdmin(admin.ModelAdmin):
     get_frame_id.short_description = "Frame ID"
 
 
-class FrameFilterAdmin(admin.ModelAdmin):
+class FrameFilterAdmin(ModelAdmin):
     list_display = ("get_log_id", "get_user")
 
     def get_log_id(self, obj):
@@ -46,9 +51,9 @@ class FrameFilterAdmin(admin.ModelAdmin):
     get_log_id.short_description = "Log ID"
 
 
-class BallModelAdmin(ModelAdmin):
+class CognitionModelAdmin(ModelAdmin):
     list_display = ("get_id", "get_log_id", "get_frame_number")
-
+    autocomplete_fields = ["frame"]
     def get_log_id(self, obj):
         return obj.frame.log_id
 
@@ -61,19 +66,19 @@ class BallModelAdmin(ModelAdmin):
 
 admin.site.register(CognitionFrame, CognitionFrameAdmin)
 admin.site.register(FrameFilter, FrameFilterAdmin)
-admin.site.register(BallModel, BallModelAdmin)
-admin.site.register(BallCandidates)
-admin.site.register(BallCandidatesTop)
-admin.site.register(CameraMatrix)
-admin.site.register(CameraMatrixTop)
-admin.site.register(OdometryData)
-admin.site.register(FieldPercept)
-admin.site.register(FieldPerceptTop)
-admin.site.register(GoalPercept)
-admin.site.register(GoalPerceptTop)
-admin.site.register(MultiBallPercept)
-admin.site.register(RansacLinePercept)
-admin.site.register(ShortLinePercept)
-admin.site.register(ScanLineEdgelPercept)
-admin.site.register(ScanLineEdgelPerceptTop)
-admin.site.register(RansacCirclePercept2018)
+admin.site.register(BallModel, CognitionModelAdmin)
+admin.site.register(BallCandidates,CognitionModelAdmin)
+admin.site.register(BallCandidatesTop,CognitionModelAdmin)
+admin.site.register(CameraMatrix,CognitionModelAdmin)
+admin.site.register(CameraMatrixTop,CognitionModelAdmin)
+admin.site.register(OdometryData,CognitionModelAdmin)
+admin.site.register(FieldPercept,CognitionModelAdmin)
+admin.site.register(FieldPerceptTop,CognitionModelAdmin)
+admin.site.register(GoalPercept,CognitionModelAdmin)
+admin.site.register(GoalPerceptTop,CognitionModelAdmin)
+admin.site.register(MultiBallPercept,CognitionModelAdmin)
+admin.site.register(RansacLinePercept,CognitionModelAdmin)
+admin.site.register(ShortLinePercept,CognitionModelAdmin)
+admin.site.register(ScanLineEdgelPercept,CognitionModelAdmin)
+admin.site.register(ScanLineEdgelPerceptTop,CognitionModelAdmin)
+admin.site.register(RansacCirclePercept2018,CognitionModelAdmin)
