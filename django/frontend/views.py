@@ -127,7 +127,6 @@ class ImageDetailView(View):
             user=self.request.user,
         ).first()
         if frames:
-            print(type(frames))
             context["frame_numbers"] = (
                 NaoImage.objects.filter(
                     frame__log=log_id, frame__frame_number__in=frames.frames["frame_list"]
