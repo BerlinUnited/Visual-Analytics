@@ -1,5 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
+from unfold.contrib.filters.admin import SingleNumericFilter
 from .models import (
     CognitionFrame,
     FrameFilter,
@@ -21,11 +22,17 @@ from .models import (
     RansacCirclePercept2018,
 )
 
+
+
+
 class CognitionFrameAdmin(ModelAdmin):
-    search_fields = ["id", "log_id", "frame_number"]
+    search_fields = ["id", "log__id", "frame_number"]
     list_display = ("get_log_id", "get_frame_id", "frame_number")
     ordering = ['-id'] # removes a warning when using this model with autocomplete_fields
-
+    list_filter_submit = True  # Submit button at the bottom of the filter
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_queryset(self, request):
         return super().get_queryset(request).order_by('-id')
     
@@ -41,9 +48,11 @@ class CognitionFrameAdmin(ModelAdmin):
 
 class FrameFilterAdmin(ModelAdmin):
     list_display = ("get_log_id", "get_user")
-
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_log_id(self, obj):
-        return obj.log_id.id
+        return obj.log.id
 
     def get_user(self, obj):
         return obj.user

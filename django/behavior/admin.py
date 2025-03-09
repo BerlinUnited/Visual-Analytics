@@ -7,12 +7,15 @@ from .models import (
     XabslSymbolComplete,
 )
 from unfold.admin import ModelAdmin
+from unfold.contrib.filters.admin import SingleNumericFilter
 
 class BehaviorOptionAdmin(ModelAdmin):
     list_display = ("get_log_id", "id", "xabsl_internal_option_id", "option_name")
-
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_log_id(self, obj):
-        return obj.log_id.id
+        return obj.log.id
 
     get_log_id.short_description = "Log ID"
 
@@ -27,9 +30,11 @@ class BehaviorOptionStateAdmin(ModelAdmin):
         "get_name",
     )
     search_fields = ["option_id__option_name"]
-
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_log_id(self, obj):
-        return obj.log_id.id
+        return obj.log.id
 
     def get_option_id(self, obj):
         return obj.option_id.id
@@ -55,9 +60,11 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
         "frame",
     )
     search_fields = ["options_id__option_name"]
-
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_log_id(self, obj):
-        return obj.log_id.id
+        return obj.log.id
 
     def get_option_id(self, obj):
         return obj.options_id.id
@@ -76,9 +83,11 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
 
 class XabslSymbolCompleteAdmin(ModelAdmin):
     list_display = ["get_log_id"]
-
+    list_filter = [
+        ("log__id", SingleNumericFilter),
+    ]
     def get_log_id(self, obj):
-        return obj.log_id.id
+        return obj.log.id
 
     get_log_id.short_description = "Log ID"
 
