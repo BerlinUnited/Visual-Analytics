@@ -6,6 +6,7 @@ from unfold.contrib.filters.admin import SingleNumericFilter
 class ImageAdmin(ModelAdmin):
     search_fields=["get_log_id"]
     list_display = ["get_log_id", "get_frame_number", "camera", "type"]
+    list_filter_submit = True 
     list_filter = [("frame__frame_number",SingleNumericFilter)]
     autocomplete_fields = ["frame"]
     def get_log_id(self, obj):
