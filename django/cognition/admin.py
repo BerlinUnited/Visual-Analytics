@@ -64,11 +64,11 @@ class FrameFilterAdmin(ModelAdmin):
 class CognitionModelAdmin(ModelAdmin):
     list_display = ("get_id", "get_log_id", "get_frame_number")
     list_filter_submit = True
-    list_filter = [("frame__frame_number",SingleNumericFilter)]
+    list_filter = [("frame__log__id", SingleNumericFilter),("frame__frame_number",SingleNumericFilter)]
     autocomplete_fields = ["frame"]
     
     def get_log_id(self, obj):
-        return obj.frame.log_id
+        return obj.frame.log.id
 
     def get_frame_number(self, obj):
         return obj.frame.frame_number
