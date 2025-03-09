@@ -37,6 +37,7 @@ class MotionFrameAdmin(ModelAdmin):
 
 class MotionModelAdmin(ModelAdmin):
     list_display = ("get_id", "get_log_id", "get_frame_number")
+    list_filter = [("frame__frame_number",SingleNumericFilter)]
     autocomplete_fields = ["frame"]
     def get_log_id(self, obj):
         return obj.frame.log_id
