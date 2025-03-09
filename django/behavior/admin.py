@@ -11,6 +11,7 @@ from unfold.contrib.filters.admin import SingleNumericFilter
 
 class BehaviorOptionAdmin(ModelAdmin):
     list_display = ("get_log_id", "id", "xabsl_internal_option_id", "option_name")
+    list_filter_submit = True 
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
@@ -30,6 +31,7 @@ class BehaviorOptionStateAdmin(ModelAdmin):
         "get_name",
     )
     search_fields = ["option_id__option_name"]
+    list_filter_submit = True 
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
@@ -59,6 +61,7 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
         "frame",
     )
     search_fields = ["options_id__option_name"]
+    list_filter_submit = True 
     list_filter = [
         ("frame__frame_number",SingleNumericFilter)
     ]
@@ -81,6 +84,7 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
 
 class XabslSymbolCompleteAdmin(ModelAdmin):
     list_display = ["get_log_id"]
+    list_filter_submit = True 
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
@@ -98,6 +102,7 @@ class XabslSymbolCompleteAdmin(ModelAdmin):
 
 class XabslSymbolSparseAdmin(ModelAdmin):
     list_display= ["get_frame_number"]
+    list_filter_submit = True 
     list_filter = [("frame__frame_number",SingleNumericFilter)]
     autocomplete_fields = ["frame"]
     def get_frame_number(self,obj):
