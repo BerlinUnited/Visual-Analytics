@@ -3,7 +3,7 @@ from .models import NaoImage
 from unfold.admin import ModelAdmin
 
 # Register your models here.
-class ImageAdmin(admin.ModelAdmin):
+class ImageAdmin(ModelAdmin):
     list_display = ["get_log_id", "get_frame_number", "camera", "type"]
     
     def get_log_id(self, obj):
@@ -14,4 +14,5 @@ class ImageAdmin(admin.ModelAdmin):
 
     get_log_id.short_description = "Log ID"
     get_frame_number.short_description = "Frame Number"
+    
 admin.site.register(NaoImage, ImageAdmin)
