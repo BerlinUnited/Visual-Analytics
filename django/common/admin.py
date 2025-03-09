@@ -2,12 +2,7 @@ from django.contrib import admin
 from .models import Event, Game, Log, LogStatus, Experiment
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import (
-    ChoicesDropdownFilter,
-    MultipleChoicesDropdownFilter,
-    RelatedDropdownFilter,
-    MultipleRelatedDropdownFilter,
     DropdownFilter,
-    MultipleDropdownFilter
 )
 
 from django.contrib.admin.sites import site

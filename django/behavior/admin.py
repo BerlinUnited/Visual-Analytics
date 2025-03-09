@@ -105,7 +105,7 @@ class XabslSymbolSparseAdmin(ModelAdmin):
     get_frame_number.short_description = "frame number"
 
 admin.site.register(BehaviorOption,BehaviorOptionAdmin)
-admin.site.register(BehaviorOptionState)
+admin.site.register(BehaviorOptionState,BehaviorOptionStateAdmin)
 admin.site.register(BehaviorFrameOption, BehaviorFrameOptionAdmin)
 admin.site.register(XabslSymbolComplete, XabslSymbolCompleteAdmin)
 admin.site.register(XabslSymbolSparse,XabslSymbolSparseAdmin)
