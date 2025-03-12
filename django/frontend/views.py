@@ -83,21 +83,21 @@ class ImageListView(DetailView):
         if filtered_frames:
             first_image = (
                 NaoImage.objects.filter(
-                    log=self.object, frame_number__in=filtered_frames.frames["frame_list"]
+                    frame__log=self.object, frame__frame_number__in=filtered_frames.frames["frame_list"]
                 )
-                .order_by("frame_number")
+                .order_by("frame__frame_number")
                 .first()
             )
         else:
             first_image = (
-                NaoImage.objects.filter(log=self.object)
-                .order_by("frame_number")
+                NaoImage.objects.filter(frame__log=self.object)
+                .order_by("frame__frame_number")
                 .first()
             )
 
         if first_image:
             return redirect(
-                "image_detail", pk=self.object.id, bla=first_image.frame_number
+                "image_detail", pk=self.object.id, bla=first_image.frame.frame_number
             )
         # TODO what if no images exist for a log -> redirect somewhere else
         return super().get(
@@ -113,33 +113,33 @@ class ImageDetailView(View):
 
         current_frame = self.kwargs.get("bla")
         context["bottom_image"] = NaoImage.objects.filter(
-            log=log_id, camera="BOTTOM", frame_number=current_frame
+            frame__log=log_id, camera="BOTTOM", frame__frame_number=current_frame
         ).first()
         context["top_image"] = NaoImage.objects.filter(
-            log=log_id, camera="TOP", frame_number=current_frame
+            frame__log=log_id, camera="TOP", frame__frame_number=current_frame
         ).first()
         context["log_id"] = log_id
         context["current_frame"] = current_frame
         # we have to get the frames for top and bottom image and then remove the duplicates here, because sometime we have only one image in the
         # first frame
         frames = FrameFilter.objects.filter(
-            log_id=log_id,
+            log=log_id,
             user=self.request.user,
         ).first()
         if frames:
             context["frame_numbers"] = (
                 NaoImage.objects.filter(
-                    log=log_id, frame_number__in=frames.frames["frame_list"]
+                    frame__log=log_id, frame__frame_number__in=frames.frames["frame_list"]
                 )
-                .order_by("frame_number")
-                .values_list("frame_number", flat=True)
+                .order_by("frame__frame_number")
+                .values_list("frame__frame_number", flat=True)
                 .distinct()
             )
         else:
             context["frame_numbers"] = (
-                NaoImage.objects.filter(log=log_id)
-                .order_by("frame_number")
-                .values_list("frame_number", flat=True)
+                NaoImage.objects.filter(frame__log=log_id)
+                .order_by("frame__frame_number")
+                .values_list("frame__frame_number", flat=True)
                 .distinct()
             )
         current_index = list(context["frame_numbers"]).index(current_frame)
