@@ -15,5 +15,7 @@ spec:
       containers:
       - name: backend
         image: ghcr.io/johanhartung/robot_api:master
+        ports:
+        - containerPort: 5247
       imagePullSecrets:
       - name: github-access
