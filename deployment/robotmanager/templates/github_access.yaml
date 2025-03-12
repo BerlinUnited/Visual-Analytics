@@ -1,0 +1,25 @@
+# https://external-secrets.io/latest/guides/common-k8s-secret-types/
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: github-access
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore  
+    name: my-secret-store
+  refreshInterval: "1m"
+  target:
+    creationPolicy: Owner
+    deletionPolicy: "Retain"
+    template:
+      type: kubernetes.io/dockerconfigjson
+      engineVersion: v2
+      data:
+        .dockerconfigjson: "{{ `{{ .token }}` }}"
+  #data:
+  #- secretKey: GithubRegistry
+  #  remoteRef:
+  #    key: token
+  dataFrom:
+  - extract:
+      key: GithubRegistry

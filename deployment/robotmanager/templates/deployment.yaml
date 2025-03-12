@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: robot-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: robot-manager
+  template:
+    metadata:
+      labels:
+        app: robot-manager
+    spec:
+      containers:
+      - name: backend
+        image: docker pull ghcr.io/johanhartung/robot_api:master
+      imagePullSecrets:
+      - name: github-access
