@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: docker pull ghcr.io/johanhartung/robot_api:master
+        image: ghcr.io/johanhartung/robot_api:master
       imagePullSecrets:
       - name: github-access
