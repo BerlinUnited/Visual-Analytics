@@ -47,7 +47,7 @@ class CognitionFrameAdmin(ModelAdmin):
 
 
 class FrameFilterAdmin(ModelAdmin):
-    list_display = ("get_log_id", "get_user")
+    list_display = ("get_log_id", "get_user","name")
     list_filter_submit = True 
     list_filter = [
         ("log__id", SingleNumericFilter),
@@ -59,6 +59,7 @@ class FrameFilterAdmin(ModelAdmin):
         return obj.user
 
     get_log_id.short_description = "Log ID"
+    get_user.short_description = "User"
 
 
 class CognitionModelAdmin(ModelAdmin):
