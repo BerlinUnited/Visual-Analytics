@@ -1,0 +1,10 @@
+wordpress:
+  existingSecret: wordpress-secret
+
+  wordpressUsername: admin
+  
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: wordpress
+    tls: true
