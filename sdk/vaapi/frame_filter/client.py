@@ -133,6 +133,7 @@ class FrameFilterClient:
         *,
         log_id: typing.Optional[int] = OMIT,
         frames: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FrameFilter:
         """
@@ -158,8 +159,9 @@ class FrameFilterClient:
             f"api/frame-filter/",
             method="POST",
             json={
-                "log_id": log_id,
+                "log": log_id,
                 "frames": frames,
+                "name": name
             },
             request_options=request_options,
             omit=OMIT,

@@ -2,7 +2,7 @@
 you can perform with the API of the visual analytics tool by Berlin United for the Robocup SPL"""
 
 
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 
 __pdoc__ = {
     'core': False,  # Excludes the entire module/folder

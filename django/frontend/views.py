@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, DetailView, View
-
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
@@ -72,15 +72,16 @@ class ImageListView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-
+        filter = request.GET.get("filter")
         # TODO fix the logic after db restructure
 
         filtered_frames = FrameFilter.objects.filter(
             log_id=self.object,
             user=self.request.user,
+            name=filter
         ).first()
 
-        if filtered_frames:
+        if filtered_frames and filter!="None":
             first_image = (
                 NaoImage.objects.filter(
                     frame__log=self.object, frame__frame_number__in=filtered_frames.frames["frame_list"]
@@ -96,9 +97,8 @@ class ImageListView(DetailView):
             )
 
         if first_image:
-            return redirect(
-                "image_detail", pk=self.object.id, bla=first_image.frame.frame_number
-            )
+            base_url = reverse("image_detail",kwargs={"pk":self.object.id, "bla":first_image.frame.frame_number})
+            return redirect(f"{base_url}?filter={filter}")
         # TODO what if no images exist for a log -> redirect somewhere else
         return super().get(
             request, *args, **kwargs
@@ -108,9 +108,25 @@ class ImageListView(DetailView):
 @method_decorator(login_required(login_url="mylogin"), name="dispatch")
 class ImageDetailView(View):
     def get(self, request, **kwargs):
+        
         context = {}
         log_id = self.kwargs.get("pk")
-
+        current_filter = self.request.GET.get("filter")
+        context["filters"] = [{'id': 0, "name": "None", "selected": current_filter == "None"}] + [
+            {'id': index + 1, "name": frame_filter.name, "selected": current_filter == frame_filter.name}
+            for index, frame_filter in enumerate(
+                FrameFilter.objects.filter(
+                    log=log_id,
+                    user=self.request.user,
+                )
+            )
+        ]      
+        selected_filter = request.GET.get('filter_selector')
+        if selected_filter: 
+            base_url = reverse("log_detail", kwargs={"pk": log_id})
+            redirect_url = f"{base_url}?filter={context['filters'][int(selected_filter)]['name']}"
+            return redirect(redirect_url)
+        
         current_frame = self.kwargs.get("bla")
         context["bottom_image"] = NaoImage.objects.filter(
             frame__log=log_id, camera="BOTTOM", frame__frame_number=current_frame
@@ -120,13 +136,16 @@ class ImageDetailView(View):
         ).first()
         context["log_id"] = log_id
         context["current_frame"] = current_frame
+        #load combobox with all availabe framefilter
+
         # we have to get the frames for top and bottom image and then remove the duplicates here, because sometime we have only one image in the
         # first frame
         frames = FrameFilter.objects.filter(
             log=log_id,
             user=self.request.user,
+            name=current_filter
         ).first()
-        if frames:
+        if frames and current_filter!="None":
             context["frame_numbers"] = (
                 NaoImage.objects.filter(
                     frame__log=log_id, frame__frame_number__in=frames.frames["frame_list"]
