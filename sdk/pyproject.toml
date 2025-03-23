@@ -9,7 +9,7 @@ authors = [
 ]
 description = "Python utils for adding logs to our Visual Analytics Tool"
 readme = "README.md"
-requires-python = ">=3.10.12"
+requires-python = ">=3.11.11"
 license = { text = "Apache-2.0" }
 classifiers = [
     "Programming Language :: Python :: 3",
