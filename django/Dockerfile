@@ -1,33 +1,49 @@
-FROM ubuntu:22.04
+# Stage 1: Builder stage for compiling Python dependencies
+FROM python:3.11-slim AS builder
 
-# show the stdout and stderr streams right in the command line instead of getting buffered.
+
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Stage 2: Final runtime image
+FROM python:3.11-slim
+
+
 ENV PYTHONUNBUFFERED=1
+ENV PATH=/root/.local/bin:$PATH
 
-RUN apt-get update && apt-get -y --no-install-recommends install \
+# Install PostgreSQL 16 client and other dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     curl \
-    gpg \
-    wget \
-    ca-certificates \
+    gnupg2 \
     lsb-release \
-    gnupg2 
-
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-
-RUN apt-get update && apt-get -y --no-install-recommends install \
     git \
-    python3 \
-    python3-pip \
-    nano \
-    python-is-python3 \
-    python3-dev \
-    postgresql-client-16
+    nano &&\
+    # Add PostgreSQL repository
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    postgresql-client-16 && \
+    # Clean up
+    apt-get purge -y --auto-remove curl gnupg2 lsb-release && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /django
+# Copy installed Python packages from builder
+COPY --from=builder /root/.local /root/.local
+
+
 WORKDIR /django
-COPY . .
 
-RUN pip install -r requirements.txt
+COPY . .
 
 EXPOSE 8000
 
