@@ -1,15 +1,11 @@
 # Stage 1: Builder stage for compiling Python dependencies
 FROM python:3.11-slim AS builder
 
-WORKDIR /app
-ENV PYTHONUNBUFFERED=1
 
 # Install build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc \
-    python3-dev \
-    libpq-dev && \
+    python3-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -19,7 +15,7 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 # Stage 2: Final runtime image
 FROM python:3.11-slim
 
-# Set environment variables
+
 ENV PYTHONUNBUFFERED=1
 ENV PATH=/root/.local/bin:$PATH
 
@@ -30,8 +26,7 @@ RUN apt-get update && \
     gnupg2 \
     lsb-release \
     git \
-    nano \
-    libpq5 && \
+    nano &&\
     # Add PostgreSQL repository
     curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
@@ -45,14 +40,11 @@ RUN apt-get update && \
 # Copy installed Python packages from builder
 COPY --from=builder /root/.local /root/.local
 
-# Set up application directory
+
 WORKDIR /django
 
-# Copy application code
 COPY . .
 
-# Expose the port the app runs on
 EXPOSE 8000
 
-# Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000","-w","8", "core.wsgi"]
