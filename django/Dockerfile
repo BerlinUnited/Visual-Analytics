@@ -3,66 +3,56 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 ENV PYTHONUNBUFFERED=1
-# Install build dependencies and PostgreSQL development libraries
+
+# Install build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl \
-    gnupg2 \
-    lsb-release \
     gcc \
     python3-dev \
     libpq-dev && \
-    # Add PostgreSQL repository
-    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
-    apt-get update && \
-    # Clean up apt
-    apt-get purge -y --auto-remove curl gnupg2 lsb-release && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --user --no-cache-dir -r requirements.txt
 
-
 # Stage 2: Final runtime image
 FROM python:3.11-slim
 
-# Install runtime dependencies (PostgreSQL client 16 and libpq5)
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PATH=/root/.local/bin:$PATH
+
+# Install PostgreSQL 16 client and other dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
     gnupg2 \
+    lsb-release \
     git \
     nano \
-    lsb-release && \
+    libpq5 && \
     # Add PostgreSQL repository
     curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    postgresql-client-16 \
-    libpq5 && \
-    # Remove pip and Python package management tools
-    apt-get purge -y python3-pip python3-setuptools && \
-    # Clean up apt
+    postgresql-client-16 && \
+    # Clean up
     apt-get purge -y --auto-remove curl gnupg2 lsb-release && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy installed Python packages from builder
 COPY --from=builder /root/.local /root/.local
 
-RUN mkdir /django
+# Set up application directory
 WORKDIR /django
+
 # Copy application code
 COPY . .
 
-# Add user-installed Python packages to PATH
-ENV PATH=/root/.local/bin:$PATH
-    
+# Expose the port the app runs on
+EXPOSE 8000
 
-# Verify installations
-RUN python --version && \
-    psql --version
-EXPOSE 8000    
+# Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000","-w","8", "core.wsgi"]
