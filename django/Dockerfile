@@ -1,40 +1,68 @@
-FROM ubuntu:22.04
-ENV DEBIAN_FRONTEND=noninteractive
-# show the stdout and stderr streams right in the command line instead of getting buffered.
+# Stage 1: Builder stage for compiling Python dependencies
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
 ENV PYTHONUNBUFFERED=1
-
-RUN apt-get update && apt-get -y --no-install-recommends install \
+# Install build dependencies and PostgreSQL development libraries
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     curl \
-    gpg \
-    wget \
-    software-properties-common \
-    ca-certificates \
+    gnupg2 \
     lsb-release \
-    gnupg2 
+    gcc \
+    python3-dev \
+    libpq-dev && \
+    # Add PostgreSQL repository
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
+    apt-get update && \
+    # Clean up apt
+    apt-get purge -y --auto-remove curl gnupg2 lsb-release && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
 
-RUN add-apt-repository -y ppa:deadsnakes/ppa
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends python3.11 python3.11-dev python3.11-venv
 
-RUN apt-get update && apt-get -y --no-install-recommends install \
+# Stage 2: Final runtime image
+FROM python:3.11-slim
+
+# Install runtime dependencies (PostgreSQL client 16 and libpq5)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    gnupg2 \
     git \
-    python3-pip \
     nano \
-    postgresql-client-16
+    lsb-release && \
+    # Add PostgreSQL repository
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    postgresql-client-16 \
+    libpq5 && \
+    # Remove pip and Python package management tools
+    apt-get purge -y python3-pip python3-setuptools && \
+    # Clean up apt
+    apt-get purge -y --auto-remove curl gnupg2 lsb-release && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy installed Python packages from builder
+COPY --from=builder /root/.local /root/.local
 
 RUN mkdir /django
 WORKDIR /django
+# Copy application code
 COPY . .
 
-RUN python3.11 -m venv /venv
-ENV PATH=/venv/bin:$PATH
+# Add user-installed Python packages to PATH
+ENV PATH=/root/.local/bin:$PATH
+    
 
-RUN pip install -r requirements.txt
-
-RUN python --version >&2
-EXPOSE 8000
-
+# Verify installations
+RUN python --version && \
+    psql --version
+EXPOSE 8000    
 CMD ["gunicorn", "--bind", "0.0.0.0:8000","-w","8", "core.wsgi"]
