@@ -96,9 +96,13 @@ class LogStatus(models.Model):
     )
     # holds the number of frames that should be in the db for each representation
     FrameInfo = models.IntegerField(blank=True, null=True)
+    RobotInfo = models.IntegerField(blank=True, null=True)
+    AudioData = models.IntegerField(blank=True, null=True)
     BallModel = models.IntegerField(blank=True, null=True)
     BallCandidates = models.IntegerField(blank=True, null=True)
     BallCandidatesTop = models.IntegerField(blank=True, null=True)
+    BehaviorStateComplete = models.IntegerField(blank=True, null=True)
+    BehaviorStateSparse = models.IntegerField(blank=True, null=True)
     CameraMatrix = models.IntegerField(blank=True, null=True)
     CameraMatrixTop = models.IntegerField(blank=True, null=True)
     FieldPercept = models.IntegerField(blank=True, null=True)
@@ -111,7 +115,13 @@ class LogStatus(models.Model):
     ShortLinePercept = models.IntegerField(blank=True, null=True)
     ScanLineEdgelPercept = models.IntegerField(blank=True, null=True)
     ScanLineEdgelPerceptTop = models.IntegerField(blank=True, null=True)
+    TeamMessageDecision = models.IntegerField(blank=True, null=True)
+    TeamState = models.IntegerField(blank=True, null=True)
     OdometryData = models.IntegerField(blank=True, null=True)
+    Image = models.IntegerField(blank=True, null=True)
+    ImageTop = models.IntegerField(blank=True, null=True)
+    ImageJPEG = models.IntegerField(blank=True, null=True)
+    ImageJPEGTop = models.IntegerField(blank=True, null=True)
 
     IMUData = models.IntegerField(blank=True, null=True)
     FSRData = models.IntegerField(blank=True, null=True)
@@ -123,12 +133,8 @@ class LogStatus(models.Model):
     MotorJointData = models.IntegerField(blank=True, null=True)
     GyrometerData = models.IntegerField(blank=True, null=True)
 
-    num_cognition_frames = models.IntegerField(blank=True, null=True)
     num_motion_frames = models.IntegerField(blank=True, null=True)
-    num_jpg_bottom = models.IntegerField(blank=True, null=True)
-    num_jpg_top = models.IntegerField(blank=True, null=True)
-    num_bottom = models.IntegerField(blank=True, null=True)
-    num_top = models.IntegerField(blank=True, null=True)
+    
 
     class Meta:
         verbose_name_plural = "Log status"

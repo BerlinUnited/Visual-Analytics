@@ -27,7 +27,6 @@ class Log(pydantic_v1.BaseModel):
     #: body_serial
     body_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-
     #: head_serial
     head_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
