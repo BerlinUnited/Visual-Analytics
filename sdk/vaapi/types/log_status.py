@@ -84,6 +84,8 @@ class LogStatus(pydantic_v1.BaseModel):
     #: ImageJPEGTop
     ImageJPEGTop: typing.Optional[int] = pydantic_v1.Field(default=None)
 
+    WhistlePercept: typing.Optional[int] = pydantic_v1.Field(default=None)
+
     #: IMUData
     IMUData: typing.Optional[int] = pydantic_v1.Field(default=None)
 

@@ -122,6 +122,7 @@ class LogStatus(models.Model):
     ImageTop = models.IntegerField(blank=True, null=True)
     ImageJPEG = models.IntegerField(blank=True, null=True)
     ImageJPEGTop = models.IntegerField(blank=True, null=True)
+    WhistlePercept = models.IntegerField(blank=True, null=True)
 
     IMUData = models.IntegerField(blank=True, null=True)
     FSRData = models.IntegerField(blank=True, null=True)
