@@ -64,45 +64,51 @@ class ExperimentLogListView(DetailView):
 
 
 @method_decorator(login_required(login_url="mylogin"), name="dispatch")
-class ImageListView(DetailView):
-    # could also be called LogDetailView
-    # TODO: maybe I should query FrameInfo from cognition representation table here sort that use that as extra parameter
+class LogDetailView(DetailView):
     model = Log
     template_name = "frontend/image.html"
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        filter = request.GET.get("filter")
-        # TODO fix the logic after db restructure
-
-        filtered_frames = FrameFilter.objects.filter(
-            log_id=self.object,
-            user=self.request.user,
-            name=filter
-        ).first()
-
-        if filtered_frames and filter!="None":
-            first_image = (
-                NaoImage.objects.filter(
-                    frame__log=self.object, frame__frame_number__in=filtered_frames.frames["frame_list"]
-                )
-                .order_by("frame__frame_number")
-                .first()
-            )
-        else:
-            first_image = (
-                NaoImage.objects.filter(frame__log=self.object)
-                .order_by("frame__frame_number")
-                .first()
-            )
-
-        if first_image:
-            base_url = reverse("image_detail",kwargs={"pk":self.object.id, "bla":first_image.frame.frame_number})
-            return redirect(f"{base_url}?filter={filter}")
-        # TODO what if no images exist for a log -> redirect somewhere else
-        return super().get(
-            request, *args, **kwargs
-        )  # Handle cases where no images exist
+        filter_name = request.GET.get("filter")
+        
+        # Get first frame based on filter
+        first_frame_number = self.get_first_frame_number(filter_name)
+        
+        if not first_frame_number:
+            base_url = reverse("image_detail", kwargs={"pk": self.object.id, "img": first_frame_number})
+            return redirect(f"{base_url}?filter={filter_name or 'None'}")
+        
+        # Handle case where no images exist
+        if self.object.game_id is not None:
+            return redirect("game_detail",pk=self.object.game.id)
+        elif self.object.experiment is not None:
+            return redirect("experiment_detail",pk=self.object.experiment.id)
+            
+             
+     
+    def get_first_frame_number(self, filter_name):
+        """Helper method to get the first frame number based on filter"""
+        if filter_name and filter_name != "None":
+            filtered_frames = FrameFilter.objects.filter(
+                log_id=self.object,
+                user=self.request.user,
+                name=filter_name
+            ).first()
+            
+            if filtered_frames:
+                first_image = CognitionFrame.objects.filter(
+                    log=self.object, frame_number__in=filtered_frames.frames["frame_list"]
+                ).order_by("frame_number").first()
+                if first_image:
+                    return first_image.frame_number
+        
+        # Default: get first frame without filtering
+        first_image = CognitionFrame.objects.filter(
+            log=self.object
+        ).order_by("frame_number").first()
+        
+        return first_image.frame_number if first_image else None
 
 
 @method_decorator(login_required(login_url="mylogin"), name="dispatch")
@@ -127,7 +133,7 @@ class ImageDetailView(View):
             redirect_url = f"{base_url}?filter={context['filters'][int(selected_filter)]['name']}"
             return redirect(redirect_url)
         
-        current_frame = self.kwargs.get("bla")
+        current_frame = self.kwargs.get("img")
         context["bottom_image"] = NaoImage.objects.filter(
             frame__log=log_id, camera="BOTTOM", frame__frame_number=current_frame
         ).first()
