@@ -9,7 +9,7 @@ authors = [
 ]
 description = "Python utils for adding logs to our Visual Analytics Tool"
 readme = "README.md"
-requires-python = ">=3.10.12"
+requires-python = ">=3.10.9"
 license = { text = "Apache-2.0" }
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -27,4 +27,4 @@ dependencies = [
 ]
 
 [tool.setuptools.dynamic]
-version = {attr = "vaapi.__version__"}
+version = { attr = "vaapi.__version__" }
