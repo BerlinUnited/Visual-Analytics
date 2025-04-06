@@ -1,5 +1,4 @@
 import typing
-import datetime as dt
 from json.decoder import JSONDecodeError
 
 from ..core.api_error import ApiError
@@ -32,7 +31,7 @@ class XabslSymbolClientComplete:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(CognitionRepresentation, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(XabslSymbolComplete, _response.json())  # type: ignore
             _response_json = _response.json()
             
         except JSONDecodeError:
@@ -254,7 +253,7 @@ class XabslSymbolClientComplete:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior/symbol/complete/",
+            "api/behavior/symbol/complete/",
             method="POST",
             json={
                 "log_id": log_id,
@@ -288,7 +287,7 @@ class XabslSymbolClientComplete:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior/symbol/",
+            "api/behavior/symbol/",
             method="POST",
             json=data_list,
             request_options=request_options,

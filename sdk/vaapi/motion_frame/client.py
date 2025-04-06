@@ -1,5 +1,4 @@
 import typing
-import datetime as dt
 from json.decoder import JSONDecodeError
 
 from ..core.api_error import ApiError
@@ -139,7 +138,7 @@ class MotionFrameClient:
         """
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/motionframe/",
+            "api/motionframe/",
             method="POST",
             json={
                 "log_id": log_id,
@@ -174,7 +173,7 @@ class MotionFrameClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/motionframe/",
+            "api/motionframe/",
             method="POST",
             json=frame_list,
             request_options=request_options,

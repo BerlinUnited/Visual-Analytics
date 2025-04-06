@@ -1,9 +1,8 @@
 import typing
-import datetime as dt
 from json.decoder import JSONDecodeError
 
 from ..core.api_error import ApiError
-from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.client_wrapper import SyncClientWrapper
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.pydantic_utilities import pydantic_v1
 from ..core.request_options import RequestOptions
@@ -252,7 +251,7 @@ class BehaviorOptionStateClient:
         """
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-option-state/",
+            "api/behavior-option-state/",
             method="POST",
             json={
                 "log_id": log_id,
@@ -289,7 +288,7 @@ class BehaviorOptionStateClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-option-state/",
+            "api/behavior-option-state/",
             method="POST",
             json=repr_list,
             request_options=request_options,

@@ -293,7 +293,7 @@ class LogStatusClient:
         ```
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/log-status/",
+            "api/log-status/",
             method="POST",
             json={
                 "log": log,

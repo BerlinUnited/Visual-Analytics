@@ -133,11 +133,11 @@ class BehaviorFrameOptionClient:
                 "log_id": log_id,
                 "options_id": options_id,
                 "activeState": activeState,
-                "parent": parent,
+                #"parent": parent,
                 "frame": frame,
-                "time": time,
-                "timeOfExecution": timeOfExecution,
-                "stateTime": stateTime,
+                #"time": time,
+                #"timeOfExecution": timeOfExecution,
+                #"stateTime": stateTime,
             },
             request_options=request_options,
             omit=OMIT,
@@ -222,7 +222,7 @@ class BehaviorFrameOptionClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-frame-option/",
+            "api/behavior-frame-option/",
             method="POST",
             json={
                 "log_id": log_id,
@@ -260,7 +260,7 @@ class BehaviorFrameOptionClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-frame-option/",
+            "api/behavior-frame-option/",
             method="POST",
             json=data_list,
             request_options=request_options,
@@ -316,7 +316,7 @@ class BehaviorFrameOptionClient:
             state_name=arms_synchronised_with_walk
         )
         """
-        url = f"api/behavior/filter/"
+        url = "api/behavior/filter/"
         query_params = {k: v for k, v in filters.items()}
         _response = self._client_wrapper.httpx_client.request(url, method="GET", request_options=request_options, params=query_params)
         try:
