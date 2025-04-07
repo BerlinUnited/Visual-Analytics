@@ -105,7 +105,7 @@ class AnnotationsClient:
         query_params = {k: v for k, v in filters.items()}
         query_params["id"] = id
         _response = self._client_wrapper.httpx_client.request(
-            f"api/annotations/", method="GET", request_options=request_options,params=query_params
+            "api/annotations/", method="GET", request_options=request_options,params=query_params
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -126,7 +126,7 @@ class AnnotationsClient:
 
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/annotations/",
+            "api/annotations/",
             method="POST",
             json={
                 "image": image_id,

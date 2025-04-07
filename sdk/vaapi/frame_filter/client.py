@@ -156,7 +156,7 @@ class FrameFilterClient:
         ```
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/frame-filter/",
+            "api/frame-filter/",
             method="POST",
             json={
                 "log": log_id,

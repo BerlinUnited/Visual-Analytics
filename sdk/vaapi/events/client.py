@@ -3,7 +3,7 @@ import datetime as dt
 from json.decoder import JSONDecodeError
 
 from ..core.api_error import ApiError
-from ..core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
+from ..core.client_wrapper import SyncClientWrapper
 from ..core.jsonable_encoder import jsonable_encoder
 from ..core.pydantic_utilities import pydantic_v1
 from ..core.request_options import RequestOptions
@@ -224,7 +224,7 @@ class EventsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/events/", method="GET", request_options=request_options
+            "api/events/", method="GET", request_options=request_options
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -256,7 +256,7 @@ class EventsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/events/",
+            "api/events/",
             method="POST",
             json={
                 "name": name,
@@ -294,7 +294,7 @@ class EventsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/events/",
+            "api/events/",
             method="POST",
             json=event_list,
             request_options=request_options,

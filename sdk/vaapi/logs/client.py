@@ -202,7 +202,7 @@ class LogClient:
         """
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/logs/",
+            "api/logs/",
             method="POST",
             json={
                 "game": game,

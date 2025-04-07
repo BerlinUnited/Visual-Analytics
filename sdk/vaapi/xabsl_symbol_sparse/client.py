@@ -300,7 +300,7 @@ class XabslSymbolClientSparse:
         ```
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior/symbol/sparse/",
+            "api/behavior/symbol/sparse/",
             method="POST",
             json={
                 "log_id": log_id,
@@ -354,7 +354,7 @@ class XabslSymbolClientSparse:
         ```
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior/symbol/sparse/",
+            "api/behavior/symbol/sparse/",
             method="POST",
             json=data,
             request_options=request_options,

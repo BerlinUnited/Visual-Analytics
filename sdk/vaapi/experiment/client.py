@@ -1,5 +1,4 @@
 import typing
-import datetime as dt
 from json.decoder import JSONDecodeError
 
 from ..core.api_error import ApiError
@@ -32,7 +31,7 @@ class ExperimentClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(Game, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(Experiment, _response.json())  # type: ignore
             _response_json = _response.json()
             
         except JSONDecodeError:
@@ -109,7 +108,7 @@ class ExperimentClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(Game, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(Experiment, _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -151,7 +150,7 @@ class ExperimentClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[Game], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(typing.List[Experiment], _response.json())  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -170,7 +169,7 @@ class ExperimentClient:
         
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/experiments/",
+            "api/experiments/",
             method="POST",
             json={
                 "event_id": event_id,

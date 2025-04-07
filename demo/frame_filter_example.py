@@ -14,6 +14,7 @@ def frame_filter_demo(client):
         log_id=168,
         frames={"frame_list": response},
     )
+    print(resp)
 
 
 if __name__ == "__main__":
