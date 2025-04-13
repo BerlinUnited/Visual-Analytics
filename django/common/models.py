@@ -83,10 +83,10 @@ class Log(models.Model):
 
     @property
     def log_type(self):
-        if self.log_game_id is not None:
-            return self.log_game
-        if self.log_experiment_id is not None:
-            return self.log_experiment
+        if self.game_id is not None:
+            return self.game
+        if self.experiment_id is not None:
+            return self.experiment
         raise AssertionError("Neither 'log_game_id' nor 'log_experiment_id' is set")
 
 
