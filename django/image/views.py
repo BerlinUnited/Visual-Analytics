@@ -25,7 +25,9 @@ class ImageCountView(APIView):
         log_instance = Log.objects.get(id=log_id)
 
         # apply filters if provided
-        queryset = models.NaoImage.objects.filter(frame__log=log_instance, camera=camera, type=image_type)
+        queryset = models.NaoImage.objects.filter(
+            frame__log=log_instance, camera=camera, type=image_type
+        )
 
         # get the count
         count = queryset.count()
@@ -147,7 +149,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             return self.bulk_create(request.data)
         else:
             return self.single_create(request.data)
-    
+
     # FIXME combine with ImageUpdateView
     def update(self, request, *args, **kwargs):
         # Check if the data is a list (bulk update) or dict (single update)
@@ -164,9 +166,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         # we ignore the fields that act as unique identifiers here
         update_fields = {
-            k: v
-            for k, v in data.items()
-            if k not in ["frame", "camera", "type"]
+            k: v for k, v in data.items() if k not in ["frame", "camera", "type"]
         }
         updated = models.NaoImage.objects.filter(id=image_id).update(**update_fields)
 

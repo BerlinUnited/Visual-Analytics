@@ -68,23 +68,23 @@ INSTALLED_APPS = [
     "frontend",
     "corsheaders",
     "rest_framework",
-    'drf_spectacular',
-    'rest_framework.authtoken',
-    'user',
-    'graphene_django',
+    "drf_spectacular",
+    "rest_framework.authtoken",
+    "user",
+    "graphene_django",
 ]
 # registers middleware components
 # these components process requests before reaching or leaving a view
 # the order is very important in this list for more see https://docs.djangoproject.com/en/5.1/ref/middleware/#middleware-ordering
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.TokenAuthMiddleware'
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.middleware.TokenAuthMiddleware",
 ]
 # defines where the url patterns are defined
 #'core.urls' means urls.py in the core app

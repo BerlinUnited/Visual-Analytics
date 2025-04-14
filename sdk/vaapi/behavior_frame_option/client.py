@@ -11,27 +11,32 @@ from ..types.behaviorframe_options import BehaviorFrameOption
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class BehaviorFrameOptionClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> BehaviorFrameOption:
-        """
-        
-        """
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> BehaviorFrameOption:
+        """ """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-frame-option/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/behavior-frame-option/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(BehaviorFrameOption, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete a BehaviorFrameOption.
 
@@ -54,7 +59,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.behavior_frame_option.delete(
@@ -62,7 +67,9 @@ class BehaviorFrameOptionClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-frame-option/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/behavior-frame-option/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -119,7 +126,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.behavior_frame_option.update(
@@ -133,11 +140,11 @@ class BehaviorFrameOptionClient:
                 "log_id": log_id,
                 "options_id": options_id,
                 "activeState": activeState,
-                #"parent": parent,
+                # "parent": parent,
                 "frame": frame,
-                #"time": time,
-                #"timeOfExecution": timeOfExecution,
-                #"stateTime": stateTime,
+                # "time": time,
+                # "timeOfExecution": timeOfExecution,
+                # "stateTime": stateTime,
             },
             request_options=request_options,
             omit=OMIT,
@@ -151,10 +158,11 @@ class BehaviorFrameOptionClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self, 
-            #log_id: int, *, 
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[BehaviorFrameOption]:
+        self,
+        # log_id: int, *,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[BehaviorFrameOption]:
         """
         List all BehaviorFrameOptions. This endpoint requires to give id's for options_id and active_state if set. You can't put the names here. If you want that you have to use the filter endpoint.
 
@@ -176,7 +184,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
 
@@ -188,13 +196,20 @@ class BehaviorFrameOptionClient:
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request("api/behavior-frame-option/", method="GET", request_options=request_options,params=query_params)
-        #_response = self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
+            "api/behavior-frame-option/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
+        # _response = self._client_wrapper.httpx_client.request(
         #    f"api/cognitionrepr/?log={jsonable_encoder(log_id)}", method="GET", request_options=request_options
-        #)
+        # )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[BehaviorFrameOption], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[BehaviorFrameOption], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -217,7 +232,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -255,7 +270,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -273,13 +288,12 @@ class BehaviorFrameOptionClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
 
     def filter(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any
-        ) -> typing.List[int]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[int]:
         """
         Returns frame numbers where the given option and states are active for one log
 
@@ -307,7 +321,7 @@ class BehaviorFrameOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.behavior_frame_option.filter(
@@ -318,7 +332,9 @@ class BehaviorFrameOptionClient:
         """
         url = "api/behavior/filter/"
         query_params = {k: v for k, v in filters.items()}
-        _response = self._client_wrapper.httpx_client.request(url, method="GET", request_options=request_options, params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            url, method="GET", request_options=request_options, params=query_params
+        )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(typing.List[int], _response.json())  # type: ignore
@@ -326,19 +342,25 @@ class BehaviorFrameOptionClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
+
     def get_behavior_count(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.Optional[int]:
-        """
-        
-        """
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.Optional[int]:
+        """ """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request("api/behavior/count/", method="GET", request_options=request_options,params=query_params) 
+        _response = self._client_wrapper.httpx_client.request(
+            "api/behavior/count/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.Dict[str, typing.Any], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.Dict[str, typing.Any], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

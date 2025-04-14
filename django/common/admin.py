@@ -7,8 +7,8 @@ from unfold.contrib.filters.admin import (
 
 from django.contrib.admin.sites import site
 from django.contrib.auth.models import Group
-site.unregister(Group)
 
+site.unregister(Group)
 
 
 class GameAdmin(ModelAdmin):
@@ -40,8 +40,6 @@ class GameExperimentFilter(DropdownFilter):
         return queryset
 
 
-
-
 class LogAdmin(ModelAdmin):
     search_fields = [
         "game_id__team1__icontains",
@@ -62,10 +60,7 @@ class LogAdmin(ModelAdmin):
     ]
 
     list_filter_submit = True  # Submit button at the bottom of the filter
-    list_filter = [GameExperimentFilter
-    ]
-
-
+    list_filter = [GameExperimentFilter]
 
     def get_game_id(self, obj):
         return obj.game.id
@@ -96,18 +91,19 @@ class LogAdmin(ModelAdmin):
 
 
 class LogStatusAdmin(ModelAdmin):
-    #TODO: add this search field to every model that is related to log
+    # TODO: add this search field to every model that is related to log
     search_fields = ["log__log_path__icontains"]
-    list_display = ["get_log_id","get_log_path"]
+    list_display = ["get_log_id", "get_log_path"]
 
     def get_log_id(self, obj):
         return obj.log.id
-    
+
     def get_log_path(self, obj):
         return obj.log.log_path
 
     get_log_id.short_description = "Log ID"
     get_log_path.short_description = "Log Path"
+
 
 # this is required for every model
 @admin.register(Event)

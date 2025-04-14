@@ -1,6 +1,7 @@
 from graphene_django import DjangoObjectType
 from .models import MotionFrame
 
+
 class MotionFrameType(DjangoObjectType):
     class Meta:
         model = MotionFrame

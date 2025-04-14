@@ -4,34 +4,33 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('common', '0001_initial'),
+        ("common", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='logstatus',
-            old_name='num_bottom',
-            new_name='Image',
+            model_name="logstatus",
+            old_name="num_bottom",
+            new_name="Image",
         ),
         migrations.RenameField(
-            model_name='logstatus',
-            old_name='num_jpg_bottom',
-            new_name='ImageJPEG',
+            model_name="logstatus",
+            old_name="num_jpg_bottom",
+            new_name="ImageJPEG",
         ),
         migrations.RenameField(
-            model_name='logstatus',
-            old_name='num_jpg_top',
-            new_name='ImageJPEGTop',
+            model_name="logstatus",
+            old_name="num_jpg_top",
+            new_name="ImageJPEGTop",
         ),
         migrations.RenameField(
-            model_name='logstatus',
-            old_name='num_top',
-            new_name='ImageTop',
+            model_name="logstatus",
+            old_name="num_top",
+            new_name="ImageTop",
         ),
         migrations.RemoveField(
-            model_name='logstatus',
-            name='num_cognition_frames',
+            model_name="logstatus",
+            name="num_cognition_frames",
         ),
     ]

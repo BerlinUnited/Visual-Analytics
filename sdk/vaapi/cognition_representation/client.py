@@ -11,42 +11,51 @@ from ..types.cognition_representation import CognitionRepresentation
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class CognitionRepresentationClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper, endpoint: str):
         self._client_wrapper = client_wrapper
         self.endpoint = endpoint
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> CognitionRepresentation:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> CognitionRepresentation:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(CognitionRepresentation, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    CognitionRepresentation, _response.json()
+                )  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete a Motion Representation.
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the logs's unique ID. You can find the ID in 
-        the django admin panel or in the log settings in the UI. 
+        You will need to supply the logs's unique ID. You can find the ID in
+        the django admin panel or in the log settings in the UI.
         Parameters
         ----------
         id : int
@@ -64,7 +73,7 @@ class CognitionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -72,7 +81,9 @@ class CognitionRepresentationClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -90,8 +101,7 @@ class CognitionRepresentationClient:
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionRepresentation:
-        """
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             f"api/cognition/{self.endpoint}/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -104,16 +114,19 @@ class CognitionRepresentationClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(CognitionRepresentation, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    CognitionRepresentation, _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self, 
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[CognitionRepresentation]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[CognitionRepresentation]:
         """
         List all logs.
 
@@ -137,7 +150,7 @@ class CognitionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.list(
@@ -149,10 +162,13 @@ class CognitionRepresentationClient:
             f"api/cognition/{self.endpoint}/",
             method="GET",
             request_options=request_options,
-            params=query_params)
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[CognitionRepresentation], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[CognitionRepresentation], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -171,7 +187,7 @@ class CognitionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -187,7 +203,9 @@ class CognitionRepresentationClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(CognitionRepresentation, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    CognitionRepresentation, _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -205,7 +223,7 @@ class CognitionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -218,21 +236,24 @@ class CognitionRepresentationClient:
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(CognitionRepresentation, _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    CognitionRepresentation, _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
+
     def get_repr_count(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.Optional[int]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.Optional[int]:
         """
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -241,10 +262,13 @@ class CognitionRepresentationClient:
             f"api/cognition/{self.endpoint}/count/",
             method="GET",
             request_options=request_options,
-            params=query_params)
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.Dict[str, typing.Any], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.Dict[str, typing.Any], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

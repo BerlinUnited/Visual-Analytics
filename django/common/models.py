@@ -135,7 +135,6 @@ class LogStatus(models.Model):
     GyrometerData = models.IntegerField(blank=True, null=True)
 
     num_motion_frames = models.IntegerField(blank=True, null=True)
-    
 
     class Meta:
         verbose_name_plural = "Log status"

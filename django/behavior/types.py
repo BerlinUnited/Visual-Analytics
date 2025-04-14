@@ -1,5 +1,10 @@
 from graphene_django import DjangoObjectType
-from .models import BehaviorOptionState, BehaviorFrameOption, XabslSymbolComplete, XabslSymbolSparse
+from .models import (
+    BehaviorOptionState,
+    BehaviorFrameOption,
+    XabslSymbolComplete,
+    XabslSymbolSparse,
+)
 
 
 class BehaviorOptionStateType(DjangoObjectType):

@@ -13,8 +13,8 @@ class CreateAnnotation(SerializerMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        image_id = input.get('image')
-         # remove image from defaults because this overwrites the retrieved image_instance otherwise
+        image_id = input.get("image")
+        # remove image from defaults because this overwrites the retrieved image_instance otherwise
         input.pop("image")
         # Fetch the Image instance using the provided ID
         try:
@@ -24,19 +24,19 @@ class CreateAnnotation(SerializerMutation):
 
         # Use the Image instance in get_or_create
         annotation, created = Annotation.objects.get_or_create(
-            image=image_instance,
-            defaults=input
+            image=image_instance, defaults=input
         )
         return annotation
 
+
 class UpdateAnnotation(SerializerMutation):
     class Meta:
-       serializer_class = AnnotationSerializer
+        serializer_class = AnnotationSerializer
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):
-        image_id = input.get('image')
-         # remove image from defaults because this overwrites the retrieved image_instance otherwise
+        image_id = input.get("image")
+        # remove image from defaults because this overwrites the retrieved image_instance otherwise
         input.pop("image")
         # Fetch the Image instance using the provided ID
         try:
@@ -49,18 +49,20 @@ class UpdateAnnotation(SerializerMutation):
         except Annotation.DoesNotExist:
             raise Exception(f"Annotation for image with id {image_id} does not exist")
 
-        annotation_instance.annotation = input.get('annotation')
+        annotation_instance.annotation = input.get("annotation")
         annotation_instance.save()
         return annotation_instance
-    
+
 
 class Query(graphene.ObjectType):
-    annotations = graphene.List(AnnotationType,filters=graphene.List(GenericFilterInput))
+    annotations = graphene.List(
+        AnnotationType, filters=graphene.List(GenericFilterInput)
+    )
 
-    def resolve_annotations(self,info,filters=None):
+    def resolve_annotations(self, info, filters=None):
         queryset = Annotation.objects.all()
-        return apply_generic_filters(Annotation,queryset,filters)
-    
+        return apply_generic_filters(Annotation, queryset, filters)
+
 
 class Mutation(graphene.ObjectType):
     CreateAnnotation = CreateAnnotation.Field()

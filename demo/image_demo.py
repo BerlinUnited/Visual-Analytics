@@ -4,7 +4,7 @@ import os
 
 if __name__ == "__main__":
     client = Vaapi(
-        base_url=os.environ.get("VAT_API_URL"),  
+        base_url=os.environ.get("VAT_API_URL"),
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
     """
@@ -16,6 +16,3 @@ if __name__ == "__main__":
     )
     for i in response:
         print(i)
-
-
-    

@@ -26,7 +26,7 @@ class FrameFilter(models.Model):
     name = models.CharField(max_length=100)
     frames = models.JSONField(blank=True, null=True)
 
-    unique_together = ("log", "user","name")
+    unique_together = ("log", "user", "name")
 
 
 class BallModel(models.Model):

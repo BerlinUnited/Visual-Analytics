@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('common', '0008_logstatus_audiodata'),
+        ("common", "0008_logstatus_audiodata"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logstatus',
-            name='WhistlePercept',
+            model_name="logstatus",
+            name="WhistlePercept",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

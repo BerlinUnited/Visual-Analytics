@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cognition', '0002_initial'),
+        ("cognition", "0002_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='framefilter',
-            name='name',
-            field=models.CharField(default='framefilter', max_length=100),
+            model_name="framefilter",
+            name="name",
+            field=models.CharField(default="framefilter", max_length=100),
             preserve_default=False,
         ),
     ]

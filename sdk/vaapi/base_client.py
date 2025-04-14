@@ -23,34 +23,35 @@ from .motion_frame.client import MotionFrameClient
 from .cognition_frame.client import CognitionFrameClient
 
 cognition_representation_list = [
-            "BallModel",
-            "BallCandidates",
-            "BallCandidatesTop",
-            "CameraMatrix",
-            "CameraMatrixTop",
-            "OdometryData",
-            "FieldPercept",
-            "FieldPerceptTop",
-            "GoalPercept",
-            "GoalPerceptTop",
-            "MultiBallPercept",
-            "RansacLinePercept", 
-            "ShortLinePercept",
-            "ScanLineEdgelPercept",
-            "ScanLineEdgelPerceptTop",
-            "RansacCirclePercept2018"
-        ]
+    "BallModel",
+    "BallCandidates",
+    "BallCandidatesTop",
+    "CameraMatrix",
+    "CameraMatrixTop",
+    "OdometryData",
+    "FieldPercept",
+    "FieldPerceptTop",
+    "GoalPercept",
+    "GoalPerceptTop",
+    "MultiBallPercept",
+    "RansacLinePercept",
+    "ShortLinePercept",
+    "ScanLineEdgelPercept",
+    "ScanLineEdgelPerceptTop",
+    "RansacCirclePercept2018",
+]
 motion_representation_list = [
-            "IMUData", 
-            "FSRData", 
-            "ButtonData", 
-            "SensorJointData", 
-            "AccelerometerData", 
-            "InertialSensorData", 
-            "MotionStatus",
-            "MotorJointData",
-            "GyrometerData",
-        ]
+    "IMUData",
+    "FSRData",
+    "ButtonData",
+    "SensorJointData",
+    "AccelerometerData",
+    "InertialSensorData",
+    "MotionStatus",
+    "MotorJointData",
+    "GyrometerData",
+]
+
 
 class VaapiBase:
     """
@@ -77,7 +78,7 @@ class VaapiBase:
     from vaapi.client import Vaapi
 
     client = Vaapi(
-        base_url='https://vat.berlin-united.com/',  
+        base_url='https://vat.berlin-united.com/',
         api_key="YOUR_API_KEY",
     )
     ```
@@ -90,9 +91,11 @@ class VaapiBase:
         api_key: typing.Optional[str] = os.getenv("VAT_API_TOKEN"),
         timeout: typing.Optional[float] = None,
         follow_redirects: typing.Optional[bool] = True,
-        httpx_client: typing.Optional[httpx.Client] = None
+        httpx_client: typing.Optional[httpx.Client] = None,
     ):
-        _defaulted_timeout = timeout if timeout is not None else 60 if httpx_client is None else None
+        _defaulted_timeout = (
+            timeout if timeout is not None else 60 if httpx_client is None else None
+        )
         if api_key is None:
             raise ApiError(
                 body="The client must be instantiated be either passing in api_key or setting LABEL_STUDIO_API_KEY"
@@ -102,30 +105,52 @@ class VaapiBase:
             api_key=api_key,
             httpx_client=httpx_client
             if httpx_client is not None
-            else httpx.Client(timeout=_defaulted_timeout, follow_redirects=follow_redirects)
+            else httpx.Client(
+                timeout=_defaulted_timeout, follow_redirects=follow_redirects
+            )
             if follow_redirects is not None
             else httpx.Client(timeout=_defaulted_timeout),
             timeout=_defaulted_timeout,
         )
         self.annotations = AnnotationsClient(client_wrapper=self._client_wrapper)
         self.events = EventsClient(client_wrapper=self._client_wrapper)
-        self.games = GameClient(client_wrapper=self._client_wrapper)  
+        self.games = GameClient(client_wrapper=self._client_wrapper)
         self.logs = LogClient(client_wrapper=self._client_wrapper)
         self.cognitionframe = CognitionFrameClient(client_wrapper=self._client_wrapper)
         self.motionframe = MotionFrameClient(client_wrapper=self._client_wrapper)
         self.behavior_option = BehaviorOptionClient(client_wrapper=self._client_wrapper)
-        self.behavior_option_state = BehaviorOptionStateClient(client_wrapper=self._client_wrapper)
-        self.behavior_frame_option = BehaviorFrameOptionClient(client_wrapper=self._client_wrapper)
+        self.behavior_option_state = BehaviorOptionStateClient(
+            client_wrapper=self._client_wrapper
+        )
+        self.behavior_frame_option = BehaviorFrameOptionClient(
+            client_wrapper=self._client_wrapper
+        )
         self.image = ImageClient(client_wrapper=self._client_wrapper)
-        self.xabsl_symbol_complete = XabslSymbolClientComplete(client_wrapper=self._client_wrapper)
-        self.xabsl_symbol_sparse = XabslSymbolClientSparse(client_wrapper=self._client_wrapper)
+        self.xabsl_symbol_complete = XabslSymbolClientComplete(
+            client_wrapper=self._client_wrapper
+        )
+        self.xabsl_symbol_sparse = XabslSymbolClientSparse(
+            client_wrapper=self._client_wrapper
+        )
         self.log_status = LogStatusClient(client_wrapper=self._client_wrapper)
         self.frame_filter = FrameFilterClient(client_wrapper=self._client_wrapper)
         self.experiment = ExperimentClient(client_wrapper=self._client_wrapper)
 
         # dynamically create client members
         for attr_name in cognition_representation_list:
-            setattr(self, attr_name.lower(), CognitionRepresentationClient(client_wrapper=self._client_wrapper, endpoint=attr_name.lower()))
+            setattr(
+                self,
+                attr_name.lower(),
+                CognitionRepresentationClient(
+                    client_wrapper=self._client_wrapper, endpoint=attr_name.lower()
+                ),
+            )
 
         for attr_name in motion_representation_list:
-            setattr(self, attr_name.lower(), MotionRepresentationClient(client_wrapper=self._client_wrapper, endpoint=attr_name.lower()))
+            setattr(
+                self,
+                attr_name.lower(),
+                MotionRepresentationClient(
+                    client_wrapper=self._client_wrapper, endpoint=attr_name.lower()
+                ),
+            )

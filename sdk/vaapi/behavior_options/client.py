@@ -11,34 +11,39 @@ from ..types.behavior_option import BehaviorOptions
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class BehaviorOptionClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> BehaviorOptions:
-        """
-        
-        """
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> BehaviorOptions:
+        """ """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-option/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/behavior-option/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(BehaviorOptions, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete a Motion Representation.
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the logs's unique ID. You can find the ID in 
-        the django admin panel or in the log settings in the UI. 
+        You will need to supply the logs's unique ID. You can find the ID in
+        the django admin panel or in the log settings in the UI.
         Parameters
         ----------
         id : int
@@ -56,7 +61,7 @@ class BehaviorOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -64,7 +69,9 @@ class BehaviorOptionClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/behavior-option/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/behavior-option/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -132,7 +139,7 @@ class BehaviorOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.update(
@@ -179,9 +186,10 @@ class BehaviorOptionClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self, 
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[BehaviorOptions]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[BehaviorOptions]:
         """
         List all logs.
 
@@ -205,7 +213,7 @@ class BehaviorOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.list(
@@ -213,13 +221,20 @@ class BehaviorOptionClient:
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request("api/behavior-option/", method="GET", request_options=request_options,params=query_params)
-        #_response = self._client_wrapper.httpx_client.request(
+        _response = self._client_wrapper.httpx_client.request(
+            "api/behavior-option/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
+        # _response = self._client_wrapper.httpx_client.request(
         #    f"api/cognitionrepr/?log={jsonable_encoder(log_id)}", method="GET", request_options=request_options
-        #)
+        # )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[BehaviorOptions], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[BehaviorOptions], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -239,7 +254,7 @@ class BehaviorOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -274,7 +289,7 @@ class BehaviorOptionClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """

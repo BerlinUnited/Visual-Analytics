@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('common', '0006_logstatus_behaviorstatesparse'),
+        ("common", "0006_logstatus_behaviorstatesparse"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logstatus',
-            name='TeamState',
+            model_name="logstatus",
+            name="TeamState",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]
