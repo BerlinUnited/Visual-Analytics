@@ -8,7 +8,7 @@ import json
 from common.models import Event, Game, Log, Experiment
 from image.models import NaoImage
 from annotation.models import Annotation
-from cognition.models import CognitionFrame, FrameFilter
+from cognition.models import FrameFilter
 from django.http import JsonResponse
 
 

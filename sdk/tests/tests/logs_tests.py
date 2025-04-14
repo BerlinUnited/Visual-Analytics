@@ -1,5 +1,5 @@
 def basic_log_tests(client):
-    a = client.logs.create(game_id=2, player_number=42)
+    a = client.logs.create(game=2, player_number=42)
     print()
     print(a)
 
