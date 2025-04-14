@@ -30,6 +30,9 @@ class IMUData(models.Model):
 
     class Meta:
         verbose_name_plural = "IMU Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_imudata")
+        ]
 
 
 class FSRData(models.Model):
@@ -43,6 +46,9 @@ class FSRData(models.Model):
 
     class Meta:
         verbose_name_plural = "FSR Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_fsrdata")
+        ]
 
 
 class ButtonData(models.Model):
@@ -56,6 +62,9 @@ class ButtonData(models.Model):
 
     class Meta:
         verbose_name_plural = "Button Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_buttondata")
+        ]
 
 
 class SensorJointData(models.Model):
@@ -69,6 +78,9 @@ class SensorJointData(models.Model):
 
     class Meta:
         verbose_name_plural = "Sensor Joint Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_sensorjointdata")
+        ]
 
 
 class AccelerometerData(models.Model):
@@ -82,6 +94,9 @@ class AccelerometerData(models.Model):
 
     class Meta:
         verbose_name_plural = "Accelerometer Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_accelerometerdata")
+        ]
 
 
 class InertialSensorData(models.Model):
@@ -95,6 +110,9 @@ class InertialSensorData(models.Model):
 
     class Meta:
         verbose_name_plural = "Inertial Sensor Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_inertialsensordata")
+        ]
 
 
 class MotionStatus(models.Model):
@@ -108,6 +126,9 @@ class MotionStatus(models.Model):
 
     class Meta:
         verbose_name_plural = "Motion Status"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motionstatus")
+        ]
 
 
 class MotorJointData(models.Model):
@@ -121,6 +142,9 @@ class MotorJointData(models.Model):
 
     class Meta:
         verbose_name_plural = "Motor Joint Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motorjointdata")
+        ]
 
 
 class GyrometerData(models.Model):
@@ -134,3 +158,6 @@ class GyrometerData(models.Model):
 
     class Meta:
         verbose_name_plural = "Gyrometer Data"
+        constraints = [
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_gyrometerdata")
+        ]
