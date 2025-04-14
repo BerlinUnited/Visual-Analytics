@@ -14,7 +14,7 @@ class Log(pydantic_v1.BaseModel):
 
     #: Foreign key to the experiment this log is from
     experiment: typing.Optional[int] = None
-    
+
     #: Robot Version, either v5 or v6
     robot_version: typing.Optional[str] = None
 
@@ -23,7 +23,7 @@ class Log(pydantic_v1.BaseModel):
 
     #: head_number
     head_number: typing.Optional[str] = pydantic_v1.Field(default=None)
-    
+
     #: body_serial
     body_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
@@ -31,7 +31,9 @@ class Log(pydantic_v1.BaseModel):
     head_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
     #: representation_list
-    representation_list: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(default=None)
+    representation_list: typing.Optional[typing.Dict[str, typing.Any]] = (
+        pydantic_v1.Field(default=None)
+    )
 
     #: sensor_log_path
     sensor_log_path: typing.Optional[str] = pydantic_v1.Field(default=None)
@@ -42,19 +44,31 @@ class Log(pydantic_v1.BaseModel):
     #: combined_log_path
     combined_log_path: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-
     def json(self, **kwargs: typing.Any) -> str:
-        kwargs_with_defaults: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
+        kwargs_with_defaults: typing.Any = {
+            "by_alias": True,
+            "exclude_unset": True,
+            **kwargs,
+        }
         return super().json(**kwargs_with_defaults)
 
     def dict(self, **kwargs: typing.Any) -> typing.Dict[str, typing.Any]:
-        kwargs_with_defaults_exclude_unset: typing.Any = {"by_alias": True, "exclude_unset": True, **kwargs}
-        kwargs_with_defaults_exclude_none: typing.Any = {"by_alias": True, "exclude_none": True, **kwargs}
+        kwargs_with_defaults_exclude_unset: typing.Any = {
+            "by_alias": True,
+            "exclude_unset": True,
+            **kwargs,
+        }
+        kwargs_with_defaults_exclude_none: typing.Any = {
+            "by_alias": True,
+            "exclude_none": True,
+            **kwargs,
+        }
 
         return deep_union_pydantic_dicts(
-            super().dict(**kwargs_with_defaults_exclude_unset), super().dict(**kwargs_with_defaults_exclude_none)
+            super().dict(**kwargs_with_defaults_exclude_unset),
+            super().dict(**kwargs_with_defaults_exclude_none),
         )
-    
+
     def __str__(self):
         return f"{self.id} - {self.log_path}"
 

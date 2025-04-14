@@ -9,11 +9,11 @@ from tests.motion_repr_test import basic_motion_repr_tests
 
 if __name__ == "__main__":
     client = Vaapi(
-        base_url=os.environ.get("VAT_API_URL"),  
+        base_url=os.environ.get("VAT_API_URL"),
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
-    #a = client.annotations.get(id=1)
-    #print(a)
+    # a = client.annotations.get(id=1)
+    # print(a)
 
     basic_event_tests(client)
     print()

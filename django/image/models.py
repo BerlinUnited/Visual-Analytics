@@ -12,7 +12,9 @@ class NaoImage(models.Model):
         raw = "RAW", _("raw")
         jpeg = "JPEG", _("jpeg")
 
-    frame = models.ForeignKey(CognitionFrame, on_delete=models.CASCADE, related_name="images")
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="images"
+    )
     camera = models.CharField(max_length=10, choices=Camera, blank=True, null=True)
     type = models.CharField(max_length=10, choices=Type, blank=True, null=True)
     image_url = models.CharField(max_length=200, blank=True, null=True)

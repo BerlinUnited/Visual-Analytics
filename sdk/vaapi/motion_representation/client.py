@@ -11,43 +11,50 @@ from ..types.motion_representation import MotionRepresentation
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class MotionRepresentationClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper, endpoint: str):
         self._client_wrapper = client_wrapper
         self.endpoint = endpoint
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> MotionRepresentation:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> MotionRepresentation:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         # FIXME make this dynamic
         _response = self._client_wrapper.httpx_client.request(
-            f"api/motion/{self.endpoint}/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/motion/{self.endpoint}/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(MotionRepresentation, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete a Motion Representation.
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the logs's unique ID. You can find the ID in 
-        the django admin panel or in the log settings in the UI. 
+        You will need to supply the logs's unique ID. You can find the ID in
+        the django admin panel or in the log settings in the UI.
         Parameters
         ----------
         id : int
@@ -65,7 +72,7 @@ class MotionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -73,7 +80,9 @@ class MotionRepresentationClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/motion/{self.endpoint}/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/motion/{self.endpoint}/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -91,8 +100,7 @@ class MotionRepresentationClient:
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MotionRepresentation:
-        """
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             f"api/{self.endpoint}/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -112,9 +120,10 @@ class MotionRepresentationClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[MotionRepresentation]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[MotionRepresentation]:
         """
         List all logs.
 
@@ -138,7 +147,7 @@ class MotionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.list(
@@ -146,10 +155,17 @@ class MotionRepresentationClient:
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request(f"api/motion/{self.endpoint}/", method="GET", request_options=request_options,params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            f"api/motion/{self.endpoint}/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[MotionRepresentation], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[MotionRepresentation], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -162,8 +178,7 @@ class MotionRepresentationClient:
         representation_data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MotionRepresentation:
-        """
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             f"api/motion/{self.endpoint}/",
             method="POST",
@@ -194,7 +209,7 @@ class MotionRepresentationClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -214,24 +229,32 @@ class MotionRepresentationClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def get_repr_count(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.Optional[int]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.Optional[int]:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request(f"api/motion/{self.endpoint}/count", method="GET", request_options=request_options,params=query_params) 
+        _response = self._client_wrapper.httpx_client.request(
+            f"api/motion/{self.endpoint}/count",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.Dict[str, typing.Any], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.Dict[str, typing.Any], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

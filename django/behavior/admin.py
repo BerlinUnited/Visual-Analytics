@@ -9,12 +9,14 @@ from .models import (
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import SingleNumericFilter
 
+
 class BehaviorOptionAdmin(ModelAdmin):
     list_display = ("get_log_id", "id", "xabsl_internal_option_id", "option_name")
-    list_filter_submit = True 
+    list_filter_submit = True
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
+
     def get_log_id(self, obj):
         return obj.log.id
 
@@ -31,10 +33,11 @@ class BehaviorOptionStateAdmin(ModelAdmin):
         "get_name",
     )
     search_fields = ["option_id__option_name"]
-    list_filter_submit = True 
+    list_filter_submit = True
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
+
     def get_log_id(self, obj):
         return obj.log.id
 
@@ -61,12 +64,9 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
         "frame",
     )
     search_fields = ["options_id__option_name"]
-    list_filter_submit = True 
-    list_filter = [
-        ("frame__frame_number",SingleNumericFilter)
-    ]
+    list_filter_submit = True
+    list_filter = [("frame__frame_number", SingleNumericFilter)]
     autocomplete_fields = ["frame"]
-
 
     def get_option_id(self, obj):
         return obj.options_id.id
@@ -84,10 +84,11 @@ class BehaviorFrameOptionAdmin(ModelAdmin):
 
 class XabslSymbolCompleteAdmin(ModelAdmin):
     list_display = ["get_log_id"]
-    list_filter_submit = True 
+    list_filter_submit = True
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
+
     def get_log_id(self, obj):
         return obj.log.id
 
@@ -100,17 +101,21 @@ class XabslSymbolCompleteAdmin(ModelAdmin):
 #    def get_log_id(self, obj):
 #        return obj.log_id.id
 
+
 class XabslSymbolSparseAdmin(ModelAdmin):
-    list_display= ["get_frame_number"]
-    list_filter_submit = True 
-    list_filter = [("frame__frame_number",SingleNumericFilter)]
+    list_display = ["get_frame_number"]
+    list_filter_submit = True
+    list_filter = [("frame__frame_number", SingleNumericFilter)]
     autocomplete_fields = ["frame"]
-    def get_frame_number(self,obj):
+
+    def get_frame_number(self, obj):
         return obj.frame.frame_number
+
     get_frame_number.short_description = "frame number"
 
-admin.site.register(BehaviorOption,BehaviorOptionAdmin)
-admin.site.register(BehaviorOptionState,BehaviorOptionStateAdmin)
+
+admin.site.register(BehaviorOption, BehaviorOptionAdmin)
+admin.site.register(BehaviorOptionState, BehaviorOptionStateAdmin)
 admin.site.register(BehaviorFrameOption, BehaviorFrameOptionAdmin)
 admin.site.register(XabslSymbolComplete, XabslSymbolCompleteAdmin)
-admin.site.register(XabslSymbolSparse,XabslSymbolSparseAdmin)
+admin.site.register(XabslSymbolSparse, XabslSymbolSparseAdmin)

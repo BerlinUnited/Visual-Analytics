@@ -34,13 +34,21 @@ create_annotation_mutation = """mutation CreateAnnotation($input: CreateAnnotati
   }
 }"""
 
-json_box = {"bbox": [{"x": 0.42298688888549807, "y": 0.5065087000528972, "id": "DDF51B611", "label": "ich", "width": 0.06891517639160157, "height": 0.09018630981445312}]}
+json_box = {
+    "bbox": [
+        {
+            "x": 0.42298688888549807,
+            "y": 0.5065087000528972,
+            "id": "DDF51B611",
+            "label": "ich",
+            "width": 0.06891517639160157,
+            "height": 0.09018630981445312,
+        }
+    ]
+}
 
-create_mutation_variables= {
-    "input": {
-        "image": "2",
-        "annotation": json.dumps(json_box)
-    }
+create_mutation_variables = {
+    "input": {"image": "2", "annotation": json.dumps(json_box)}
 }
 
 update_annotation_mutation = """mutation updateAnnotation($input:UpdateAnnotationInput!)
@@ -50,16 +58,22 @@ update_annotation_mutation = """mutation updateAnnotation($input:UpdateAnnotatio
   }
 }"""
 
-json_box_2 = {"bbox": [{"x": 0.42298688888549807, "y": 0.5065087000528972, "id": "DDF51B611", "label": "nao", "width": 0.06891517639160157, "height": 0.09018630981445312}]}
-
-update_mutation_variables= {
-    "input": {
-        "image": "2",
-        "annotation": json.dumps(json_box_2)
-    }
+json_box_2 = {
+    "bbox": [
+        {
+            "x": 0.42298688888549807,
+            "y": 0.5065087000528972,
+            "id": "DDF51B611",
+            "label": "nao",
+            "width": 0.06891517639160157,
+            "height": 0.09018630981445312,
+        }
+    ]
 }
 
-
+update_mutation_variables = {
+    "input": {"image": "2", "annotation": json.dumps(json_box_2)}
+}
 
 
 if __name__ == "__main__":
@@ -68,5 +82,5 @@ if __name__ == "__main__":
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
 
-    data = client.execute(update_annotation_mutation,update_mutation_variables)
+    data = client.execute(update_annotation_mutation, update_mutation_variables)
     print(data)

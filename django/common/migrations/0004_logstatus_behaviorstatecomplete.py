@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('common', '0003_logstatus_robotinfo'),
+        ("common", "0003_logstatus_robotinfo"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logstatus',
-            name='BehaviorStateComplete',
+            model_name="logstatus",
+            name="BehaviorStateComplete",
             field=models.IntegerField(blank=True, null=True),
         ),
     ]

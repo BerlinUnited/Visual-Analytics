@@ -12,41 +12,48 @@ from ..types.event import Event
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class EventsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> Event:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> Event:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/events/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/events/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(Event, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete an event.
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the events's unique ID. You can find the ID in 
-        the django admin panel or in the events settings in the UI. 
+        You will need to supply the events's unique ID. You can find the ID in
+        the django admin panel or in the events settings in the UI.
         Parameters
         ----------
         id : int
@@ -64,7 +71,7 @@ class EventsClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -72,7 +79,9 @@ class EventsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/events/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/events/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -143,7 +152,7 @@ class EventsClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.update(
@@ -192,7 +201,9 @@ class EventsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def list(self, *, request_options: typing.Optional[RequestOptions] = None) -> typing.List[Event]:
+    def list(
+        self, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> typing.List[Event]:
         """
         List all annotations for a task.
 
@@ -216,7 +227,7 @@ class EventsClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.list(
@@ -251,7 +262,7 @@ class EventsClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -289,7 +300,7 @@ class EventsClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """

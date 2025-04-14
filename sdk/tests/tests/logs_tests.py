@@ -13,6 +13,6 @@ def basic_log_tests(client):
     d = client.logs.update(id=a.id, player_number=13)
     print()
     print(d)
-    
+
     e = client.logs.delete(id=a.id)
     print(e)

@@ -12,7 +12,7 @@ class CognitionFrameSerializer(serializers.ModelSerializer):
 class FrameFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = FrameFilter
-        fields = ["log", "frames","name"]
+        fields = ["log", "frames", "name"]
 
     def create(self, validated_data):
         user = self.context["request"].user
@@ -20,7 +20,7 @@ class FrameFilterSerializer(serializers.ModelSerializer):
         # Using update_or_create instead of create
         instance, created = FrameFilter.objects.update_or_create(
             log=validated_data["log"],
-            name = validated_data["name"],
+            name=validated_data["name"],
             user=user,
             defaults={"frames": validated_data["frames"]},
         )

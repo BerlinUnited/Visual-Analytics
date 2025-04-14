@@ -11,41 +11,48 @@ from ..types.frame_filter import FrameFilter
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class FrameFilterClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> FrameFilter:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> FrameFilter:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/frame-filter/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/frame-filter/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(FrameFilter, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete the log status for one log.
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the logs's unique ID. You can find the ID in 
-        the django admin panel or in the log settings in the UI. 
+        You will need to supply the logs's unique ID. You can find the ID in
+        the django admin panel or in the log settings in the UI.
         Parameters
         ----------
         id : int
@@ -63,7 +70,7 @@ class FrameFilterClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -71,7 +78,9 @@ class FrameFilterClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/frame-filter/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/frame-filter/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -88,9 +97,7 @@ class FrameFilterClient:
         frames: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> FrameFilter:
-        """
-        
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             f"api/frame-filter/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -109,20 +116,23 @@ class FrameFilterClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self, 
-            #log_id: int, *, 
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[FrameFilter]:
-        """
-
-        """
+        self,
+        # log_id: int, *,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[FrameFilter]:
+        """ """
         query_params = {k: v for k, v in filters.items() if v is not None}
 
         url = "api/frame-filter/"
-        _response = self._client_wrapper.httpx_client.request(url, method="GET", request_options=request_options,params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            url, method="GET", request_options=request_options, params=query_params
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[FrameFilter], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[FrameFilter], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -150,7 +160,7 @@ class FrameFilterClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         ```
@@ -158,11 +168,7 @@ class FrameFilterClient:
         _response = self._client_wrapper.httpx_client.request(
             "api/frame-filter/",
             method="POST",
-            json={
-                "log": log_id,
-                "frames": frames,
-                "name": name
-            },
+            json={"log": log_id, "frames": frames, "name": name},
             request_options=request_options,
             omit=OMIT,
         )
@@ -173,4 +179,3 @@ class FrameFilterClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-

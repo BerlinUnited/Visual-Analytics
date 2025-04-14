@@ -11,13 +11,18 @@ from ..types.annotation import Annotation
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class AnnotationsClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> Annotation:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> Annotation:
         _response = self._client_wrapper.httpx_client.request(
-            f"api/annotations/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/annotations/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -27,7 +32,9 @@ class AnnotationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete an annotation.
 
@@ -59,7 +66,9 @@ class AnnotationsClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/annotations/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/annotations/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -74,12 +83,9 @@ class AnnotationsClient:
         id: int,
         *,
         annotation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
-        
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
-        """
-        
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             f"api/annotations/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -97,7 +103,13 @@ class AnnotationsClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def list(self, id: int, *, request_options: typing.Optional[RequestOptions] = None,**filters: typing.Any) -> typing.List[Annotation]:
+    def list(
+        self,
+        id: int,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[Annotation]:
         """
         TODO: think about when it makes sense to use list for annotations:
         - kind of only makes sense for statistics on annotations.
@@ -105,11 +117,16 @@ class AnnotationsClient:
         query_params = {k: v for k, v in filters.items()}
         query_params["id"] = id
         _response = self._client_wrapper.httpx_client.request(
-            "api/annotations/", method="GET", request_options=request_options,params=query_params
+            "api/annotations/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
         )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[Annotation], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.List[Annotation], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
@@ -122,9 +139,7 @@ class AnnotationsClient:
         annotation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
-        """
-
-        """
+        """ """
         _response = self._client_wrapper.httpx_client.request(
             "api/annotations/",
             method="POST",

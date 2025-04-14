@@ -11,41 +11,48 @@ from ..types.image import Image
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
 
+
 class ImageClient:
     def __init__(self, *, client_wrapper: SyncClientWrapper):
         self._client_wrapper = client_wrapper
 
-    def get(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> Image:
+    def get(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> Image:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/image/{jsonable_encoder(id)}/", method="GET", request_options=request_options
+            f"api/image/{jsonable_encoder(id)}/",
+            method="GET",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(Image, _response.json())  # type: ignore
             _response_json = _response.json()
-            
+
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-    def delete(self, id: int, *, request_options: typing.Optional[RequestOptions] = None) -> None:
+    def delete(
+        self, id: int, *, request_options: typing.Optional[RequestOptions] = None
+    ) -> None:
         """
         Delete a Log., this will also delete all images and representations
 
         <Warning>This action can't be undone!</Warning>
 
-        You will need to supply the logs's unique ID. You can find the ID in 
-        the django admin panel or in the log settings in the UI. 
+        You will need to supply the logs's unique ID. You can find the ID in
+        the django admin panel or in the log settings in the UI.
         Parameters
         ----------
         id : int
@@ -63,7 +70,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.delete(
@@ -71,7 +78,9 @@ class ImageClient:
         )
         """
         _response = self._client_wrapper.httpx_client.request(
-            f"api/image/{jsonable_encoder(id)}/", method="DELETE", request_options=request_options
+            f"api/image/{jsonable_encoder(id)}/",
+            method="DELETE",
+            request_options=request_options,
         )
         try:
             if 200 <= _response.status_code < 300:
@@ -144,7 +153,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.update(
@@ -180,7 +189,7 @@ class ImageClient:
                 "type": type,
                 "frame_number": frame_number,
                 "image_url": image_url,
-                "blurredness_value":blurredness_value,
+                "blurredness_value": blurredness_value,
                 "brightness_value": brightness_value,
                 "resolution": resolution,
             },
@@ -196,9 +205,10 @@ class ImageClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.List[Image]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.List[Image]:
         """
         List all Image with optional filters applied.
 
@@ -217,7 +227,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.image.list(
@@ -225,7 +235,12 @@ class ImageClient:
         )
         """
         query_params = {k: v for k, v in filters.items()}
-        _response = self._client_wrapper.httpx_client.request("api/image/", method="GET", request_options=request_options,params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            "api/image/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(typing.List[Image], _response.json())  # type: ignore
@@ -305,7 +320,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         client.annotations.create(
@@ -365,7 +380,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -383,7 +398,6 @@ class ImageClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
 
     def bulk_update(
         self,
@@ -397,7 +411,7 @@ class ImageClient:
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
@@ -416,26 +430,33 @@ class ImageClient:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
-
     def get_image_count(
-            self,
-            request_options: typing.Optional[RequestOptions] = None,
-            **filters: typing.Any) -> typing.Optional[int]:
+        self,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
+    ) -> typing.Optional[int]:
         """
         Examples
         --------
         from vaapi.client import Vaapi
 
         client = Vaapi(
-            base_url='https://vat.berlin-united.com/',  
+            base_url='https://vat.berlin-united.com/',
             api_key="YOUR_API_KEY",
         )
         """
         query_params = {k: v for k, v in filters.items() if v is not None}
-        _response = self._client_wrapper.httpx_client.request("api/image-count/", method="GET", request_options=request_options,params=query_params)
+        _response = self._client_wrapper.httpx_client.request(
+            "api/image-count/",
+            method="GET",
+            request_options=request_options,
+            params=query_params,
+        )
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.Dict[str, typing.Any], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(
+                    typing.Dict[str, typing.Any], _response.json()
+                )  # type: ignore
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

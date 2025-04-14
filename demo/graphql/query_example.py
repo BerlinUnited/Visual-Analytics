@@ -45,10 +45,8 @@ query log_status($id: String!) {
   }
 }
 """
-log_status_var = {
-  "id": "12"
-}
-#this would be cooler if it only returns fields that are null since this is what we are checking for in 05_calculate_num_frames is_done
+log_status_var = {"id": "12"}
+# this would be cooler if it only returns fields that are null since this is what we are checking for in 05_calculate_num_frames is_done
 log_status_cognition_frames = """query cognition_status($id: String!) {
   logstatus(filters: [{ field: "log_id", value: $id }]) {
     FrameInfo
@@ -99,12 +97,11 @@ image_without_stats = """query($id: String!){
 }"""
 
 
-
 if __name__ == "__main__":
     client = VATClient(
         base_url=os.environ.get("VAT_API_URL"),
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
 
-    data = client.execute(image_without_stats,log_status_var)
+    data = client.execute(image_without_stats, log_status_var)
     print(data)

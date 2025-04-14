@@ -5,28 +5,32 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cognition', '0002_initial'),
-        ('image', '0001_initial'),
+        ("cognition", "0002_initial"),
+        ("image", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='naoimage',
-            name='frame',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='images', to='cognition.cognitionframe'),
+            model_name="naoimage",
+            name="frame",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="images",
+                to="cognition.cognitionframe",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='naoimage',
-            unique_together={('frame', 'camera', 'type')},
+            name="naoimage",
+            unique_together={("frame", "camera", "type")},
         ),
         migrations.RemoveField(
-            model_name='naoimage',
-            name='frame_number',
+            model_name="naoimage",
+            name="frame_number",
         ),
         migrations.RemoveField(
-            model_name='naoimage',
-            name='log',
+            model_name="naoimage",
+            name="log",
         ),
     ]
