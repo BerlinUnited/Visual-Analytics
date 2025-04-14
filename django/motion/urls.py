@@ -13,7 +13,7 @@ urlpatterns = [
 router = routers.DefaultRouter()
 router.register("motionframe", views.MotionFrameViewSet)
 router.register(
-    r"api/motion/(?P<model_name>[^/.]+)",
+    "motion/(?P<model_name>[^/.]+)",
     views.DynamicModelViewSet,
     basename="dynamicmodel",
 )
