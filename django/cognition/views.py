@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .models import CognitionFrame, FrameFilter
 from . import serializers
 
@@ -67,6 +68,23 @@ class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
             execute_values(cursor, query, rows_tuples, page_size=500)
 
         return Response({}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'], url_path='count')
+    def count_records(self, request, *args, **kwargs):
+        """
+        Custom action to count records in the dynamic model.
+        Accessible at /api/cognition/<modelname>/count/
+        """
+        # Get filter parameters from query string
+        log_id = request.query_params.get("log")
+
+        model = self.get_model()
+        queryset = model.objects.filter(frame__log=log_id)
+        
+        # You can add any additional filtering here if needed
+        count = queryset.count()
+        
+        return Response({'count': count})
 
 
 class CognitionFrameCount(APIView):
@@ -74,11 +92,8 @@ class CognitionFrameCount(APIView):
         # Get filter parameters from query string
         log_id = request.query_params.get("log")
 
-        # start with all images
-        queryset = CognitionFrame.objects.all()
-
-        # apply filters if provided
-        queryset = queryset.filter(log=log_id)
+        # query the data
+        queryset = CognitionFrame.objects.filter(log=log_id)
 
         # get the count
         count = queryset.count()
