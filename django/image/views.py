@@ -139,7 +139,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         # print(qs.order_by('frame_number').count())
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return qs.order_by("frame_number")
+        return qs.order_by("frame__frame_number")
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)
