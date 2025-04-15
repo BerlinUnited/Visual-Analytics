@@ -4,6 +4,7 @@ from unfold.contrib.filters.admin import SingleNumericFilter
 from .models import (
     CognitionFrame,
     FrameFilter,
+    AudioData,
     BallModel,
     BallCandidates,
     BallCandidatesTop,
@@ -15,11 +16,15 @@ from .models import (
     GoalPercept,
     GoalPerceptTop,
     MultiBallPercept,
+    RansacCirclePercept2018,
     RansacLinePercept,
+    RobotInfo,
     ShortLinePercept,
     ScanLineEdgelPercept,
     ScanLineEdgelPerceptTop,
-    RansacCirclePercept2018,
+    TeamMessageDecision,
+    Teamstate,
+    WhistlePercept,
 )
 
 
@@ -88,6 +93,7 @@ class CognitionModelAdmin(ModelAdmin):
 
 admin.site.register(CognitionFrame, CognitionFrameAdmin)
 admin.site.register(FrameFilter, FrameFilterAdmin)
+admin.site.register(AudioData, CognitionModelAdmin)
 admin.site.register(BallModel, CognitionModelAdmin)
 admin.site.register(BallCandidates, CognitionModelAdmin)
 admin.site.register(BallCandidatesTop, CognitionModelAdmin)
@@ -99,8 +105,12 @@ admin.site.register(FieldPerceptTop, CognitionModelAdmin)
 admin.site.register(GoalPercept, CognitionModelAdmin)
 admin.site.register(GoalPerceptTop, CognitionModelAdmin)
 admin.site.register(MultiBallPercept, CognitionModelAdmin)
+admin.site.register(RansacCirclePercept2018, CognitionModelAdmin)
 admin.site.register(RansacLinePercept, CognitionModelAdmin)
+admin.site.register(RobotInfo, CognitionModelAdmin)
 admin.site.register(ShortLinePercept, CognitionModelAdmin)
 admin.site.register(ScanLineEdgelPercept, CognitionModelAdmin)
 admin.site.register(ScanLineEdgelPerceptTop, CognitionModelAdmin)
-admin.site.register(RansacCirclePercept2018, CognitionModelAdmin)
+admin.site.register(TeamMessageDecision, CognitionModelAdmin)
+admin.site.register(Teamstate, CognitionModelAdmin)
+admin.site.register(WhistlePercept, CognitionModelAdmin)

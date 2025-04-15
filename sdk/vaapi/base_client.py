@@ -23,6 +23,7 @@ from .motion_frame.client import MotionFrameClient
 from .cognition_frame.client import CognitionFrameClient
 
 cognition_representation_list = [
+    "AudioData",
     "BallModel",
     "BallCandidates",
     "BallCandidatesTop",
@@ -34,11 +35,15 @@ cognition_representation_list = [
     "GoalPercept",
     "GoalPerceptTop",
     "MultiBallPercept",
+    "RansacCirclePercept2018",
     "RansacLinePercept",
+    "RobotInfo",
     "ShortLinePercept",
     "ScanLineEdgelPercept",
     "ScanLineEdgelPerceptTop",
-    "RansacCirclePercept2018",
+    "TeamMessageDecision",
+    "TeamState",
+    "WhistlePercept",
 ]
 motion_representation_list = [
     "IMUData",

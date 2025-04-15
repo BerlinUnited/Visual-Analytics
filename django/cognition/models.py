@@ -29,6 +29,24 @@ class FrameFilter(models.Model):
     unique_together = ("log", "user", "name")
 
 
+class AudioData(models.Model):
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="audiodata"
+    )
+    representation_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.frame}--{self.__class__.__name__}"
+
+    class Meta:
+        verbose_name_plural = "Audio Data"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_audiodata"
+            )
+        ]
+
+
 class BallModel(models.Model):
     frame = models.ForeignKey(
         CognitionFrame, on_delete=models.CASCADE, related_name="ballmodel"
@@ -225,6 +243,24 @@ class MultiBallPercept(models.Model):
         ]
 
 
+class RansacCirclePercept2018(models.Model):
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="ransaccirclepercept2018"
+    )
+    representation_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.frame}--{self.__class__.__name__}"
+
+    class Meta:
+        verbose_name_plural = "Ransac Circle Percept 2018"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_ransaccirclepercept2018"
+            )
+        ]
+
+
 class RansacLinePercept(models.Model):
     frame = models.ForeignKey(
         CognitionFrame, on_delete=models.CASCADE, related_name="ransaclinepercept"
@@ -239,6 +275,24 @@ class RansacLinePercept(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["frame"], name="unique_frame_id_ransaclinepercept"
+            )
+        ]
+
+
+class RobotInfo(models.Model):
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="robotinfo"
+    )
+    representation_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.frame}--{self.__class__.__name__}"
+
+    class Meta:
+        verbose_name_plural = "Robot Info"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_robotinfo"
             )
         ]
 
@@ -297,9 +351,9 @@ class ScanLineEdgelPerceptTop(models.Model):
         ]
 
 
-class RansacCirclePercept2018(models.Model):
+class TeamMessageDecision(models.Model):
     frame = models.ForeignKey(
-        CognitionFrame, on_delete=models.CASCADE, related_name="ransaccirclepercept2018"
+        CognitionFrame, on_delete=models.CASCADE, related_name="teammessagedecision"
     )
     representation_data = models.JSONField(blank=True, null=True)
 
@@ -307,9 +361,45 @@ class RansacCirclePercept2018(models.Model):
         return f"{self.frame}--{self.__class__.__name__}"
 
     class Meta:
-        verbose_name_plural = "Ransac Circle Percept 2018"
+        verbose_name_plural = "Team Message Decision"
         constraints = [
             models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_ransaccirclepercept2018"
+                fields=["frame"], name="unique_frame_id_teammessagedecision"
+            )
+        ]
+
+
+class Teamstate(models.Model):
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="teamstate"
+    )
+    representation_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.frame}--{self.__class__.__name__}"
+
+    class Meta:
+        verbose_name_plural = "Team State"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_teamstate"
+            )
+        ]
+
+
+class WhistlePercept(models.Model):
+    frame = models.ForeignKey(
+        CognitionFrame, on_delete=models.CASCADE, related_name="whistlepercept"
+    )
+    representation_data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.frame}--{self.__class__.__name__}"
+
+    class Meta:
+        verbose_name_plural = "Whistle Percept"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_whistlepercept"
             )
         ]
