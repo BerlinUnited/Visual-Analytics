@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: image-updater
+spec:
+  project: default
+  source:
+    repoURL: 'git@github.com:efcy/visual_analytics.git'
+    path: deployment/image-updater
+    targetRevision: HEAD
+    helm:
+      releaseName: image-updater
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: image-updater
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
