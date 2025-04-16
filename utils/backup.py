@@ -9,6 +9,7 @@ import time
 
 # kubectl port-forward postgres-postgresql-0 -n postgres 1234:5432
 # full backup: python backup.py -a -g -o /opt/local-path-provisioner/db_backup
+# only full tables: python backup.py  -g -o ./
 # tar --use-compress-program="pigz -k -3" -cf /opt/local-path-provisioner/db_backup.tar.gz -C /opt/local-path-provisioner/ db_backup/
 
 
@@ -155,6 +156,36 @@ def export_split_table(log_id, force=False, export_tables=None):
 
     cognition_tables = [
         "image_naoimage",
+        "cognition_ballcandidates",
+        "cognition_ballcandidatestop",
+        #"cognition_audiodata",
+        "cognition_ballmodel",
+        "cognition_cameramatrix",
+        "cognition_cameramatrixtop",
+        "cognition_fieldpercept",
+        "cognition_fieldpercepttop",
+        "cognition_goalpercept",
+        "cognition_goalpercepttop",
+        "cognition_multiballpercept",
+        "cognition_odometrydata",
+        "cognition_ransaccirclepercept2018",
+        "cognition_ransaclinepercept",
+        "cognition_robotinfo",
+        "cognition_scanlineedgelpercept",
+        "cognition_scanlineedgelpercepttop",
+        "cognition_shortlinepercept",
+        "cognition_teammessagedecision",
+        "cognition_teamstate",
+        "cognition_whistlepercept",
+        "motion_accelerometerdata",
+        "motion_buttondata",
+        "motion_fsrdata",
+        "motion_gyrometerdata",
+        "motion_imudata",
+        "motion_inertialsensordata",
+        "motion_motionstatus",
+        "motion_motorjointdata",
+        "motion_sensorjointdata",
     ]
     for table in cognition_tables:
         output_file = Path(args.output) / f"{table}_{log_id}.sql"
@@ -178,12 +209,14 @@ def export_split_table(log_id, force=False, export_tables=None):
             proc.wait()
 
             delete_temp_table(temp_table_name)
+            # FIXME the last temp folder is not deleted??? - sometimes I see one temp table - check whats going on there.
         except Exception as e:
             print("Exception happened during dump %s" % (e))
             quit()
 
         # change the table name in the sql files
         replace_string_in_first_lines(output_file, "temp_", "", 200)
+        
 
 
 if __name__ == "__main__":
@@ -244,9 +277,5 @@ if __name__ == "__main__":
             export_split_table(log_id, args.force, args.tables)
             t1 = time.time()
             print(f"time to export: {t1 - t0}s")
-    else:
-        print("ERROR: either specify all or logs argument")
-        print(parser.print_help())
-        quit()
-
+    
     conn.close()
