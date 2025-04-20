@@ -14,7 +14,9 @@ class CognitionFrame(pydantic_v1.BaseModel):
 
     #
     frame_time: typing.Optional[int] = None
-
+    
+    clostest_motion_frame: typing.Optional[int] = pydantic_v1.Field(default=None)
+    
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {
             "by_alias": True,
