@@ -84,7 +84,7 @@ class LogDetailView(DetailView):
         # Handle case where no images exist
         if self.object.game_id is not None:
             return redirect("game_detail", pk=self.object.game.id)
-        elif self.object.experiment is not None:
+        elif self.object.experiment_id is not None:
             return redirect("experiment_detail", pk=self.object.experiment.id)
 
     def get_first_frame_number(self, filter_name):
