@@ -1,0 +1,207 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Sidebar width, remaining for content */
+    grid-template-rows: auto 1fr; /* Header height, remaining for content, timeline height */
+    grid-template-areas:
+    "header header"
+    "nav content";
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgb(159, 232, 253) 20%,
+        transparent 80%
+    ),
+      conic-gradient(
+        from 45deg at 50% 50%,
+        rgb(255, 129, 170) 0%,
+        rgb(159, 232, 253) 25%,
+        rgb(255, 129, 170) 50%,
+        rgb(159, 232, 253) 75%,
+        rgb(255, 129, 170) 100%
+      );
+}
+
+header {
+    grid-column: 1 / -1; /* Span across all columns */
+    
+    color: black;
+    padding-left: 16px;
+    align-items: center;
+    display: flex;
+    height: 50px;
+}
+.header-logo{
+    height: 80%;
+}
+
+.sidebar_container {
+    grid-row: 2 / -1;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4; /* Match body background */
+}
+
+.sidebar {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    color: #000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    border-bottom: 1px solid #4a6572;
+}
+
+.sidebar li:last-child {
+    border-bottom: none;
+}
+
+.sidebar a {
+    color: #555;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+}
+
+.sidebar a:hover {
+    color: rgb(255, 129, 170);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 3fr auto;
+    grid-template-rows: 1fr 100px;
+    gap: 20px;
+    background-color: #f4f4f4; /* Match body background */
+    padding: 20px;
+    overflow: hidden; /* Prevent scrolling within content area */
+}
+
+.left {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mainImage {
+    display: block;
+    cursor: default;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+}
+
+.right {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+}
+
+#secondaryImage {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+#secondaryImage img {
+    max-width: 70%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+#secondaryImage:hover {
+    transform: scale(1.05);
+}
+
+.settings {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.settings label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+    font-weight: bold;
+}
+
+.settings select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+}
+
+.settings select:focus {
+    outline: none;
+    border-color: #159, 232, 253;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.timeline-container {
+    grid-column: 1 / -1; /* Start after sidebar, span to the end */
+    
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.frame_button {
+    background-color: #ddd;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    box-sizing: content-box;
+    height: 15px;
+}
+
+.frame_button:hover {
+    background-color: rgb(159, 232, 253);
+}
+
+.frame_button.active {
+    background-color: rgb(159, 232, 253);
+}

@@ -1,210 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Modern Image Viewer with Timeline</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            display: grid;
-            grid-template-columns: 3fr auto;
-            grid-template-rows: 1fr 100px; /* Added auto for the timeline row */
-            gap: 30px;
-            padding: 30px;
-            box-sizing: border-box;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .left {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #mainImage {
-            max-width: 150%;
-            max-height: 150%;
-            object-fit: cover;
-            cursor: default;
-        }
-
-        .right {
-            display: grid;
-            grid-template-rows: auto 1fr ;
-            gap: 20px;
-        }
-
-        #secondaryImage {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        #secondaryImage img {
-            max-width: 70%;
-            max-height: 70%;
-            object-fit: contain;
-        }
-
-        .settings {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .settings label {
-            display: block;
-            margin-bottom: 10px;
-            color: #555;
-            font-weight: bold;
-        }
-
-        .settings select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-            color: #333;
-            appearance: none; /* Remove default arrow */
-            background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23333" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 1em;
-        }
-
-        .settings select:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .timeline-container {
-            grid-column: 1 / -1; /* Span across both columns */
-            background-color: #eee;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            padding: 15px;
-            overflow-x: auto; /* Enable horizontal scrolling */
-            white-space: nowrap; /* Prevent buttons from wrapping */
-            display: flex;
-            align-items: center;
-            vertical-align: bottom;
-            max-height: 100px;
-        }
-
-        .frame-button {
-            background-color: #ddd;
-            color: #333;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
-            margin-right: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.2s ease;
-        }
-
-        .frame-button:hover {
-            background-color: #ccc;
-        }
-
-        .frame-button.active {
-            background-color: #007bff;
-            color: #fff;
-        }
-    </style>
+    <title>Berlin United Visual Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-    <div class="left">
-        <img id="mainImage" src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_bottom_jpg/0008295.png" alt="Main Image">
-    </div>
-    <div class="right">
-        <div id="secondaryImage">
-            <img src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_top_jpg/0008295.png" alt="Secondary Image">
-        </div>
-        <div class="settings">
-            <label for="classSelect">Select Class for Annotation:</label>
-            <select id="classSelect">
-                <option value="robot">Robot</option>
-                <option value="ball">Ball</option>
-                <option value="goalpost">Goalpost</option>
-                <option value="field">Field</option>
-                <option value="line">Line</option>
-            </select>
-        </div>
-    </div>
+    <header>
+        <img class="header-logo" src="naoth-bu-2012-blue-mini.png" alt="Home">
+        Berlin United Visual Analytics
+    </header>
 
-    <div class="timeline-container" id="timelineContainer">
+    <aside class="sidebar_container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="content">
+        <div class="left">
+            <img id="mainImage" src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_bottom_jpg/0008295.png" alt="Main Image">
+        </div>
+        <div class="right">
+            <div id="secondaryImage">
+                <img src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_top_jpg/0008295.png" alt="Secondary Image">
+            </div>
+            <div class="settings">
+                <label for="classSelect">Select Class for Annotation:</label>
+                <select id="classSelect">
+                    <option value="robot">Robot</option>
+                    <option value="ball">Ball</option>
+                    <option value="goalpost">Goalpost</option>
+                    <option value="field">Field</option>
+                    <option value="line">Line</option>
+                </select>
+                <label for="filterSelect">Select Frame Filter:</label>
+                <select id="filterSelect">
+                    <option value="filter1">Filter 1</option>
+                    <option value="filter2">Filter 2</option>
+                    <option value="filter3">Filter 3</option>
+                    <option value="filter4">Filter 4</option>
+                    <option value="filter5">Filter 5</option>
+                </select>
+            </div>
         </div>
 
+        <div class="timeline-container" id="timelineContainer">
+    </main>
+
+    
+    </div>
+    <script src="functions.js"></script>
     <script>
-        const mainImage = document.getElementById("mainImage");
-        const secondaryImageContainer = document.getElementById("secondaryImage");
-        const secondaryImage = secondaryImageContainer.querySelector('img');
-        const timelineContainer = document.getElementById("timelineContainer");
-        const numFrames = 300; // Total number of frames
-        let currentFrame = 1; // Initial frame
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const leftContainer = document.querySelector('.left');
+            const mainImage = document.getElementById('mainImage');
 
-        secondaryImageContainer.addEventListener('click', swapImages);
+            // Function to scale the image
+            const scaleImage = () => {
+                // Ensure the image has loaded and natural dimensions are available
+                if (!mainImage.naturalWidth || !mainImage.naturalHeight) {
+                    console.warn('Image natural dimensions not yet available.');
+                    return;
+                }
+                if (!leftContainer) {
+                     console.error('Left container not found.');
+                     return;
+                }
 
-        function swapImages() {
-            const mainImageSrc = mainImage.src;
-            mainImage.src = secondaryImage.src;
-            secondaryImage.src = mainImageSrc;
-        }
+                // Get container dimensions (content area, excluding padding)
+                const containerWidth = leftContainer.clientWidth;
+                const containerHeight = leftContainer.clientHeight;
 
-        function loadFrame(frameNumber) {
-            // Replace these with your actual image loading logic based on frame number
-            const baseUrlBottom = "https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_bottom_jpg/";
-            const baseUrlTop = "https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_top_jpg/";
-            //const frameNumberPadded = String(frameNumber).padStart(7, '0'); // Pad with leading zeros
+                // Get image's natural aspect ratio
+                const imageRatio = mainImage.naturalWidth / mainImage.naturalHeight;
+                const containerRatio = containerWidth / containerHeight;
 
-            mainImage.src = `${baseUrlBottom}0008295.png`;
-            secondaryImage.src = `${baseUrlTop}0008295.png`;
+                let targetWidth = 0;
+                let targetHeight = 0;
 
-            // Update active button in timeline
-            const activeButtons = document.querySelectorAll('.frame-button.active');
-            activeButtons.forEach(button => button.classList.remove('active'));
-            const currentButton = document.getElementById(`frame-${frameNumber}`);
-            if (currentButton) {
-                currentButton.classList.add('active');
-                // Basic scroll to active button (you might need more sophisticated scrolling)
-                timelineContainer.scrollLeft = currentButton.offsetLeft - (timelineContainer.offsetWidth / 2) + (currentButton.offsetWidth / 2);
+                // Determine scaling factor based on container aspect ratio
+                if (imageRatio > containerRatio) {
+                    // Image is wider than container relative to height, scale based on width
+                    targetWidth = containerWidth;
+                    targetHeight = targetWidth / imageRatio;
+                } else {
+                    // Image is taller than container relative to width (or ratios match), scale based on height
+                    targetHeight = containerHeight;
+                    targetWidth = targetHeight * imageRatio;
+                }
+
+                // Apply calculated dimensions to the image style
+                mainImage.style.width = `${targetWidth}px`;
+                mainImage.style.height = `${targetHeight}px`;
+
+                // console.log(`Container: ${containerWidth}x${containerHeight}, Image scaled to: ${targetWidth.toFixed(2)}x${targetHeight.toFixed(2)}`);
+            };
+
+            // --- ResizeObserver Setup ---
+            // Create an observer instance linked to the callback function
+            const observer = new ResizeObserver(entries => {
+                 // We only observe one element, so entries[0] is the container
+                 // The callback might fire multiple times rapidly, consider debouncing for performance if needed
+                 scaleImage();
+            });
+
+
+            // --- Image Load Handling ---
+            // Function to initialize scaling and observer *after* image loads
+            const initializeScaling = () => {
+                console.log('Image loaded, initializing scaling.');
+                // Perform the initial scaling calculation
+                scaleImage();
+                // Start observing the container *after* the image is loaded and initially scaled
+                 if (leftContainer) {
+                    observer.observe(leftContainer);
+                 } else {
+                    console.error("Cannot observe null container.");
+                 }
+            };
+
+            // Check if the image is already loaded (e.g., from cache)
+            if (mainImage.complete) {
+                initializeScaling();
+            } else {
+                // If not loaded, wait for the onload event
+                mainImage.onload = initializeScaling;
+                // Optional: Handle image loading errors
+                mainImage.onerror = () => {
+                    console.error("Failed to load the main image.");
+                    // Optionally hide the image or show a placeholder message
+                };
             }
 
-            currentFrame = frameNumber;
-        }
-
-        // Create timeline buttons
-        for (let i = 1; i <= numFrames; i++) {
-            const button = document.createElement('button');
-            button.classList.add('frame-button');
-            //button.textContent = i;
-            button.id = `frame-${i}`;
-            button.addEventListener('click', () => loadFrame(i));
-            timelineContainer.appendChild(button);
-
-            // Set the first frame button as active initially
-            if (i === 1) {
-                button.classList.add('active');
-            }
-        }
-
-        // Initial load of the first frame (already done by setting src in HTML, but good to have in loadFrame function)
-        // loadFrame(currentFrame);
+            // --- Cleanup ---
+            // Optional: Disconnect observer when it's no longer needed (e.g., in SPAs)
+            // window.addEventListener('beforeunload', () => {
+            //     observer.disconnect();
+            // });
+        });
     </script>
 </body>
 </html>
