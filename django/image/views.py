@@ -103,10 +103,13 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ImageSerializer
 
     def get_queryset(self):
-        queryset = models.NaoImage.objects.all()
-        # we use copy here so that the QueryDict object query_params become mutable
         query_params = self.request.query_params.copy()
-
+        log_id = int(query_params.pop("log_id")[0])
+        # FIXME we can just filter for the log that we want here
+        qs = models.NaoImage.objects.filter(frame__log=log_id)
+        # we use copy here so that the QueryDict object query_params become mutable
+        
+        
         # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
         for field in models.NaoImage._meta.fields:
@@ -118,8 +121,8 @@ class ImageViewSet(viewsets.ModelViewSet):
                 # print(f"filter with {field.name} = {param_value}")
                 filters &= Q(**{field.name: param_value})
 
-        qs = queryset.filter(filters)
-
+        qs = qs.filter(filters)
+        return qs.order_by("frame")
         # check if the frontend wants to use a frame filter
         if "use_filter" in query_params and query_params.get("use_filter") == "1":
             # check if we have a list of frames set here
@@ -137,9 +140,8 @@ class ImageViewSet(viewsets.ModelViewSet):
                 metadata_count=0
             )
 
-        # print(qs.order_by('frame_number').count())
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return qs.order_by("frame_number")
+        return qs.order_by("frame")
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)
