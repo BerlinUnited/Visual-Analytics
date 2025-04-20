@@ -71,7 +71,7 @@ class LogDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         filter_name = request.GET.get("filter")
-
+        
         # Get first frame based on filter
         first_frame_number = self.get_first_frame_number(filter_name)
 
@@ -80,39 +80,36 @@ class LogDetailView(DetailView):
                 "image_detail", kwargs={"pk": self.object.id, "img": first_frame_number}
             )
             return redirect(f"{base_url}?filter={filter_name or 'None'}")
-
+        
         # Handle case where no images exist
         if self.object.game_id is not None:
-            return redirect("game_detail", pk=self.object.game.id)
+            return redirect("game_detail",pk=self.object.game.id)
         elif self.object.experiment is not None:
-            return redirect("experiment_detail", pk=self.object.experiment.id)
-
+            return redirect("experiment_detail",pk=self.object.experiment.id)
+            
+             
+     
     def get_first_frame_number(self, filter_name):
         """Helper method to get the first frame number based on filter"""
         if filter_name and filter_name != "None":
             filtered_frames = FrameFilter.objects.filter(
-                log_id=self.object, user=self.request.user, name=filter_name
+                log_id=self.object,
+                user=self.request.user,
+                name=filter_name
             ).first()
-
+            
             if filtered_frames:
-                first_image = (
-                    CognitionFrame.objects.filter(
-                        log=self.object,
-                        frame_number__in=filtered_frames.frames["frame_list"],
-                    )
-                    .order_by("frame_number")
-                    .first()
-                )
+                first_image = CognitionFrame.objects.filter(
+                    log=self.object, frame_number__in=filtered_frames.frames["frame_list"]
+                ).order_by("frame_number").first()
                 if first_image:
                     return first_image.frame_number
-
+        
         # Default: get first frame without filtering
-        first_image = (
-            CognitionFrame.objects.filter(log=self.object)
-            .order_by("frame_number")
-            .first()
-        )
-
+        first_image = CognitionFrame.objects.filter(
+            log=self.object
+        ).order_by("frame_number").first()
+        
         return first_image.frame_number if first_image else None
 
 
