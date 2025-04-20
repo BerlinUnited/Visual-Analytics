@@ -10,7 +10,8 @@ class MotionFrame(models.Model):
     log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name="motionframe")
     frame_number = models.IntegerField(blank=True, null=True)
     frame_time = models.IntegerField(blank=True, null=True)
-
+    closest_cognition_frame = models.ForeignKey('cognition.CognitionFrame',on_delete=models.DO_NOTHING,related_name="closest_cognition_frame",null=True,
+        blank=True)
     class Meta:
         verbose_name_plural = "Motion Frames"
         indexes = [
