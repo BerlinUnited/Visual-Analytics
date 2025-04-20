@@ -5,58 +5,133 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cognition', '0003_framefilter_name'),
+        ("cognition", "0003_framefilter_name"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AudioData',
+            name="AudioData",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('representation_data', models.JSONField(blank=True, null=True)),
-                ('frame', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='audiodata', to='cognition.cognitionframe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("representation_data", models.JSONField(blank=True, null=True)),
+                (
+                    "frame",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="audiodata",
+                        to="cognition.cognitionframe",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Audio Data',
-                'constraints': [models.UniqueConstraint(fields=('frame',), name='unique_frame_id_audiodata')],
+                "verbose_name_plural": "Audio Data",
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("frame",), name="unique_frame_id_audiodata"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='RobotInfo',
+            name="RobotInfo",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('representation_data', models.JSONField(blank=True, null=True)),
-                ('frame', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='robotinfo', to='cognition.cognitionframe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("representation_data", models.JSONField(blank=True, null=True)),
+                (
+                    "frame",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="robotinfo",
+                        to="cognition.cognitionframe",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Robot Info',
-                'constraints': [models.UniqueConstraint(fields=('frame',), name='unique_frame_id_robotinfo')],
+                "verbose_name_plural": "Robot Info",
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("frame",), name="unique_frame_id_robotinfo"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='TeamMessageDecision',
+            name="TeamMessageDecision",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('representation_data', models.JSONField(blank=True, null=True)),
-                ('frame', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teammessagedecision', to='cognition.cognitionframe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("representation_data", models.JSONField(blank=True, null=True)),
+                (
+                    "frame",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="teammessagedecision",
+                        to="cognition.cognitionframe",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Team Message Decision',
-                'constraints': [models.UniqueConstraint(fields=('frame',), name='unique_frame_id_teammessagedecision')],
+                "verbose_name_plural": "Team Message Decision",
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("frame",), name="unique_frame_id_teammessagedecision"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='Teamstate',
+            name="Teamstate",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('representation_data', models.JSONField(blank=True, null=True)),
-                ('frame', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='teamstate', to='cognition.cognitionframe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("representation_data", models.JSONField(blank=True, null=True)),
+                (
+                    "frame",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="teamstate",
+                        to="cognition.cognitionframe",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Team State',
-                'constraints': [models.UniqueConstraint(fields=('frame',), name='unique_frame_id_teamstate')],
+                "verbose_name_plural": "Team State",
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("frame",), name="unique_frame_id_teamstate"
+                    )
+                ],
             },
         ),
     ]

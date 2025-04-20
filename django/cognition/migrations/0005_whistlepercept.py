@@ -5,22 +5,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cognition', '0004_audiodata_robotinfo_teammessagedecision_teamstate'),
+        ("cognition", "0004_audiodata_robotinfo_teammessagedecision_teamstate"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='WhistlePercept',
+            name="WhistlePercept",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('representation_data', models.JSONField(blank=True, null=True)),
-                ('frame', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='whistlepercept', to='cognition.cognitionframe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("representation_data", models.JSONField(blank=True, null=True)),
+                (
+                    "frame",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="whistlepercept",
+                        to="cognition.cognitionframe",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Whistle Percept',
-                'constraints': [models.UniqueConstraint(fields=('frame',), name='unique_frame_id_whistlepercept')],
+                "verbose_name_plural": "Whistle Percept",
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("frame",), name="unique_frame_id_whistlepercept"
+                    )
+                ],
             },
         ),
     ]

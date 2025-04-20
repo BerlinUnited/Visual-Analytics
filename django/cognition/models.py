@@ -9,8 +9,13 @@ class CognitionFrame(models.Model):
     )
     frame_number = models.IntegerField(blank=True, null=True)
     frame_time = models.IntegerField(blank=True, null=True)
-    closest_motion_frame = models.ForeignKey('motion.Motionframe',on_delete=models.DO_NOTHING,related_name="closest_motion_frame",null=True,
-        blank=True)
+    closest_motion_frame = models.ForeignKey(
+        "motion.Motionframe",
+        on_delete=models.DO_NOTHING,
+        related_name="closest_motion_frame",
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name_plural = "Cognition Frames"
@@ -43,9 +48,7 @@ class AudioData(models.Model):
     class Meta:
         verbose_name_plural = "Audio Data"
         constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_audiodata"
-            )
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_audiodata")
         ]
 
 
@@ -293,9 +296,7 @@ class RobotInfo(models.Model):
     class Meta:
         verbose_name_plural = "Robot Info"
         constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_robotinfo"
-            )
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_robotinfo")
         ]
 
 
@@ -383,9 +384,7 @@ class Teamstate(models.Model):
     class Meta:
         verbose_name_plural = "Team State"
         constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_teamstate"
-            )
+            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_teamstate")
         ]
 
 

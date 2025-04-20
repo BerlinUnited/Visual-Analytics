@@ -7,13 +7,15 @@ from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 class MotionFrame(pydantic_v1.BaseModel):
     #: Foreign key to the log the image belongs to
-    log_id: typing.Optional[int] = pydantic_v1.Field(default=None)
+    log: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     #: Frame Number
     frame_number: typing.Optional[int] = None
 
     #
     frame_time: typing.Optional[int] = None
+
+    clostest_cognition_frame: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {
