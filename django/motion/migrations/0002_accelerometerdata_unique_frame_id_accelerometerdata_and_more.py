@@ -4,46 +4,63 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('motion', '0001_initial'),
+        ("motion", "0001_initial"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='accelerometerdata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_accelerometerdata'),
+            model_name="accelerometerdata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_accelerometerdata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='buttondata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_buttondata'),
+            model_name="buttondata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_buttondata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='fsrdata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_fsrdata'),
+            model_name="fsrdata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_fsrdata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='gyrometerdata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_gyrometerdata'),
+            model_name="gyrometerdata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_gyrometerdata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='imudata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_imudata'),
+            model_name="imudata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_imudata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='inertialsensordata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_inertialsensordata'),
+            model_name="inertialsensordata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_inertialsensordata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='motionstatus',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_motionstatus'),
+            model_name="motionstatus",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_motionstatus"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='motorjointdata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_motorjointdata'),
+            model_name="motorjointdata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_motorjointdata"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='sensorjointdata',
-            constraint=models.UniqueConstraint(fields=('frame',), name='unique_frame_id_sensorjointdata'),
+            model_name="sensorjointdata",
+            constraint=models.UniqueConstraint(
+                fields=("frame",), name="unique_frame_id_sensorjointdata"
+            ),
         ),
     ]

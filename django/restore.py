@@ -79,7 +79,7 @@ if __name__ == "__main__":
         "image_naoimage",
         "cognition_ballcandidates",
         "cognition_ballcandidatestop",
-        #"cognition_audiodata",
+        # "cognition_audiodata",
         "cognition_ballmodel",
         "cognition_cameramatrix",
         "cognition_cameramatrixtop",

@@ -10,8 +10,14 @@ class MotionFrame(models.Model):
     log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name="motionframe")
     frame_number = models.IntegerField(blank=True, null=True)
     frame_time = models.IntegerField(blank=True, null=True)
-    closest_cognition_frame = models.ForeignKey('cognition.CognitionFrame',on_delete=models.DO_NOTHING,related_name="closest_cognition_frame",null=True,
-        blank=True)
+    closest_cognition_frame = models.ForeignKey(
+        "cognition.CognitionFrame",
+        on_delete=models.DO_NOTHING,
+        related_name="closest_cognition_frame",
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         verbose_name_plural = "Motion Frames"
         indexes = [
@@ -80,7 +86,9 @@ class SensorJointData(models.Model):
     class Meta:
         verbose_name_plural = "Sensor Joint Data"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_sensorjointdata")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_sensorjointdata"
+            )
         ]
 
 
@@ -96,7 +104,9 @@ class AccelerometerData(models.Model):
     class Meta:
         verbose_name_plural = "Accelerometer Data"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_accelerometerdata")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_accelerometerdata"
+            )
         ]
 
 
@@ -112,7 +122,9 @@ class InertialSensorData(models.Model):
     class Meta:
         verbose_name_plural = "Inertial Sensor Data"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_inertialsensordata")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_inertialsensordata"
+            )
         ]
 
 
@@ -128,7 +140,9 @@ class MotionStatus(models.Model):
     class Meta:
         verbose_name_plural = "Motion Status"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motionstatus")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_motionstatus"
+            )
         ]
 
 
@@ -144,7 +158,9 @@ class MotorJointData(models.Model):
     class Meta:
         verbose_name_plural = "Motor Joint Data"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motorjointdata")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_motorjointdata"
+            )
         ]
 
 
@@ -160,5 +176,7 @@ class GyrometerData(models.Model):
     class Meta:
         verbose_name_plural = "Gyrometer Data"
         constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_gyrometerdata")
+            models.UniqueConstraint(
+                fields=["frame"], name="unique_frame_id_gyrometerdata"
+            )
         ]

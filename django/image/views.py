@@ -108,8 +108,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # FIXME we can just filter for the log that we want here
         qs = models.NaoImage.objects.filter(frame__log=log_id)
         # we use copy here so that the QueryDict object query_params become mutable
-        
-        
+
         # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
         for field in models.NaoImage._meta.fields:
