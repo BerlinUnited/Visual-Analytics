@@ -9,6 +9,8 @@ class CognitionFrame(models.Model):
     )
     frame_number = models.IntegerField(blank=True, null=True)
     frame_time = models.IntegerField(blank=True, null=True)
+    closest_motion_frame = models.ForeignKey('motion.Motionframe',on_delete=models.DO_NOTHING,related_name="closest_motion_frame",null=True,
+        blank=True)
 
     class Meta:
         verbose_name_plural = "Cognition Frames"
