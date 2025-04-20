@@ -9,6 +9,7 @@ import time
 
 # kubectl port-forward postgres-postgresql-0 -n postgres 1234:5432
 # full backup: python backup.py -a -g -o /opt/local-path-provisioner/db_backup
+# full backup: python backup.py -a -t cognition_ballcandidates cognition_ballcandidatestop -o /opt/local-path-provisioner/db_backup
 # only full tables: python backup.py  -g -o ./
 # tar --use-compress-program="pigz -k -3" -cf /opt/local-path-provisioner/db_backup.tar.gz -C /opt/local-path-provisioner/ db_backup/
 
@@ -120,10 +121,6 @@ def export_split_table(log_id, force=False, export_tables=None):
         "cognition_cognitionframe",
         "motion_motionframe",
     ]
-    #
-    if export_tables:
-        tables = export_tables
-        force = True
 
     for table in tables:
         output_file = Path(args.output) / f"{table}_{log_id}.sql"
@@ -187,6 +184,11 @@ def export_split_table(log_id, force=False, export_tables=None):
         "motion_motorjointdata",
         "motion_sensorjointdata",
     ]
+
+    if export_tables:
+        cognition_tables = export_tables
+        force = True
+
     for table in cognition_tables:
         output_file = Path(args.output) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
