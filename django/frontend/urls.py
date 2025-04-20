@@ -12,9 +12,9 @@ urlpatterns = [
         views.ExperimentLogListView.as_view(),
         name="experiment_detail",
     ),
-    path("log/<int:pk>", views.ImageListView.as_view(), name="log_detail"),
+    path("log/<int:pk>", views.LogDetailView.as_view(), name="log_detail"),
     path(
-        "log/<int:pk>/frame/<int:bla>",
+        "log/<int:pk>/frame/<int:img>",
         views.ImageDetailView.as_view(),
         name="image_detail",
     ),
