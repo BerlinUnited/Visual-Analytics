@@ -1,6 +1,5 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
     color: #333;
     display: grid;
     grid-template-columns: 200px 1fr; /* Sidebar width, remaining for content */
@@ -43,6 +42,8 @@ header {
 .sidebar_container {
     grid-row: 2 / -1;
     padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
     display: flex;
     flex-direction: column;
     background-color: #f4f4f4; /* Match body background */
@@ -60,8 +61,9 @@ header {
 
 .sidebar h2 {
     margin-top: 0;
-    color: #ecf0f1;
+    color: #555;
     margin-bottom: 15px;
+    font-weight: bold;
 }
 
 .sidebar ul {
@@ -80,14 +82,14 @@ header {
 }
 
 .sidebar a {
-    color: #ecf0f1;
+    color: #555;
     text-decoration: none;
     display: block;
     transition: color 0.2s ease;
 }
 
 .sidebar a:hover {
-    color: #f39c12;
+    color: rgb(255, 129, 170);
 }
 
 .content {
@@ -166,16 +168,11 @@ header {
     border-radius: 4px;
     font-size: 16px;
     color: #333;
-    appearance: none;
-    background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%23333" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 1em;
 }
 
 .settings select:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #159, 232, 253;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -194,7 +191,6 @@ header {
 
 .frame_button {
     background-color: #ddd;
-    color: #333;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
@@ -207,10 +203,9 @@ header {
 }
 
 .frame_button:hover {
-    background-color: #ccc;
+    background-color: rgb(159, 232, 253);
 }
 
 .frame_button.active {
-    background-color: #007bff;
-    color: #fff;
+    background-color: rgb(159, 232, 253);
 }
