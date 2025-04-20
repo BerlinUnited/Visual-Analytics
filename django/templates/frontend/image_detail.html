@@ -26,26 +26,28 @@
                 {% endfor %}
             </select>
         </form>
-        <p>Image URL: {{bottom_image.image_url}}</p>
+        {% with selected_filter_name=None %}
         {% for filter in filters %}
-        {% if filter.selected %}
-        {% with selected_filter_name=filter.name selected_filter_id=filter.id %}
-        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
-            class="prev-button">Previous</a>
-        <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
-            class="next-button">Next</a>
-        {% endwith %}
-        {% endif %}
+            {% if filter.selected %}
+                {% with selected_filter_name=filter.name %}
+                    <p>Image URL: {{bottom_image.image_url}}</p>
+                    <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
+                        class="prev-button">Previous</a>
+                    <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
+                        class="next-button">Next</a>
+                    <button id="save_button" type="submit">Save Annotation</button>
+                    <div class="test">
+                        <div class="timeline">
+                            {% for frame in frame_numbers %}
+                            <a href="{% url 'image_detail' log_id frame %}?filter={{ selected_filter_name|urlencode }}"
+                                class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endwith %}
+            {% endif %}
         {% endfor %}
-        <button id="save_button" type="submit">Save Annotation</button>
-        <div class="test">
-            <div class="timeline">
-                {% for frame in frame_numbers %}
-                <a href="{% url 'image_detail' log_id frame %}"
-                    class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
-                {% endfor %}
-            </div>
-        </div>
+    {% endwith %}
     </div>
 
 </main>

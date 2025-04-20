@@ -75,7 +75,7 @@ class LogDetailView(DetailView):
         # Get first frame based on filter
         first_frame_number = self.get_first_frame_number(filter_name)
 
-        if not first_frame_number:
+        if first_frame_number:
             base_url = reverse(
                 "image_detail", kwargs={"pk": self.object.id, "img": first_frame_number}
             )
@@ -118,10 +118,64 @@ class LogDetailView(DetailView):
 
 @method_decorator(login_required(login_url="mylogin"), name="dispatch")
 class ImageDetailView(View):
+    def _get_image_and_annotation(self, log_id, frame_number, camera_type):
+        """Fetches an image and its annotation for a given log, frame, and camera."""
+        image = NaoImage.objects.filter(
+            frame__log_id=log_id, camera=camera_type, frame__frame_number=frame_number
+        ).first()  # Use _id for FK efficiency if not needing the whole frame object
+
+        image_url = None
+        annotation_json = json.dumps({})  # Default empty annotation
+
+        if image:
+            image_url = f"https://logs.berlin-united.com/{image.image_url}"
+            image.image_url = image_url
+
+            annotation_data = (
+                Annotation.objects.filter(image=image)
+                .values_list("annotation", flat=True)
+                .first()
+            )  # Use image instance directly
+
+            if annotation_data:
+                annotation_json = json.dumps(annotation_data)
+        else:
+            image = None
+            # FIXME do we want to use dummy images ?
+            # image = NaoImage()
+            # image.image_url = "https://dummyimage.com/640x4:3/"
+            # image.id = -1
+
+        return image, annotation_json
+
+    def _get_frame_numbers(self, log_id, user, current_filter_name):
+        """Gets the distinct list of frame numbers, potentially filtered."""
+        frame_numbers_qs = (
+            NaoImage.objects.filter(frame__log_id=log_id)
+            .order_by("frame__frame_number")
+            .values_list("frame__frame_number", flat=True)
+            .distinct()
+        )
+
+        # Apply specific frame filter if provided and valid
+        if current_filter_name and current_filter_name != "None":
+            frame_filter = FrameFilter.objects.filter(
+                log_id=log_id, user=user, name=current_filter_name
+            ).first()
+            if frame_filter and "frame_list" in frame_filter.frames:
+                # Filter the base query by the list from the FrameFilter
+                frame_numbers_qs = frame_numbers_qs.filter(
+                    frame__frame_number__in=frame_filter.frames["frame_list"]
+                )
+
+        return list(frame_numbers_qs)  # Return the QuerySet initially
+
     def get(self, request, **kwargs):
         context = {}
         log_id = self.kwargs.get("pk")
         current_filter = self.request.GET.get("filter")
+
+        # load combobox with all available framefilter
         context["filters"] = [
             {"id": 0, "name": "None", "selected": current_filter == "None"}
         ] + [
@@ -146,39 +200,17 @@ class ImageDetailView(View):
             return redirect(redirect_url)
 
         current_frame = self.kwargs.get("img")
-        context["bottom_image"] = NaoImage.objects.filter(
-            frame__log=log_id, camera="BOTTOM", frame__frame_number=current_frame
-        ).first()
-        context["top_image"] = NaoImage.objects.filter(
-            frame__log=log_id, camera="TOP", frame__frame_number=current_frame
-        ).first()
         context["log_id"] = log_id
         context["current_frame"] = current_frame
-        # load combobox with all availabe framefilter
 
-        # we have to get the frames for top and bottom image and then remove the duplicates here, because sometime we have only one image in the
-        # first frame
-        frames = FrameFilter.objects.filter(
-            log=log_id, user=self.request.user, name=current_filter
-        ).first()
-        if frames and current_filter != "None":
-            context["frame_numbers"] = (
-                NaoImage.objects.filter(
-                    frame__log=log_id,
-                    frame__frame_number__in=frames.frames["frame_list"],
-                )
-                .order_by("frame__frame_number")
-                .values_list("frame__frame_number", flat=True)
-                .distinct()
-            )
-        else:
-            context["frame_numbers"] = (
-                NaoImage.objects.filter(frame__log=log_id)
-                .order_by("frame__frame_number")
-                .values_list("frame__frame_number", flat=True)
-                .distinct()
-            )
+        current_filter = request.GET.get(
+            "filter", "None"
+        )  # Default to "None" if not present
+        context["frame_numbers"] = self._get_frame_numbers(
+            log_id, request.user, current_filter
+        )
         current_index = list(context["frame_numbers"]).index(current_frame)
+
         context["prev_frame"] = (
             list(context["frame_numbers"])[current_index - 1]
             if current_index > 0
@@ -189,63 +221,14 @@ class ImageDetailView(View):
             if current_index < len(context["frame_numbers"]) - 1
             else None
         )
-        # handle the case that we do have a bottom image in the frame
-        if context["bottom_image"]:
-            # update the image url
-            # TODO: dynamically add the url based on which server is online
-            context["bottom_image"].image_url = (
-                "https://logs.berlin-united.com/" + context["bottom_image"].image_url
-            )
 
-            bottom_annotation = (
-                Annotation.objects.filter(image=context["bottom_image"].id)
-                .values_list("annotation", flat=True)
-                .first()
-            )
-            if bottom_annotation:
-                context["bottom_annotation"] = json.dumps(bottom_annotation)
-            else:
-                # add empty annotations when we could not load annotations
-                context["bottom_annotation"] = json.dumps({})
-        else:
-            # add a dummy image if we don't have an image from the database
-            context["bottom_image"] = None
-            # context['bottom_image'] = Image()
-            # context['bottom_image'].image_url = "https://dummyimage.com/640x4:3/"
-            # context['bottom_image'].id = -1
+        context["bottom_image"], context["bottom_annotation"] = (
+            self._get_image_and_annotation(log_id, current_frame, "BOTTOM")
+        )
+        context["top_image"], context["top_annotation"] = (
+            self._get_image_and_annotation(log_id, current_frame, "TOP")
+        )
 
-            # add empty annotations when we don't have an image
-            context["bottom_annotation"] = json.dumps({})
-
-        # handle the case that we do have a top image in the frame
-        if context["top_image"]:
-            print("id:", context["top_image"].id)
-            # update the image url
-            # TODO: dynamically add the url based on which server is online
-            context["top_image"].image_url = (
-                "https://logs.berlin-united.com/" + context["top_image"].image_url
-            )
-
-            top_annotation = (
-                Annotation.objects.filter(image=context["top_image"].id)
-                .values_list("annotation", flat=True)
-                .first()
-            )
-            if top_annotation:
-                context["top_annotation"] = json.dumps(top_annotation)
-            else:
-                # add empty annotations when we could not load annotations
-                context["top_annotation"] = json.dumps({})
-        else:
-            print("set top image to none")
-            # add a dummy image if we don't have an image from the database
-            context["top_image"] = None
-            # context['top_image'] = Image()
-            # context['top_image'].image_url = "https://dummyimage.com/640x4:3/"
-            # context['top_image'].id = -1
-
-            # add empty annotations when we don't have an image
-            context["top_annotation"] = json.dumps({})
         return render(request, "frontend/image_detail.html", context)
 
     def patch(self, request, **kwargs):
