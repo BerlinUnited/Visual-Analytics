@@ -1,5 +1,11 @@
-""" """
+"""
+Similar to 
+response = client.imudata.list(
+        log_id=1,
+    )
 
+you can use any representation name present in the sensor.log to query it.
+"""
 from vaapi.client import Vaapi
 import os
 
@@ -23,14 +29,10 @@ if __name__ == "__main__":
         base_url=os.environ.get("VAT_API_URL"),
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
-    response = client.motion_repr.list(
-        log_id=168,
-        representation_name="IMUData",
+    response = client.imudata.list(
+        log_id=1,
     )
-    # print(len(response))
-    # print(response[0])
-    # print(type(response[0]))
-    # print(response[0].representation_data)
+    print(response)
 
-    a = check_if_imu_changes(response)
-    print(a)
+    #a = check_if_imu_changes(response)
+    #print(a)
