@@ -22,8 +22,11 @@ class DynamicModelMixin:
     def get_queryset(self):
         # Override get_queryset to use the dynamic model
         model = self.get_model()
-        queryset = model.objects.all()
-        query_params = self.request.query_params
+        query_params = self.request.query_params.copy()
+
+        # if log_id was set filter for it
+        log_id = int(query_params.pop("log_id")[0])
+        queryset = model.objects.filter(frame__log=log_id)
 
         filters = Q()
         for field in model._meta.fields:
