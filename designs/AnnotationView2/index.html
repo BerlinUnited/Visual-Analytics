@@ -31,6 +31,7 @@
                 <img src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_top_jpg/0008295.png" alt="Secondary Image">
             </div>
             <div class="settings">
+                <button id="validate_button" type="button">Validate</button>
                 <label for="classSelect">Select Class for Annotation:</label>
                 <select id="classSelect">
                     <option value="robot">Robot</option>
@@ -146,5 +147,21 @@
             // });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.getElementById('validate_button');
+            let isActive = false;
+            button.addEventListener('click', async () => {
+                // Toggle state
+                isActive = !isActive;
+                // Update button appearance
+                if (isActive) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        });
+      </script>
 </body>
 </html>

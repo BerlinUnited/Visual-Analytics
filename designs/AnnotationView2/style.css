@@ -150,6 +150,23 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+#validate_button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+}
+
+#validate_button:hover {
+    background-color: rgb(159, 232, 253);
+}
+
+#validate_button.active {
+    background-color: rgb(159, 232, 253);
+}
+
 .settings label {
     display: block;
     margin-bottom: 10px;
@@ -157,7 +174,7 @@ header {
     font-weight: bold;
 }
 
-.settings select {
+.settings select, button {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
