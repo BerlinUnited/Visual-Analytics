@@ -83,7 +83,7 @@ class BehaviorFrameOptionClient:
         self,
         id: int,
         *,
-        log_id: typing.Optional[int] = OMIT,
+        log: typing.Optional[int] = OMIT,
         options_id: typing.Optional[int] = OMIT,
         activeState: typing.Optional[int] = OMIT,
         frame: typing.Optional[int] = OMIT,
@@ -137,7 +137,7 @@ class BehaviorFrameOptionClient:
             f"api/behavior-frame-option/{jsonable_encoder(id)}/",
             method="PATCH",
             json={
-                "log_id": log_id,
+                "log": log,
                 "options_id": options_id,
                 "activeState": activeState,
                 # "parent": parent,
@@ -159,7 +159,6 @@ class BehaviorFrameOptionClient:
 
     def list(
         self,
-        # log_id: int, *,
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
     ) -> typing.List[BehaviorFrameOption]:
@@ -218,7 +217,7 @@ class BehaviorFrameOptionClient:
     def create(
         self,
         *,
-        log_id: typing.Optional[int] = OMIT,
+        log: typing.Optional[int] = OMIT,
         options_id: typing.Optional[int] = OMIT,
         activeState: typing.Optional[int] = OMIT,
         parent: typing.Optional[int] = OMIT,
@@ -240,7 +239,7 @@ class BehaviorFrameOptionClient:
             "api/behavior-frame-option/",
             method="POST",
             json={
-                "log_id": log_id,
+                "log": log,
                 "options_id": options_id,
                 "activeState": activeState,
                 "parent": parent,

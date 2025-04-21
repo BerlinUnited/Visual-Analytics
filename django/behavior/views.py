@@ -21,13 +21,10 @@ class BehaviorFrameCountView(APIView):
         log_id = request.query_params.get("log_id")
 
         # Start with all images
-        queryset = models.BehaviorFrameOption.objects.all()
-
-        # Apply filters if provided
-        queryset = queryset.filter(log_id=log_id)
+        queryset = models.BehaviorFrameOption.objects.filter(frame__log=log_id)
 
         # Get the count
-        unique_frame_count = queryset.values("frame").distinct().count()
+        unique_frame_count = queryset.count()
 
         return Response({"count": unique_frame_count}, status=status.HTTP_200_OK)
 
@@ -81,7 +78,7 @@ class BehaviorOptionViewSet(viewsets.ModelViewSet):
         validated_data = serializer.validated_data
 
         instance, created = models.BehaviorOption.objects.get_or_create(
-            log_id=validated_data.get("log_id"),
+            log=validated_data.get("log"),
             xabsl_internal_option_id=validated_data.get("xabsl_internal_option_id"),
             option_name=validated_data.get("option_name"),
             defaults=validated_data,
@@ -99,7 +96,7 @@ class BehaviorOptionViewSet(viewsets.ModelViewSet):
             # Get all existing games
             existing_combinations = set(
                 models.BehaviorOption.objects.values_list(
-                    "log_id", "option_name", "xabsl_internal_option_id"
+                    "log", "option_name", "xabsl_internal_option_id"
                 )
             )
 
@@ -177,7 +174,7 @@ class BehaviorOptionStateViewSet(viewsets.ModelViewSet):
         validated_data = serializer.validated_data
 
         instance, created = models.BehaviorOptionState.objects.get_or_create(
-            log_id=validated_data.get("log_id"),
+            log=validated_data.get("log"),
             option_id=validated_data.get("option_id"),
             xabsl_internal_state_id=validated_data.get("xabsl_internal_state_id"),
             name=validated_data.get("name"),
@@ -196,7 +193,7 @@ class BehaviorOptionStateViewSet(viewsets.ModelViewSet):
         validated_data = serializer.validated_data
 
         with transaction.atomic():
-            batch_log_id = validated_data[0]["log_id"].id
+            batch_log_id = validated_data[0]["log"].id
             # Get all existing combinations given the log id
             existing_combinations = set(
                 models.BehaviorOptionState.objects.filter(

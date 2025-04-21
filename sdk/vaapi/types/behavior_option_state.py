@@ -10,7 +10,7 @@ class BehaviorOptionState(pydantic_v1.BaseModel):
     id: typing.Optional[int] = None
 
     #: Log ID: Id of related log / robot data
-    log_id: typing.Optional[int] = pydantic_v1.Field(default=None)
+    log: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     #: option_id
     option_id: typing.Optional[int] = pydantic_v1.Field(default=None)
