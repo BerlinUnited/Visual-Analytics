@@ -97,6 +97,7 @@ class CognitionFrameClient:
         log_id: typing.Optional[int] = OMIT,
         frame_number: typing.Optional[int] = OMIT,
         frame_time: typing.Optional[int] = OMIT,
+        closest_motion_frame: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionFrame:
         """ """
@@ -107,6 +108,7 @@ class CognitionFrameClient:
                 "log_id": log_id,
                 "frame_number": frame_number,
                 "frame_time": frame_time,
+                "closest_motion_frame": closest_motion_frame,
             },
             request_options=request_options,
             omit=OMIT,
@@ -148,6 +150,7 @@ class CognitionFrameClient:
         log_id: typing.Optional[int] = OMIT,
         frame_number: typing.Optional[int] = OMIT,
         frame_time: typing.Optional[int] = OMIT,
+        closest_motion_frame: typing.Optional[int] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionFrame:
         """ """
@@ -158,6 +161,7 @@ class CognitionFrameClient:
                 "log_id": log_id,
                 "frame_number": frame_number,
                 "frame_time": frame_time,
+                "closest_motion_frame": closest_motion_frame,
             },
             request_options=request_options,
             omit=OMIT,

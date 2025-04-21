@@ -251,16 +251,15 @@ class BehaviorFrameOptionViewSet(viewsets.ModelViewSet):
 
         starttime = time.time()
 
-        # rows_tuples = [(row['log_id'], row['options_id'], row['active_state'], row['parent'], row['frame'], row['time'], row['time_of_execution'], row['state_time']) for row in request.data]
         rows_tuples = [
-            (row["log_id"], row["options_id"], row["active_state"], row["frame"])
+            (row["frame"], row["options_id"], row["active_state"])
             for row in request.data
         ]
         with connection.cursor() as cursor:
             query = """
-            INSERT INTO behavior_behaviorframeoption (log_id_id, options_id_id, active_state_id, frame)
+            INSERT INTO behavior_behaviorframeoption (frame_id, options_id_id, active_state_id)
             VALUES %s
-            ON CONFLICT (log_id_id, options_id_id, frame, active_state_id) DO NOTHING;
+            ON CONFLICT (frame_id, options_id_id, active_state_id) DO NOTHING;
             """
             # rows is a list of tuples containing the data
             execute_values(cursor, query, rows_tuples, page_size=500)
@@ -271,14 +270,14 @@ class BehaviorFrameOptionViewSet(viewsets.ModelViewSet):
 class BehaviorFrameOptionAPIView(APIView):
     def get(self, request, *args, **kwargs):
         # Get the log_id from the query parameters
-        log_id = request.query_params.get("log_id")
+        log = request.query_params.get("log")
         option_name = request.query_params.get("option_name")
         state_name = request.query_params.get("state_name")
         print("state_name", state_name)
-        if not log_id or not option_name:
+        if not log or not option_name:
             return Response(
                 {
-                    "error": "not all required parameter were provided. you need to provide log_id and option_name"
+                    "error": "not all required parameter were provided. you need to provide log and option_name"
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
@@ -292,19 +291,21 @@ class BehaviorFrameOptionAPIView(APIView):
             )
             if not state_name:
                 behavior_frame_options = behavior_data_combined.filter(
-                    log_id=log_id, options_id__option_name=option_name
+                    frame__log=log, options_id__option_name=option_name
                 )
             else:
                 behavior_frame_options = behavior_data_combined.filter(
-                    log_id=log_id,
+                    frame__log=log,
                     options_id__option_name=option_name,
                     active_state__name=state_name,
                 )
+            print(behavior_frame_options)
             # Serialize the data
             serializer = serializers.BehaviorFrameOptionCustomSerializer(
                 behavior_frame_options, many=True
             )
-
+            print()
+            print(serializer.data[0])
             # Return the serialized data
             return Response(serializer.data)
         except ValueError:

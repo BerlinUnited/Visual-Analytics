@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from . import models
-
+from cognition.serializers import CognitionFrameSerializer
 
 class BehaviorOptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,10 +24,12 @@ class BehaviorFrameOptionCustomSerializer(serializers.ModelSerializer):
     # those lines are really important otherwise you cant return the fields here
     # option_name = serializers.CharField(source='options_id.option_name')  # Gets option_name from BehaviorOption
     # state_name = serializers.CharField(source='active_state.name')        # Gets name from BehaviorOptionState
-    frame = serializers.IntegerField()  # frame from BehaviorFrameOption
+    #frame = serializers.IntegerField()  # frame from BehaviorFrameOption
+    frame = CognitionFrameSerializer(read_only=True)
 
-    def to_representation(self, data):
-        return data.frame
+    def to_representation(self, instance):
+        # Get the serialized frame data (skips the outer "frame" wrapper)
+        return self.fields['frame'].to_representation(instance.frame)
 
     class Meta:
         model = models.BehaviorFrameOption

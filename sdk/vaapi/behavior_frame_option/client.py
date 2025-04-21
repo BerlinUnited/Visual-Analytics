@@ -7,6 +7,7 @@ from ..core.jsonable_encoder import jsonable_encoder
 from ..core.pydantic_utilities import pydantic_v1
 from ..core.request_options import RequestOptions
 from ..types.behaviorframe_options import BehaviorFrameOption
+from ..types.cognition_frame import CognitionFrame
 
 # this is used as the default value for optional parameters
 OMIT = typing.cast(typing.Any, ...)
@@ -292,7 +293,7 @@ class BehaviorFrameOptionClient:
         self,
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
-    ) -> typing.List[int]:
+    ) -> typing.List[CognitionFrame]:
         """
         Returns frame numbers where the given option and states are active for one log
 
@@ -334,9 +335,11 @@ class BehaviorFrameOptionClient:
         _response = self._client_wrapper.httpx_client.request(
             url, method="GET", request_options=request_options, params=query_params
         )
+        #print(_response.text)
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[int], _response.json())  # type: ignore
+                return pydantic_v1.parse_obj_as(typing.List[CognitionFrame], _response.json())  # type: ignore
+                #return _response.json()
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
