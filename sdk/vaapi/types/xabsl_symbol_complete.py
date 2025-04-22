@@ -7,7 +7,7 @@ from ..core.pydantic_utilities import deep_union_pydantic_dicts, pydantic_v1
 
 class XabslSymbolComplete(pydantic_v1.BaseModel):
     #: 1:1 relationship to log
-    log_id: typing.Optional[int] = pydantic_v1.Field(default=None)
+    log: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     #: data
     data: typing.Optional[typing.Dict[str, typing.Any]] = None
