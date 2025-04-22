@@ -38,6 +38,8 @@ class CognitionFrameAdmin(ModelAdmin):
     list_filter = [
         ("log__id", SingleNumericFilter),
     ]
+    # makes sure not all motion frames have to be loaded
+    raw_id_fields = ('closest_motion_frame',)
 
     def get_queryset(self, request):
         return super().get_queryset(request).order_by("-id")
