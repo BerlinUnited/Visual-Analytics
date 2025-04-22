@@ -23,9 +23,11 @@
     </aside>
 
     <main class="content">
-        <div class="left">
-            <img id="mainImage" src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_bottom_jpg/0008295.png" alt="Main Image">
-        </div>
+            <div class="left" id="left">
+                <div class="big_image_wrapper">
+                <img id="mainImage" src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_bottom_jpg/0008295.png" alt="Main Image">
+                </div>
+            </div>
         <div class="right">
             <div id="secondaryImage">
                 <img src="https://logs.berlin-united.com/2025-03-12-GO25/2025-03-15_17-15-00_BerlinUnited_vs_Hulks_half2/extracted/4_35_Nao0022_250315-1825/log_top_jpg/0008295.png" alt="Secondary Image">
@@ -51,7 +53,14 @@
             </div>
         </div>
 
-        <div class="timeline-container" id="timelineContainer">
+        <div class="timeline-container">
+            <div class="timeline_infos">
+                <p>Frame: .../...</p>
+            </div>
+            <div class="timeline" id="timeline">
+
+            </div>
+        </div>
     </main>
 
     
@@ -60,7 +69,7 @@
     <script>
         // Wait for the DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            const leftContainer = document.querySelector('.left');
+            const leftContainer = document.querySelector('.big_image_wrapper');
             const mainImage = document.getElementById('mainImage');
 
             // Function to scale the image
@@ -150,6 +159,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const button = document.getElementById('validate_button');
+            const left_container = document.getElementById('left');
             let isActive = false;
             button.addEventListener('click', async () => {
                 // Toggle state
@@ -157,8 +167,12 @@
                 // Update button appearance
                 if (isActive) {
                     button.classList.add('active');
+                    button.innerText = 'Validated';
+                    left_container.style.boxShadow = "inset 2px 2px 108px -38px rgba(52, 243, 4),inset -2px -2px 108px -38px rgba(52, 243, 4)";
                 } else {
                     button.classList.remove('active');
+                    button.innerText = 'Validate';
+                    left_container.style.boxShadow = "";
                 }
             });
         });

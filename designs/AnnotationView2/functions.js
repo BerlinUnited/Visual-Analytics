@@ -1,7 +1,7 @@
 const mainImage = document.getElementById("mainImage");
 const secondaryImageContainer = document.getElementById("secondaryImage");
 const secondaryImage = secondaryImageContainer.querySelector('img');
-const timelineContainer = document.getElementById("timelineContainer");
+const timeline = document.getElementById("timeline");
 const numFrames = 100; // Total number of frames
 let currentFrame = 1; // Initial frame
 
@@ -40,7 +40,7 @@ for (let i = 1; i <= numFrames; i++) {
     button.textContent = "";
     button.id = `frame-${i}`;
     button.addEventListener('click', () => loadFrame(i));
-    timelineContainer.appendChild(button);
+    timeline.appendChild(button);
 
     if (i === 1) {
         button.classList.add('active');
