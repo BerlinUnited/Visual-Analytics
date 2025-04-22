@@ -1,11 +1,12 @@
 """
-Similar to 
+Similar to
 response = client.ballcandidates.list(
         log_id=1,
     )
 
 you can use any representation name present in the game.log to query it except behavior. Behavior is handled differently.
 """
+
 from vaapi.client import Vaapi
 import os
 
