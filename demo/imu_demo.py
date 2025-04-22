@@ -1,11 +1,12 @@
 """
-Similar to 
+Similar to
 response = client.imudata.list(
         log_id=1,
     )
 
 you can use any representation name present in the sensor.log to query it.
 """
+
 from vaapi.client import Vaapi
 import os
 
@@ -34,5 +35,5 @@ if __name__ == "__main__":
     )
     print(response)
 
-    #a = check_if_imu_changes(response)
-    #print(a)
+    # a = check_if_imu_changes(response)
+    # print(a)
