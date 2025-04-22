@@ -32,13 +32,10 @@ class BehaviorFrameCountView(APIView):
 class BehaviorSymbolCountView(APIView):
     def get(self, request):
         # Get filter parameters from query string
-        log_id = request.query_params.get("log_id")
+        log_id = request.query_params.get("log")
 
-        # Start with all images
-        queryset = models.XabslSymbolSparse.objects.all()
-
-        # Apply filters if provided
-        queryset = queryset.filter(log_id=log_id)
+        # 
+        queryset = models.XabslSymbolSparse.objects.filter(frame__log=log_id)
 
         # Get the count
         unique_frame_count = queryset.values("frame").distinct().count()
@@ -340,7 +337,6 @@ class XabslSymbolSparseViewSet(viewsets.ModelViewSet):
 
         rows_tuples = [
             (
-                row["log_id"],
                 row["frame"],
                 json.dumps(row["data"]),
             )
@@ -349,9 +345,9 @@ class XabslSymbolSparseViewSet(viewsets.ModelViewSet):
 
         with connection.cursor() as cursor:
             query = """
-            INSERT INTO behavior_xabslsymbolsparse(log_id_id, frame, data)
+            INSERT INTO behavior_xabslsymbolsparse(frame_id, data)
             VALUES %s
-            ON CONFLICT (log_id_id, frame) DO NOTHING;
+            ON CONFLICT (frame_id) DO NOTHING;
             """
             # rows is a list of tuples containing the data
             execute_values(cursor, query, rows_tuples, page_size=1000)
@@ -378,13 +374,13 @@ class XabslSymbolCompleteViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         starttime = time.time()
         data = request.data["data"]
-        rows_tuples = [(data["log_id"], json.dumps(data["data"]))]
+        rows_tuples = [(data["log"], json.dumps(data["data"]))]
 
         with connection.cursor() as cursor:
             query = """
-            INSERT INTO behavior_xabslsymbolcomplete(log_id_id, data)
+            INSERT INTO behavior_xabslsymbolcomplete(log_id, data)
             VALUES %s
-            ON CONFLICT (log_id_id) DO NOTHING;
+            ON CONFLICT (log_id) DO NOTHING;
             """
             # rows is a list of tuples containing the data
             execute_values(cursor, query, rows_tuples, page_size=1000)

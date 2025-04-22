@@ -10,7 +10,7 @@ class XabslSymbolSparse(pydantic_v1.BaseModel):
     id: typing.Optional[int] = None
 
     #: Foreign key to the log
-    log_id: typing.Optional[int] = pydantic_v1.Field(default=None)
+    log: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     #: frame
     frame: typing.Optional[int] = None
