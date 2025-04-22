@@ -18,13 +18,13 @@ from . import models
 class BehaviorFrameCountView(APIView):
     def get(self, request):
         # Get filter parameters from query string
-        log_id = request.query_params.get("log_id")
+        log_id = request.query_params.get("log")
 
-        # Start with all images
+        #
         queryset = models.BehaviorFrameOption.objects.filter(frame__log=log_id)
 
         # Get the count
-        unique_frame_count = queryset.count()
+        unique_frame_count = queryset.values("frame").distinct().count()
 
         return Response({"count": unique_frame_count}, status=status.HTTP_200_OK)
 
