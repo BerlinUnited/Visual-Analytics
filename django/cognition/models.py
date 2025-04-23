@@ -11,7 +11,7 @@ class CognitionFrame(models.Model):
     frame_time = models.IntegerField(blank=True, null=True)
     closest_motion_frame = models.ForeignKey(
         "motion.Motionframe",
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
         related_name="closest_motion_frame",
         null=True,
         blank=True,
