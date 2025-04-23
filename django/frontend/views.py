@@ -7,7 +7,7 @@ import json
 
 from common.models import Event, Game, Log, Experiment
 from image.models import NaoImage
-from annotation.models import Annotation
+from annotation.models import Annotation, AnnotationClass
 from cognition.models import CognitionFrame, FrameFilter
 from django.http import JsonResponse
 
@@ -147,9 +147,9 @@ class ImageDetailView(View):
     def _get_frame_numbers(self, log_id, user, current_filter_name):
         """Gets the distinct list of frame numbers, potentially filtered."""
         frame_numbers_qs = (
-            NaoImage.objects.filter(frame__log_id=log_id)
-            .order_by("frame__frame_number")
-            .values_list("frame__frame_number", flat=True)
+            CognitionFrame.objects.filter(log=log_id)
+            .order_by("frame_number")
+            .values_list("frame_number", flat=True)
             .distinct()
         )
 
@@ -168,45 +168,31 @@ class ImageDetailView(View):
 
     def get(self, request, **kwargs):
         context = {}
-        log_id = self.kwargs.get("pk")
-        current_filter = self.request.GET.get("filter")
-
-        # load combobox with all available framefilter
-        context["filters"] = [
-            {"id": 0, "name": "None", "selected": current_filter == "None"}
-        ] + [
-            {
-                "id": index + 1,
-                "name": frame_filter.name,
-                "selected": current_filter == frame_filter.name,
-            }
-            for index, frame_filter in enumerate(
-                FrameFilter.objects.filter(
-                    log=log_id,
-                    user=self.request.user,
-                )
-            )
-        ]
-        selected_filter = request.GET.get("filter_selector")
-        if selected_filter:
-            base_url = reverse("log_detail", kwargs={"pk": log_id})
-            redirect_url = (
-                f"{base_url}?filter={context['filters'][int(selected_filter)]['name']}"
-            )
-            return redirect(redirect_url)
-
-        current_frame = self.kwargs.get("img")
-        context["log_id"] = log_id
-        context["current_frame"] = current_frame
-
-        current_filter = request.GET.get(
-            "filter", "None"
-        )  # Default to "None" if not present
+        log_id = context["log_id"] = self.kwargs.get("pk")
+        # Default to "None" if not present
+        current_filter = self.request.GET.get("filter", "None")
         context["frame_numbers"] = self._get_frame_numbers(
             log_id, request.user, current_filter
         )
-        current_index = list(context["frame_numbers"]).index(current_frame)
+        # load combobox with all available framefilter
+        context["filters"] = FrameFilter.objects.filter(log=log_id)
 
+        # load available annotation classes
+        context["classes"] = AnnotationClass.objects.all()
+
+        context["current_frame"] = current_frame = self.kwargs.get("img")
+
+        # FIXME get images and annotations from javascript using the information in the url
+        # this way we dont have to do some weird mapping from template values to javascript
+        context["bottom_image"], context["bottom_annotation"] = (
+            self._get_image_and_annotation(log_id, current_frame, "BOTTOM")
+        )
+        context["top_image"], context["top_annotation"] = (
+            self._get_image_and_annotation(log_id, current_frame, "TOP")
+        )
+
+        # set information for timeline
+        current_index = list(context["frame_numbers"]).index(current_frame)
         context["prev_frame"] = (
             list(context["frame_numbers"])[current_index - 1]
             if current_index > 0
@@ -217,17 +203,33 @@ class ImageDetailView(View):
             if current_index < len(context["frame_numbers"]) - 1
             else None
         )
-
-        context["bottom_image"], context["bottom_annotation"] = (
-            self._get_image_and_annotation(log_id, current_frame, "BOTTOM")
-        )
-        context["top_image"], context["top_annotation"] = (
-            self._get_image_and_annotation(log_id, current_frame, "TOP")
-        )
+        context["current_index"] = current_index  # Frame number from 0 to len(frames), not equal to the actual recorded framenumber
+        context["num_frames"] = len(context["frame_numbers"])
 
         return render(request, "frontend/image_detail.html", context)
 
+    def post(self, request, *args, **kwargs):
+        """
+        this handles selecting a frame filter and redirecting it to the first frame of this filter
+        """
+        selected_frame_filter = request.POST.get('frame_filter')
+        print(selected_frame_filter)
+        # TODO fully implement this
+        # old stuff moved from get function
+        """
+        selected_filter = request.GET.get("filter_selector")
+        if selected_filter:
+            base_url = reverse("log_detail", kwargs={"pk": log_id})
+            redirect_url = (
+                f"{base_url}?filter={context['filters'][int(selected_filter)]['name']}"
+            )
+            return redirect(redirect_url)
+        """
+
     def patch(self, request, **kwargs):
+        """
+        This handles updating annotations via api call from js
+        """
         try:
             json_data = json.loads(request.body)
             print(json_data)

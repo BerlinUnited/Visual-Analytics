@@ -1,7 +1,46 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from .models import Annotation
-from .serializers import AnnotationSerializer
+from django.db import connection
+from psycopg2.extras import execute_values
+from .models import Annotation, AnnotationClass
+from .serializers import AnnotationSerializer, AnnotationClassSerializer
+
+
+class AnnotationClassViewSet(viewsets.ModelViewSet):
+    queryset = AnnotationClass.objects.all()
+    serializer_class = AnnotationClassSerializer
+
+    def create(self, request, *args, **kwargs):
+        row_tuple = [
+            (
+                request.data.get("name"),
+                request.data.get("color"),
+            )
+        ]
+        with connection.cursor() as cursor:
+            query = """
+            INSERT INTO annotation_annotationclass (name, color)
+            VALUES %s
+            ON CONFLICT (name) DO NOTHING
+            RETURNING id;
+            """
+
+            execute_values(cursor, query, row_tuple, page_size=1)
+            result = cursor.fetchone()
+            if result:
+                serializer = self.get_serializer(
+                    AnnotationClass.objects.get(id=result[0])
+                )
+                # If insert was successful, get the object
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # If ON CONFLICT DO NOTHING prevented insert, get the existing object
+                instance = AnnotationClass.objects.get(
+                    name=request.data.get("name"), color=request.data.get("color")
+                )
+                serializer = self.get_serializer(instance)
+
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AnnotationViewSet(viewsets.ModelViewSet):

@@ -31,7 +31,7 @@ body {
       );
 }
 
-header {
+.header {
     grid-column: 1 / -1; /* Span across all columns */
     
     color: black;

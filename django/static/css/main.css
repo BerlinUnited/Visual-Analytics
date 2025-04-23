@@ -2,69 +2,112 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.page {
-  width: 100vw;
-  height: 100vh;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
   display: grid;
+  grid-template-columns: 200px 1fr; /* Sidebar width, remaining for content */
+  grid-template-rows: auto 1fr; /* Header height, remaining for content, timeline height */
   grid-template-areas:
-    "header header"
-    "nav main_container";
-  grid-template-rows: 40px auto;
-  grid-template-columns: 80px auto;
+  "header header"
+  "nav content";
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
   background: radial-gradient(
-    circle at 50% 50%,
-    rgb(159, 232, 253) 20%,
-    transparent 80%
+      circle at 50% 50%,
+      rgb(159, 232, 253) 20%,
+      transparent 80%
   ),
-  conic-gradient(
-    from 45deg at 50% 50%,
-    rgb(255, 129, 170) 0%,
-    rgb(159, 232, 253) 25%,
-    rgb(255, 129, 170) 50%,
-    rgb(159, 232, 253) 75%,
-    rgb(255, 129, 170) 100%
-  );
-  transition: 0.2s;
+    conic-gradient(
+      from 45deg at 50% 50%,
+      rgb(255, 129, 170) 0%,
+      rgb(159, 232, 253) 25%,
+      rgb(255, 129, 170) 50%,
+      rgb(159, 232, 253) 75%,
+      rgb(255, 129, 170) 100%
+    );
 }
 
 .header {
-  grid-area: header;
+  grid-column: 1 / -1; /* Span across all columns */
+  
   color: black;
   padding-left: 16px;
   align-items: center;
-
   display: flex;
+  height: 50px;
 }
+
 .header-logo{
   height: 80%;
 }
 
-.app-content {
-  display: flex;
-  height: 100%;
-  width: 100%;
-  
-  overflow: hidden;
-}
-.nav {
-  grid-area: nav;
-  padding: 40px 16px;
+.sidebar_container {
+  grid-row: 2 / -1;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  background-color: #f4f4f4; /* Match body background */
 }
 
+.sidebar {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  color: #000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  border-bottom: 1px solid #4a6572;
+}
+
+.sidebar li:last-child {
+  border-bottom: none;
+}
+
+.sidebar a {
+  color: #555;
+  text-decoration: none;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.sidebar a:hover {
+  color: rgb(255, 129, 170);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 3fr auto;
+  grid-template-rows: 1fr 200px;
+  gap: 20px;
+  background-color: #f4f4f4; /* Match body background */
+  padding: 20px;
+  overflow: hidden; /* Prevent scrolling within content area */
+}
 
 /* For event list view */
 .projects_section {
-  grid-area: main_container;
-  
-  background-color: #fff;
-  border-top-left-radius: 32px;
-  padding: 32px 32px 0 32px;
+  grid-area: content;
+  padding: 20px;
+  background-color: #f4f4f4; /* Match body background */
   overflow: hidden;
   height: 100%;
   display: flex;
@@ -194,34 +237,23 @@
   padding-bottom: 5px;
 }
 
-.timeline {
-  display: flex;
-
-}
 
 .timeline-box {
-  flex-shrink: 0;
-  width: 40px;
-  height: 80px;
-  display: flex;
-  border: 1px solid black;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  color: white;
-  background-color: #ffcccb;
-  border-radius: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  transition: background-color 0.3s;
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 5px;
+  height: 15px;
+  transition: background-color 0.2s ease;
 }
 
 .timeline-box:hover {
-  background-color: #ff69b4;
+  background-color: rgb(159, 232, 253);
 }
 
 .timeline-active {
-  background-color: #ff69b4;
+  background-color: rgb(159, 232, 253);
 }
 
 /* Add smooth scrolling for aesthetics */
@@ -236,4 +268,138 @@
 
 .test::-webkit-scrollbar-track {
   background: #f1f1f1;
+}
+
+
+.left {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.big_image_wrapper{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#mainImage {
+  display: block;
+  cursor: default;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+}
+
+.right {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+}
+
+#secondaryImage {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#secondaryImage img {
+  max-width: 70%;
+  max-height: 70%;
+  object-fit: contain;
+}
+
+#secondaryImage:hover {
+  transform: scale(1.05);
+}
+
+.settings {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#validate_button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+}
+
+#validate_button:hover {
+  background-color: rgb(159, 232, 253);
+}
+
+#validate_button.active {
+  background-color: rgb(159, 232, 253);
+}
+
+.settings label {
+  display: block;
+  margin-bottom: 10px;
+  color: #555;
+  font-weight: bold;
+}
+
+.settings select, button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+}
+
+.settings select:focus {
+  outline: none;
+  border-color: #159, 232, 253;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.timeline-container {
+  grid-column: 1 / -1; /* Start after sidebar, span to the end */
+  padding-left: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  
+}
+
+.timeline{
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.frame_button {
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-sizing: content-box;
+  height: 15px;
+}
+
+.frame_button:hover {
+  background-color: rgb(159, 232, 253);
+}
+
+.frame_button.active {
+  background-color: rgb(159, 232, 253);
 }

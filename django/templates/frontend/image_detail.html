@@ -11,110 +11,63 @@
 {% block content %}
 {% load static %}
 {% csrf_token %}
-<main class="main_container_annotation">
-    <div class="content_grid_annotation">
-        <div class="grid_item_annotation" id="konva-container1">
-        </div>
-        <div class="grid_item_annotation" id="konva-container2">
+<main class="content">
+    <div class="left" id="left">
+        <div class="big_image_wrapper">
+        <img id="mainImage" src="{{ bottom_image.image_url|default_if_none:"" }}" alt="Main Image">
         </div>
     </div>
-    <div class="timeline-container">
-        <form method="GET">
-            <select name="filter_selector" id="filter_selector" onchange="this.form.submit()">
-                {% for filter in filters %}
-                <option value="{{ filter.id }}" {% if filter.selected %}selected{% endif %}>{{ filter.name }}</option>
-                {% endfor %}
+<div class="right">
+    <div id="secondaryImage">
+        <img src="{{ top_image.image_url|default_if_none:"" }}" alt="Secondary Image">
+    </div>
+    <div class="settings">
+        <!-- the buttons will trigger an api call via javascript -->
+        <button id="save_button" type="button">Save Annotations</button>
+        <button id="validate_button" type="button">Validate</button>
+        <label for="classSelect">Select Class for Annotation:</label>
+        <!-- this is just for frontend anyway we dont need this data on the backend-->
+        <select id="classSelect">
+            {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.name }}</option>
+            {% endfor %}
+        </select>
+        <!-- selecting a filter will trigger a redirect-->
+        <form method="POST" action="{% url 'image_detail' log_id current_frame %}">
+            {% csrf_token %}
+            <label for="filterSelect">Select Frame Filter:</label>
+            <select name="frame_filter" id="filterSelect">
+            {% for filter in filters %}
+                <option value="{{ filter.id }}">{{ filter.name }}</option>
+            {% endfor %}
             </select>
         </form>
-        {% with selected_filter_name=None %}
-        {% for filter in filters %}
-            {% if filter.selected %}
-                {% with selected_filter_name=filter.name %}
-                    <p>Image URL: {{bottom_image.image_url}}</p>
-                    <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
-                        class="prev-button">Previous</a>
-                    <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }}{% else %}{% endif %}"
-                        class="next-button">Next</a>
-                    <button id="save_button" type="submit">Save Annotation</button>
-                    <div class="test">
-                        <div class="timeline">
-                            {% for frame in frame_numbers %}
-                            <a href="{% url 'image_detail' log_id frame %}?filter={{ selected_filter_name|urlencode }}"
-                                class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endwith %}
-            {% endif %}
-        {% endfor %}
-    {% endwith %}
     </div>
+</div>
 
+<div class="timeline-container">
+    <div class="timeline_infos">
+        <p>Frame: {{current_index}}/{{num_frames}}</p>
+        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %} {% else %}{% endif %}" class="prev-button">Previous</a>
+        <p>Image URL: {{bottom_image.image_url}}</p>
+        <p>Image URL: {{top_image.image_url}}</p>
+    </div>
+    <div class="timeline" id="timeline">
+        {% for frame in frame_numbers %}
+        <a href="{% url 'image_detail' log_id frame %}?filter={{ selected_filter_name|urlencode }}"
+            class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
+        {% endfor %}
+    </div>
+</div>
 </main>
-<script src="{% static 'js/helper.js' %}"></script>
-<script src="{% static 'js/my_konva.js' %}"></script>
-
+<script src="{% static 'js/functions.js' %}"></script>
+<script src="{% static 'js/image.js' %}"></script>
+<script src="{% static 'js/validation.js' %}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        scrollTimeline();
-        arrow_navigation();
-        currentClassListener();
+        resize_main_image()
+        // TODO how to get the current frame id of the image in the main screen
+        handle_validation()
     });
-    // ugly hack since we can't use templates directly in external javascript files we have to create objects here based on values from the context passed from the view function
-    // TODO: research how to make it cleaner and easier to understand
-    generateUUID4();
-
-    state = {
-        api_url: null,
-        top_image: {
-            url: null,
-            id: null,
-            annotation: { bbox: [] },
-        },
-        bottom_image: {
-            url: null,
-            id: null,
-            annotation: { bbox: [] },
-        }
-    }
-    state.api_url = "{% url 'image_detail' log_id  current_frame %}"
-
-    const a = "{{ top_image.image_url|default_if_none:"" }}"
-    const b = "{{ top_image.id|default_if_none:"" }}"
-
-    const annotation_list_top = {{ top_annotation | safe }};
-    //console.log(annotation_list_top)
-    if (a) {
-        state.top_image.url = a
-    }
-    if (b) {
-        state.top_image.id = b
-    }
-    if (!isObjectEmpty(annotation_list_top)) {
-        state.top_image.annotation = annotation_list_top
-    }
-
-    /*
-
-    */
-
-    const c = "{{ bottom_image.image_url|default_if_none:"" }}"
-    const d = "{{ bottom_image.id|default_if_none:"" }}"
-    const annotation_list_bottom = {{ bottom_annotation | safe }};
-    if (c) {
-        state.bottom_image.url = c
-    }
-    if (d) {
-        state.bottom_image.id = d
-    }
-    if (!isObjectEmpty(annotation_list_bottom)) {
-        state.bottom_image.annotation = annotation_list_bottom
-    }
-    //console.log("blabla: ", state)
-
-    setUpCanvas(is_top = true, "konva-container1");
-    setUpCanvas(is_top = false, "konva-container2");
-
-
 </script>
 {% endblock %}
