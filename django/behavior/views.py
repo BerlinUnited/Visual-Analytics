@@ -296,13 +296,12 @@ class BehaviorFrameOptionAPIView(APIView):
                     options_id__option_name=option_name,
                     active_state__name=state_name,
                 )
-            print(behavior_frame_options)
+
             # Serialize the data
             serializer = serializers.BehaviorFrameOptionCustomSerializer(
                 behavior_frame_options, many=True
             )
-            print()
-            print(serializer.data[0])
+
             # Return the serialized data
             return Response(serializer.data)
         except ValueError:
