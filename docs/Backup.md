@@ -46,6 +46,7 @@ This will completely wipe the database. The script uses the same database creden
 - VAT_POSTGRES_PORT
 - VAT_POSTGRES_USER
 - VAT_POSTGRES_DB
+- VAT_POSTGRES_PASS
 
 You need to be on the same state the remote server is. The important part is that you have all the migration files that are in the commit that runs in production.
 
