@@ -1,11 +1,13 @@
 # Backups
 Database backups can be multiple hundreds of gigabyte. Tools like `python manage.py dbbackup` create one large backup file. This is not useful in our case. We wrote a custom python script that exports an sql file per log_id for every model that is dependent on the log model. That way each sql output file has manageable size.
 
-## Create Backups
-Usually you run the backup on one of the k8s servers. The you first need to enable forwarding to the postgres port inside the postgres pod. Run this on the server (probably inside a screen session).
+## Create Backups Manually
+Usually you run the backup on one of the k8s servers. The you first need to enable forwarding to the postgres port inside the postgres pod. Run this on the server (probably inside a screen session). For this to work you need to be added to the kubernetes admins.
 ```bash
 kubectl port-forward postgres-postgresql-0 -n postgres 1234:5432
 ```
+
+To get access to the live postgres you need to have the postgres password set as environment variable `PGPASSWORD`.
 
 To force export all data you can run:
 ```bash
@@ -33,17 +35,20 @@ These kind of backups will only backup VAT data and no user related data.
 
 
 ## Restore a backup
-Make sure you have a database where no data exists that is the same as the data you want to restore. Also the environment variables need to be set:
+Restoring a backup can only work for a database that has no data in the tables you want to restore. Usually the backup restoring is done locally to have some data for development purposes so you can just reset your database:
+
+```bash
+./utils/dbubtils.sh renew
+```
+
+This will completely wipe the database. The script uses the same database credentials the django settings use. Namely those environment variables:
 - VAT_POSTGRES_HOST
 - VAT_POSTGRES_PORT
 - VAT_POSTGRES_USER
 - VAT_POSTGRES_DB
+- VAT_POSTGRES_PASS
 
-If you set up the project locally you probably have them already set to the values needed for your local environment. Make sure you have the same database schema as the remote. If you are behind just run:
-```bash
-python manage.py makemigrations
-python mange.py migrate
-```
+You need to be on the same state the remote server is. The important part is that you have all the migration files that are in the commit that runs in production.
 
 To restore data from the backup run
 ```bash

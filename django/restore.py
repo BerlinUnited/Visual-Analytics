@@ -138,7 +138,7 @@ if __name__ == "__main__":
                 proc = subprocess.Popen(
                     command,
                     shell=True,
-                    env={"PGPASSWORD": os.environ.get("PGPASSWORD")},
+                    env={"PGPASSWORD": os.environ.get("VAT_POSTGRES_PASS")},
                     stdout=f,
                 )
                 return_code = proc.wait()
