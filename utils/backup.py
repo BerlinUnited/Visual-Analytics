@@ -7,17 +7,7 @@ import psycopg2
 from psycopg2 import sql
 import time
 
-# kubectl port-forward postgres-postgresql-0 -n postgres 1234:5432
-# full backup: python backup.py -a -g -o /opt/local-path-provisioner/db_backup
-# full backup: python backup.py -a -t cognition_ballcandidates cognition_ballcandidatestop -o /opt/local-path-provisioner/db_backup
-
-#tar --use-compress-program="pigz -k -3" -cf /opt/local-path-provisioner/db_backup.tar.gz -C /opt/local-path-provisioner/ db_backup/
-
-# only full tables: python backup.py -g -o ./
-# usefull backups for local testing: python backup.py -g -a -t image_naoimage -o /opt/local-path-provisioner/db_backup_small
-# tar --use-compress-program="pigz -k -3" -cf /opt/local-path-provisioner/db_backup_small.tar.gz -C /opt/local-path-provisioner/ db_backup_small/
-
-
+# setup postgres connection
 DB_HOST = "localhost"
 DB_PORT = "1234"
 DB_USER = "naoth"
@@ -280,11 +270,8 @@ def export_split_table(log_id, force=False, export_tables=None):
         # change the table name in the sql files
         replace_string_in_first_lines(output_file, "temp_", "", 200)
 
-    
-    
     export_cognition_tables(log_id, force, export_tables)
     export_motion_tables(log_id, force, export_tables)
-        
 
 
 if __name__ == "__main__":
