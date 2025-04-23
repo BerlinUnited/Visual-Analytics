@@ -7,13 +7,7 @@ import psycopg2
 from psycopg2 import sql
 import time
 
-# kubectl port-forward postgres-postgresql-0 -n postgres 1234:5432
-# full backup: python backup.py -a -g -o /opt/local-path-provisioner/db_backup
-# full backup: python backup.py -a -t cognition_ballcandidates cognition_ballcandidatestop -o /opt/local-path-provisioner/db_backup
-# only full tables: python backup.py  -g -o ./
-# tar --use-compress-program="pigz -k -3" -cf /opt/local-path-provisioner/db_backup.tar.gz -C /opt/local-path-provisioner/ db_backup/
-
-
+# setup postgres connection
 DB_HOST = "localhost"
 DB_PORT = "1234"
 DB_USER = "naoth"
@@ -88,6 +82,22 @@ def create_cognition_temp_table(table, table_name, log_id):
     cur.close()
 
 
+def create_motion_temp_table(table, table_name, log_id):
+    delete_temp_table(table_name)
+    command = f"""
+    CREATE TABLE {table_name} AS
+    SELECT i.*
+    FROM common_log l
+    JOIN cognition_motionframe f ON l.id = f.log_id
+    JOIN {table} i ON f.id = i.frame_id
+    WHERE l.id = {log_id};
+    """
+    cur = conn.cursor()
+    cur.execute(sql.SQL(command))
+    conn.commit()
+    cur.close()
+
+
 def export_full_tables():
     tables = [
         "common_event",
@@ -114,6 +124,115 @@ def export_full_tables():
             proc.wait()
         except Exception as e:
             print("Exception happened during dump %s" % (e))
+
+
+def export_cognition_tables(log_id, force=False, export_tables=None):
+    cognition_tables = [
+        "image_naoimage",
+        "cognition_ballcandidates",
+        "cognition_ballcandidatestop",
+        #"cognition_audiodata",
+        "cognition_ballmodel",
+        "cognition_cameramatrix",
+        "cognition_cameramatrixtop",
+        "cognition_fieldpercept",
+        "cognition_fieldpercepttop",
+        "cognition_goalpercept",
+        "cognition_goalpercepttop",
+        "cognition_multiballpercept",
+        "cognition_odometrydata",
+        "cognition_ransaccirclepercept2018",
+        "cognition_ransaclinepercept",
+        "cognition_robotinfo",
+        "cognition_scanlineedgelpercept",
+        "cognition_scanlineedgelpercepttop",
+        "cognition_shortlinepercept",
+        "cognition_teammessagedecision",
+        "cognition_teamstate",
+        "cognition_whistlepercept",
+    ]
+    if export_tables:
+        print(f"Will use tables: {export_tables}")
+        cognition_tables = export_tables
+        force = True
+
+    for table in cognition_tables:
+        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        if output_file.exists() and not force:
+            continue
+
+        try:
+            temp_table_name = f"temp_{table}"
+            create_cognition_temp_table(table, temp_table_name, log_id)
+            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            print(f"\trunning {command} > {table}_{log_id}.sql")
+
+            f = open(str(output_file), "w")
+
+            proc = subprocess.Popen(
+                command,
+                shell=True,
+                env={"PGPASSWORD": os.environ.get("PGPASSWORD")},
+                stdout=f,
+            )
+            proc.wait()
+
+            delete_temp_table(temp_table_name)
+            # FIXME the last temp folder is not deleted??? - sometimes I see one temp table - check whats going on there.
+        except Exception as e:
+            print("Exception happened during dump %s" % (e))
+            quit()
+
+        # change the table name in the sql files
+        replace_string_in_first_lines(output_file, "temp_", "", 200)
+
+
+def export_motion_tables(log_id, force=False, export_tables=None):
+    motion_tables = [
+        "motion_accelerometerdata",
+        "motion_buttondata",
+        "motion_fsrdata",
+        "motion_gyrometerdata",
+        "motion_imudata",
+        "motion_inertialsensordata",
+        "motion_motionstatus",
+        "motion_motorjointdata",
+        "motion_sensorjointdata",
+    ]
+    if export_tables:
+        print(f"Will use tables: {export_tables}")
+        motion_tables = export_tables
+        force = True
+
+    for table in motion_tables:
+        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        if output_file.exists() and not force:
+            continue
+
+        try:
+            temp_table_name = f"temp_{table}"
+            create_motion_temp_table(table, temp_table_name, log_id)
+            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            print(f"\trunning {command} > {table}_{log_id}.sql")
+
+            f = open(str(output_file), "w")
+
+            proc = subprocess.Popen(
+                command,
+                shell=True,
+                env={"PGPASSWORD": os.environ.get("PGPASSWORD")},
+                stdout=f,
+            )
+            proc.wait()
+
+            delete_temp_table(temp_table_name)
+            # FIXME the last temp folder is not deleted??? - sometimes I see one temp table - check whats going on there.
+        except Exception as e:
+            print("Exception happened during dump %s" % (e))
+            quit()
+
+        # change the table name in the sql files
+        replace_string_in_first_lines(output_file, "temp_", "", 200)
 
 
 def export_split_table(log_id, force=False, export_tables=None):
@@ -151,74 +270,8 @@ def export_split_table(log_id, force=False, export_tables=None):
         # change the table name in the sql files
         replace_string_in_first_lines(output_file, "temp_", "", 200)
 
-    cognition_tables = [
-        "image_naoimage",
-        "cognition_ballcandidates",
-        "cognition_ballcandidatestop",
-        #"cognition_audiodata",
-        "cognition_ballmodel",
-        "cognition_cameramatrix",
-        "cognition_cameramatrixtop",
-        "cognition_fieldpercept",
-        "cognition_fieldpercepttop",
-        "cognition_goalpercept",
-        "cognition_goalpercepttop",
-        "cognition_multiballpercept",
-        "cognition_odometrydata",
-        "cognition_ransaccirclepercept2018",
-        "cognition_ransaclinepercept",
-        "cognition_robotinfo",
-        "cognition_scanlineedgelpercept",
-        "cognition_scanlineedgelpercepttop",
-        "cognition_shortlinepercept",
-        "cognition_teammessagedecision",
-        "cognition_teamstate",
-        "cognition_whistlepercept",
-        "motion_accelerometerdata",
-        "motion_buttondata",
-        "motion_fsrdata",
-        "motion_gyrometerdata",
-        "motion_imudata",
-        "motion_inertialsensordata",
-        "motion_motionstatus",
-        "motion_motorjointdata",
-        "motion_sensorjointdata",
-    ]
-
-    if export_tables:
-        cognition_tables = export_tables
-        force = True
-
-    for table in cognition_tables:
-        output_file = Path(args.output) / f"{table}_{log_id}.sql"
-        if output_file.exists() and not force:
-            continue
-
-        try:
-            temp_table_name = f"temp_{table}"
-            create_cognition_temp_table(table, temp_table_name, log_id)
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
-            print(f"\trunning {command} > {table}_{log_id}.sql")
-
-            f = open(str(output_file), "w")
-
-            proc = subprocess.Popen(
-                command,
-                shell=True,
-                env={"PGPASSWORD": os.environ.get("PGPASSWORD")},
-                stdout=f,
-            )
-            proc.wait()
-
-            delete_temp_table(temp_table_name)
-            # FIXME the last temp folder is not deleted??? - sometimes I see one temp table - check whats going on there.
-        except Exception as e:
-            print("Exception happened during dump %s" % (e))
-            quit()
-
-        # change the table name in the sql files
-        replace_string_in_first_lines(output_file, "temp_", "", 200)
-        
+    export_cognition_tables(log_id, force, export_tables)
+    export_motion_tables(log_id, force, export_tables)
 
 
 if __name__ == "__main__":
