@@ -40,12 +40,13 @@ def group_consecutive_integers(numbers):
 
 def demo1(client, log_id):
     response = client.behavior_frame_option.filter(
-        log_id=log_id,
+        log=log_id,
         option_name="path_striker2024",
         state_name="forwardkick",
     )
+    frame_numbers = [frame.frame_number for frame in response]
 
-    grouped_numbers = group_consecutive_integers(response)
+    grouped_numbers = group_consecutive_integers(frame_numbers)
     print(f"Number of times the robot tried to kick: {len(grouped_numbers)}")
     for group in grouped_numbers:
         print(f"Spend {len(group)} frames doing the forwardkick")
