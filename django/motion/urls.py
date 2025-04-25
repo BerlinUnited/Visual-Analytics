@@ -8,6 +8,7 @@ urlpatterns = [
     path(
         "motionframe/count/", views.MotionFrameCount.as_view(), name="motionframe-count"
     ),
+    path("motionframe/update/", views.MotionFrameUpdate.as_view(), name="motionframe-update"),
 ]
 
 router = routers.DefaultRouter()
