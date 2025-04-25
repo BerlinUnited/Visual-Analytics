@@ -39,7 +39,7 @@ class ImageUpdateView(APIView):
     def patch(self, request):
         data = self.request.data
         try:
-            rows_updated = self.bulk_insert(data)
+            rows_updated = self.bulk_update(data)
 
             return Response(
                 {
@@ -55,7 +55,7 @@ class ImageUpdateView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-    def bulk_insert(self, data):
+    def bulk_update(self, data):
         update_fields = set()
 
         for item in data:
