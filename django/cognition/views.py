@@ -103,6 +103,81 @@ class CognitionFrameCount(APIView):
         return Response({"count": count}, status=status.HTTP_200_OK)
 
 
+class CognitionFrameUpdate(APIView):
+    def patch(self, request):
+        data = self.request.data
+        try:
+            rows_updated = self.bulk_update(data)
+
+            return Response(
+                {
+                    "success": True,
+                    "rows_updated": rows_updated,
+                    "message": f"Successfully updated {rows_updated} images",
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response(
+                {"success": False, "rows_updated": 0, "message": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    def bulk_update(self, data):
+        update_fields = set()
+
+        # since closest_motion_frame is a foreign key and therefore has not the same name in the db
+        # as it has in django we need to take care of the transformation manually here
+        transformed_data = []
+
+        for item in data:
+            new_item = {}
+            for key, value in item.items():
+                if key == "closest_motion_frame":
+                    new_item["closest_motion_frame_id"] = value
+                else:
+                    new_item[key] = value
+            transformed_data.append(new_item)
+
+        for item in transformed_data:
+            update_fields.update(key for key in item.keys() if key != "id")
+
+        # Build the case statements for each field
+        case_statements = []
+        for field in update_fields:
+            case_when_parts = []
+            for item in transformed_data:
+                print("item", item)
+                if field in item and item[field] is not None:
+                    case_when_parts.append(f"WHEN id = {item['id']} THEN %s")
+
+            if case_when_parts:
+                case_stmt = (
+                    f"""{field} = (CASE {" ".join(case_when_parts)} ELSE {field} END)"""
+                )
+                case_statements.append(case_stmt)
+
+        # Collect all values for the parameterized query
+        update_values = []
+        for field in update_fields:
+            for item in transformed_data:
+                if field in item and item[field] is not None:
+                    update_values.append(item[field])
+
+        # Build the complete SQL query
+        ids = [str(item["id"]) for item in transformed_data]
+        sql = f"""
+            UPDATE cognition_cognitionframe
+            SET {", ".join(case_statements)}
+            WHERE id IN ({",".join(ids)})
+        """
+        print(sql)
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql, update_values)
+            return cursor.rowcount
+
+
 class CognitionFrameViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CognitionFrameSerializer
     queryset = CognitionFrame.objects.all()
