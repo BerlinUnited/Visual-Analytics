@@ -1,13 +1,13 @@
 <!-- icons taken from https://fonts.google.com/icons -->
 {% load static %}
-<nav class="nav">
-  <a href="{% url 'events' %}">
-    <img src={% static 'images/home.svg' %} alt="Home"/>
-  </a>
-  <a href="{% url 'events' %}">
-    <img src={% static 'images/settings.svg' %} alt="Home"/>
-  </a>
-  <a href="{% url 'mylogout' %}">
-    <img src={% static 'images/logout.svg' %} alt="Logout"/>
-  </a>
-</nav>
+
+<aside class="sidebar_container">
+  <div class="sidebar">
+      <ul>
+          <li><a href="{% url 'events' %}">Home</a></li>
+          <li><a href="{% url 'events' %}">Settings</a></li>
+          <li><a href="{% url 'events' %}">Help</a></li>
+          <li><a href="{% url 'mylogout' %}">Logout</a></li>
+      </ul>
+  </div>
+</aside>

@@ -16,6 +16,7 @@ import time
 
 class ImageCountView(APIView):
     def get(self, request):
+        # FIXME make me more generic similar to ImageViewSet.get_queryset below
         # Get filter parameters from query string
         log_id = request.query_params.get("log")
         camera = request.query_params.get("camera")

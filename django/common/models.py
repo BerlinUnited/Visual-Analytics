@@ -58,6 +58,7 @@ class VideoRecording(models.Model):
     experiment = models.ForeignKey(
         Experiment, null=True, blank=True, on_delete=models.CASCADE
     )
+    # urls should optionally include the youtube links
     urls = models.JSONField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     # TODO add calculated camera matrix here
@@ -95,23 +96,23 @@ class LogStatus(models.Model):
         Log, on_delete=models.CASCADE, related_name="log_status", primary_key=True
     )
     # holds the number of frames that should be in the db for each representation
-    FrameInfo = models.IntegerField(blank=True, null=True)
-    RobotInfo = models.IntegerField(blank=True, null=True)
     AudioData = models.IntegerField(blank=True, null=True)
-    BallModel = models.IntegerField(blank=True, null=True)
     BallCandidates = models.IntegerField(blank=True, null=True)
     BallCandidatesTop = models.IntegerField(blank=True, null=True)
+    BallModel = models.IntegerField(blank=True, null=True)
     BehaviorStateComplete = models.IntegerField(blank=True, null=True)
     BehaviorStateSparse = models.IntegerField(blank=True, null=True)
     CameraMatrix = models.IntegerField(blank=True, null=True)
     CameraMatrixTop = models.IntegerField(blank=True, null=True)
     FieldPercept = models.IntegerField(blank=True, null=True)
     FieldPerceptTop = models.IntegerField(blank=True, null=True)
+    FrameInfo = models.IntegerField(blank=True, null=True)
     GoalPercept = models.IntegerField(blank=True, null=True)
     GoalPerceptTop = models.IntegerField(blank=True, null=True)
     MultiBallPercept = models.IntegerField(blank=True, null=True)
-    RansacLinePercept = models.IntegerField(blank=True, null=True)
     RansacCirclePercept2018 = models.IntegerField(blank=True, null=True)
+    RansacLinePercept = models.IntegerField(blank=True, null=True)
+    RobotInfo = models.IntegerField(blank=True, null=True)
     ShortLinePercept = models.IntegerField(blank=True, null=True)
     ScanLineEdgelPercept = models.IntegerField(blank=True, null=True)
     ScanLineEdgelPerceptTop = models.IntegerField(blank=True, null=True)
