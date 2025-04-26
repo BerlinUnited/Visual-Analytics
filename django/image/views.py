@@ -16,22 +16,30 @@ import time
 
 class ImageCountView(APIView):
     def get(self, request):
-        # FIXME make me more generic similar to ImageViewSet.get_queryset below
         # Get filter parameters from query string
-        log_id = request.query_params.get("log")
-        camera = request.query_params.get("camera")
-        image_type = request.query_params.get("type")
+        query_params = request.query_params.copy()
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
 
-        # get log instance
-        log_instance = Log.objects.get(id=log_id)
+            qs = models.NaoImage.objects.filter(frame__log=log_id)
+        else:
+            qs = models.NaoImage.objects.all()
+
+        filters = Q()
+        for field in models.NaoImage._meta.fields:
+            param_value = query_params.get(field.name)
+            if param_value == "None" or param_value == "null":
+                filters &= Q(**{f"{field.name}__isnull": True})
+                # print(f"filter with {field.name} = {param_value}")
+            elif param_value:
+                # print(f"filter with {field.name} = {param_value}")
+                filters &= Q(**{field.name: param_value})
 
         # apply filters if provided
-        queryset = models.NaoImage.objects.filter(
-            frame__log=log_instance, camera=camera, type=image_type
-        )
+        qs = qs.filter(filters)
 
         # get the count
-        count = queryset.count()
+        count = qs.count()
 
         return Response({"count": count}, status=status.HTTP_200_OK)
 
@@ -106,7 +114,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         query_params = self.request.query_params.copy()
         log_id = int(query_params.pop("log")[0])
-        # FIXME we can just filter for the log that we want here
+
         qs = models.NaoImage.objects.filter(frame__log=log_id)
         # we use copy here so that the QueryDict object query_params become mutable
 
