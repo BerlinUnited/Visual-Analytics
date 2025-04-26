@@ -11,7 +11,7 @@ if __name__ == "__main__":
     Get Top Images
     """
     response = client.image.list(
-        log_id=155,
+        log=155,
         camera="TOP",
     )
     for i in response:

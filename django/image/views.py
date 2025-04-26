@@ -104,7 +104,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         query_params = self.request.query_params.copy()
-        log_id = int(query_params.pop("log_id")[0])
+        log_id = int(query_params.pop("log")[0])
         # FIXME we can just filter for the log that we want here
         qs = models.NaoImage.objects.filter(frame__log=log_id)
         # we use copy here so that the QueryDict object query_params become mutable

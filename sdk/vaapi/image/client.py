@@ -231,7 +231,7 @@ class ImageClient:
             api_key="YOUR_API_KEY",
         )
         client.image.list(
-            log_id=1,
+            log=1,
         )
         """
         query_params = {k: v for k, v in filters.items()}
