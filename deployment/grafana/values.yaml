@@ -1,0 +1,29 @@
+grafana:
+  replicas: 1
+  resources:
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - "grafana.berlin-united.com"
+    tls:
+      - secretName: tls-cert-grafana
+        hosts:
+          - "grafana.berlin-united.com"
+  persistence: 
+    enabled: true
+    type: "pvc"
+
+  admin:
+    existingSecret: grafana-secret
+    userKey: username
+    passwordKey: password
+  
+  plugins:
+  - yesoreyeram-infinity-datasource

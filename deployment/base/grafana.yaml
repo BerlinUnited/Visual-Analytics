@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+spec:
+  project: default
+  source:
+    repoURL: 'https://scm.cms.hu-berlin.de/berlinunited/projects/k8s-cluster.git'
+    path: grafana
+    targetRevision: HEAD
+    helm:
+      releaseName: grafana
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

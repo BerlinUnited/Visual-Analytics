@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod-grafana
+  namespace: {{ .Values.namespace }}
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # ACME Email address
+    email: stella.a.schlotter@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector:
+        dnsNames:
+        - 'grafana.berlin-united.com'
+      dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-token
+            key: DATA

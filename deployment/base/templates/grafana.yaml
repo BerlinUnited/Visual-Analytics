@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+spec:
+  project: default
+  source:
+    repoURL: 'git@github.com:efcy/visual_analytics.git'
+    path: deployment/grafana
+    targetRevision: HEAD
+    helm:
+      releaseName: grafana
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
