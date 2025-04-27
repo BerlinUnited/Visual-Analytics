@@ -21,7 +21,6 @@ from .frame_filter.client import FrameFilterClient
 from .experiment.client import ExperimentClient
 from .motion_frame.client import MotionFrameClient
 from .cognition_frame.client import CognitionFrameClient
-from .annotationclass.client import AnnotationClassClient
 
 cognition_representation_list = [
     "AudioData",
@@ -141,7 +140,6 @@ class VaapiBase:
         self.log_status = LogStatusClient(client_wrapper=self._client_wrapper)
         self.frame_filter = FrameFilterClient(client_wrapper=self._client_wrapper)
         self.experiment = ExperimentClient(client_wrapper=self._client_wrapper)
-        self.annotationclass = AnnotationClassClient(client_wrapper=self._client_wrapper)
 
         # dynamically create client members
         for attr_name in cognition_representation_list:

@@ -9,8 +9,8 @@ class Image(pydantic_v1.BaseModel):
     #: Id assigned by django
     id: typing.Optional[int] = None
 
-    #: Foreign key to the log the image belongs to
-    log: typing.Optional[int] = pydantic_v1.Field(default=None)
+    #: Foreign key to the frame the image belongs to
+    frame: typing.Optional[int] = pydantic_v1.Field(default=None)
 
     #: camera
     camera: typing.Optional[str] = None

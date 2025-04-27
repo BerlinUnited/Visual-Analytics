@@ -112,11 +112,17 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ImageSerializer
 
     def get_queryset(self):
-        query_params = self.request.query_params.copy()
-        log_id = int(query_params.pop("log")[0])
-
-        qs = models.NaoImage.objects.filter(frame__log=log_id)
         # we use copy here so that the QueryDict object query_params become mutable
+        query_params = self.request.query_params.copy()
+
+        qs = models.NaoImage.objects.all()
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            qs = qs.filter(frame__log=log_id)
+
+        if "frame_number" in query_params.keys():
+            frame_number = int(query_params.pop("frame_number")[0])
+            qs = qs.filter(frame__frame_number=frame_number)
 
         # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()

@@ -82,7 +82,9 @@ class AnnotationsClient:
         self,
         id: int,
         *,
-        annotation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        class_name: typing.Optional[str] = OMIT,
+        concealed: typing.Optional[bool] = OMIT,
+        data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
         """ """
@@ -90,7 +92,9 @@ class AnnotationsClient:
             f"api/annotations/{jsonable_encoder(id)}/",
             method="PATCH",
             json={
-                "annotation": annotation,
+                "class_name": class_name,
+                "concealed": concealed,
+                "data": data,
             },
             request_options=request_options,
             omit=OMIT,
@@ -105,7 +109,7 @@ class AnnotationsClient:
 
     def list(
         self,
-        id: int,
+        image: int,
         *,
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
@@ -115,7 +119,7 @@ class AnnotationsClient:
         - kind of only makes sense for statistics on annotations.
         """
         query_params = {k: v for k, v in filters.items()}
-        query_params["id"] = id
+        query_params["image"] = image
         _response = self._client_wrapper.httpx_client.request(
             "api/annotations/",
             method="GET",
@@ -135,8 +139,11 @@ class AnnotationsClient:
     def create(
         self,
         image_id,
+        type,
+        class_name,
         *,
-        annotation: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
+        concealed: typing.Optional[bool] = OMIT,
+        data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
         """ """
@@ -145,7 +152,10 @@ class AnnotationsClient:
             method="POST",
             json={
                 "image": image_id,
-                "annotation": annotation,
+                "type": type,
+                "class_name": class_name,
+                "concealed": concealed,
+                "data": data,
             },
             request_options=request_options,
             omit=OMIT,

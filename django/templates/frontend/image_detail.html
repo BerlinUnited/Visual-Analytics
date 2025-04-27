@@ -13,9 +13,7 @@
 {% csrf_token %}
 <main class="content">
     <div class="left" id="left">
-        <div class="big_image_wrapper">
-        <img id="mainImage" src="{{ bottom_image.image_url|default_if_none:"" }}" alt="Main Image">
-        </div>
+        <div class="big_image_wrapper" id="konva"></div>
     </div>
 <div class="right">
     <div id="secondaryImage">
@@ -28,9 +26,9 @@
         <label for="classSelect">Select Class for Annotation:</label>
         <!-- this is just for frontend anyway we dont need this data on the backend-->
         <select id="classSelect">
-            {% for class in classes %}
-                <option value="{{ class.id }}">{{ class.name }}</option>
-            {% endfor %}
+            <option value="robot">Nao</option>
+            <option value="ball">Ball</option>
+            <option value="penaltymark">Penalty Mark</option>
         </select>
         <!-- selecting a filter will trigger a redirect-->
         <form method="POST" action="{% url 'image_detail' log_id current_frame %}">
@@ -60,14 +58,33 @@
     </div>
 </div>
 </main>
-<script src="{% static 'js/functions.js' %}"></script>
-<script src="{% static 'js/image.js' %}"></script>
+<script src="{% static 'js/globals.js' %}"></script>
 <script src="{% static 'js/validation.js' %}"></script>
+<script src="{% static 'js/my_konva.js' %}"></script>
+<script src="{% static 'js/image.js' %}"></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        resize_main_image()
-        // TODO how to get the current frame id of the image in the main screen
+    const csrfToken = "{{ csrf_token }}";  // Django template variable
+    async function setup(){
+        // TODO maybe return the image object here so we can get the id and use that to list out all annotations
+        a = await get_image_url("BOTTOM");
+        bottom_image_url = `https://logs.berlin-united.com/${a.image_url}`
+        b = await get_image_url("TOP");
+        top_image_url = `https://logs.berlin-united.com/${b.image_url}`
+        
+        // TODO switch annotations also
+        bottom_annotations = await get_annotation(a.id);
+        top_annotations = await get_annotation(b.id);
+        console.log("top_annotations", top_annotations);
+        current_annotations = bottom_annotations;
         handle_validation()
+        
+        setup_secondary_image()
+        setUpKonvaCanvas()
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        setup()
     });
+
 </script>
 {% endblock %}

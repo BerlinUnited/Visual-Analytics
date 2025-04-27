@@ -7,7 +7,7 @@ import json
 
 from common.models import Event, Game, Log, Experiment
 from image.models import NaoImage
-from annotation.models import Annotation, AnnotationClass
+from annotation.models import Annotation
 from cognition.models import CognitionFrame, FrameFilter
 from django.http import JsonResponse
 
@@ -118,32 +118,6 @@ class LogDetailView(DetailView):
 
 @method_decorator(login_required(login_url="mylogin"), name="dispatch")
 class ImageDetailView(View):
-    def _get_image_and_annotation(self, log_id, frame_number, camera_type):
-        """Fetches an image and its annotation for a given log, frame, and camera."""
-        image = NaoImage.objects.filter(
-            frame__log_id=log_id, camera=camera_type, frame__frame_number=frame_number
-        ).first()  # Use _id for FK efficiency if not needing the whole frame object
-
-        image_url = None
-        annotation_json = json.dumps({})  # Default empty annotation
-
-        if image:
-            image_url = f"https://logs.berlin-united.com/{image.image_url}"
-            image.image_url = image_url
-
-            annotation_data = (
-                Annotation.objects.filter(image=image)
-                .values_list("annotation", flat=True)
-                .first()
-            )  # Use image instance directly
-
-            if annotation_data:
-                annotation_json = json.dumps(annotation_data)
-        else:
-            image = None
-
-        return image, annotation_json
-
     def _get_frame_numbers(self, log_id, user, current_filter_name):
         """Gets the distinct list of frame numbers, potentially filtered."""
         frame_numbers_qs = (
@@ -177,19 +151,7 @@ class ImageDetailView(View):
         # load combobox with all available framefilter
         context["filters"] = FrameFilter.objects.filter(log=log_id)
 
-        # load available annotation classes
-        context["classes"] = AnnotationClass.objects.all()
-
         context["current_frame"] = current_frame = self.kwargs.get("img")
-
-        # FIXME get images and annotations from javascript using the information in the url
-        # this way we dont have to do some weird mapping from template values to javascript
-        context["bottom_image"], context["bottom_annotation"] = (
-            self._get_image_and_annotation(log_id, current_frame, "BOTTOM")
-        )
-        context["top_image"], context["top_annotation"] = (
-            self._get_image_and_annotation(log_id, current_frame, "TOP")
-        )
 
         # set information for timeline
         current_index = list(context["frame_numbers"]).index(current_frame)

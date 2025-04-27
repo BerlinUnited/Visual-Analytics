@@ -7,6 +7,5 @@ urlpatterns = []
 
 router = routers.DefaultRouter()
 router.register("annotations", views.AnnotationViewSet)
-router.register("annotationclass", views.AnnotationClassViewSet)
 
 urlpatterns += router.urls

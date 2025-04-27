@@ -6,7 +6,7 @@ import image.schema
 
 
 class Query(
-    annotation.schema.Query,
+#    annotation.schema.Query,
     common.schema.Query,
     image.schema.Query,
     graphene.ObjectType,
@@ -16,7 +16,7 @@ class Query(
 
 
 class Mutation(
-    annotation.schema.Mutation,
+#    annotation.schema.Mutation,
     common.schema.Mutation,
     image.schema.Mutation,
     graphene.ObjectType,
