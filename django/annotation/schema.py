@@ -1,3 +1,4 @@
+"""
 import graphene
 from image.models import NaoImage
 from .models import Annotation
@@ -70,3 +71,4 @@ class Mutation(graphene.ObjectType):
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
+"""
