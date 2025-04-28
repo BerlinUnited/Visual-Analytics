@@ -1,3 +1,6 @@
+//
+
+
 // global konva objects needed everywhere
 let konvaImage;
 let imageObj;

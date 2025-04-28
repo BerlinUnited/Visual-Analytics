@@ -20,13 +20,14 @@ const getBoundingBoxTransformer = () => {
   };
 
 function draw_db_annotations(){
+    const {targetWidth, targetHeight} = get_canvas_dims()
     current_annotations.map((db_box, i) => {
         console.log("db_box", db_box)
         var rect = new Konva.Rect({
             x: db_box.data.x * 640,
             y: db_box.data.y * 480,
-            width: db_box.data.width * 640,
-            height: db_box.data.height * 480,
+            width: db_box.data.width * targetWidth,
+            height: db_box.data.height * targetHeight,
             fill: db_box.color,
             stroke: "rgba(0, 255, 0, 1)",
             strokeWidth: 2,
@@ -36,6 +37,7 @@ function draw_db_annotations(){
             draggable: true,
             name: 'bb',
         });
+        console.log("rect", rect)
 
         drawingLayer.add(rect);
         rect.on('transformend', () => {

@@ -58,6 +58,11 @@
     </div>
 </div>
 </main>
+<script>
+    const BASE_URL = window.location.protocol === 'https:' 
+    ? `https://{{ request.get_host }}` 
+    : `http://{{ request.get_host }}`;
+</script>
 <script src="{% static 'js/globals.js' %}"></script>
 <script src="{% static 'js/validation.js' %}"></script>
 <script src="{% static 'js/my_konva.js' %}"></script>

@@ -37,7 +37,7 @@ async function get_image_url(camera) {
         const logId = pathParts[1];
         const frame_number = pathParts[3];
         
-        const url = `http://127.0.0.1:8000/api/image/?camera=${camera}&log=${logId}&frame_number=${frame_number}`;
+        const url = `${BASE_URL}/api/image/?camera=${camera}&log=${logId}&frame_number=${frame_number}`;
         
         const response = await fetch(url, {
             method: "GET",
@@ -64,7 +64,7 @@ async function get_annotation(image_id){
     console.log("image_id", image_id)
     try {
         /* Fetches the annotation objects from the API */
-        const url = `http://127.0.0.1:8000/api/annotations/?image=${image_id}`;
+        const url = `${BASE_URL}/api/annotations/?image=${image_id}`;
         
         const response = await fetch(url, {
             method: "GET",
