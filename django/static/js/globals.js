@@ -1,5 +1,6 @@
 //
-
+let targetWidth;
+let targetHeight;
 
 // global konva objects needed everywhere
 let konvaImage;
