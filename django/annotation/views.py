@@ -1,12 +1,10 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets
+from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
-from django.db import connection
-from psycopg2.extras import execute_values
+
 from .models import Annotation
 from .serializers import AnnotationSerializer
-
-import datetime
 
 
 class AnnotationViewSet(viewsets.ModelViewSet):
@@ -33,3 +31,45 @@ class AnnotationViewSet(viewsets.ModelViewSet):
 
         qs = qs.filter(filters)
         return qs
+    
+    # TODO write a create function that checks if json is exactly the same and if so ignores the insert
+    def create(self, request, *args, **kwargs):
+        # Get the data from the request
+        image_id = request.data.get('image')
+        annotation_type = request.data.get('type')
+        class_name = request.data.get('class_name')
+        concealed = request.data.get('concealed', False)
+        data = request.data.get('data')
+        
+        # Check if all required fields are present
+        if not all([image_id, annotation_type, class_name, data]):
+            return Response(
+                {"detail": "Missing required fields"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Convert concealed to boolean if it's a string
+        if isinstance(concealed, str):
+            concealed = concealed.lower() == 'true'
+        
+        # TODO when we use a new yolo model we will get slightly different results, we need to catch this here
+        # Look for existing annotation with the same fields
+        existing_annotation = Annotation.objects.filter(
+            image_id=image_id,
+            type=annotation_type,
+            class_name=class_name,
+            concealed=concealed,
+            data=data  # JSONField comparison will handle the structure
+        ).first()
+
+        if existing_annotation:
+            # Return the existing annotation
+            serializer = self.get_serializer(existing_annotation)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # No existing annotation found, proceed with normal creation
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
