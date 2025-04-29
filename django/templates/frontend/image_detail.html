@@ -22,7 +22,7 @@
     <div class="settings">
         <!-- the buttons will trigger an api call via javascript -->
         <button id="save_button" type="button">Save Annotations</button>
-        <button id="validate_button" type="button">Validate</button>
+        <button id="validate_button" type="button">Validate All</button>
         <label for="classSelect">Select Class for Annotation:</label>
         <!-- this is just for frontend anyway we dont need this data on the backend-->
         <select id="classSelect">
@@ -47,8 +47,7 @@
     <div class="timeline_infos">
         <p>Frame: {{current_index}}/{{num_frames}}</p>
         <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %} {% else %}{% endif %}" class="prev-button">Previous</a>
-        <p>Image URL: {{bottom_image.image_url}}</p>
-        <p>Image URL: {{top_image.image_url}}</p>
+        <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %} {% else %}{% endif %}" class="next-button">Next</a>
     </div>
     <div class="timeline" id="timeline">
         {% for frame in frame_numbers %}
