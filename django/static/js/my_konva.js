@@ -40,8 +40,9 @@ function draw_db_annotations(){
             // custom properties from the db annotation
             class: db_box.class_name,
             id: db_box.id,
+            //FIXME add type here
         });
-        console.log("rect", rect)
+        
 
         drawingLayer.add(rect);
         rect.on('transformend', () => {
@@ -102,7 +103,6 @@ function setUpKonvaCanvas(){
     drawingLayer = new Konva.Layer({ name: 'drawingLayer' });
     stage.add(drawingLayer);
     
-    draw_db_annotations();
 }
 
 function switchImage() {

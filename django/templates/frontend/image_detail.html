@@ -21,22 +21,34 @@
     </div>
     <div class="settings">
         <!-- the buttons will trigger an api call via javascript -->
-        <button id="save_button" type="button">Save Annotations</button>
-        <button id="validate_button" type="button">Validate All</button>
-        <label for="classSelect">Select Class for Annotation:</label>
+        <!-- TODO do the buttons next to each other and smaller -->
+        <!-- TODO intel geti only uses one button the meaning shifts based on who created it - think about it -->
+        <div class="save_buttons">
+            <button class="settings_button" id="save_button" type="button">Save Annotations</button>
+            <button class="settings_button" id="validate_button" type="button">Validate All</button>
+        </div>
         <!-- this is just for frontend anyway we dont need this data on the backend-->
-        <select id="classSelect">
-            <option value="robot">Nao</option>
-            <option value="ball">Ball</option>
-            <option value="penaltymark">Penalty Mark</option>
-        </select>
+        <!-- TODO do the selects  next to each other and smaller -->
+        <div class="annotation_options">
+            <select id="classSelect">
+                <option value="">--Please choose a class--</option>
+                <option value="robot">Nao</option>
+                <option value="ball">Ball</option>
+                <option value="penaltymark">Penalty Mark</option>
+            </select>
+            <select id="typeSelect">
+                <option value="box">Bounding Box</option>
+                <option value="polygon">Polygon</option>
+                <option value="point">Point</option>
+            </select>
+        </div>
         <!-- selecting a filter will trigger a redirect-->
         <form method="POST" action="{% url 'image_detail' log_id current_frame %}">
             {% csrf_token %}
             <label for="filterSelect">Select Frame Filter:</label>
             <select name="frame_filter" id="filterSelect" onchange="this.form.submit()">
             {% for filter in filters %}
-            <option value="0">None</option>
+            <option value="">--Please choose a Framefilter--</option>
                 <option value="{{ filter.id }}">{{ filter.name }}</option>
             {% endfor %}
             </select>
@@ -76,16 +88,16 @@
         bottom_image_url = `https://logs.berlin-united.com/${a.image_url}`
         b = await get_image_url("TOP");
         top_image_url = `https://logs.berlin-united.com/${b.image_url}`
-        
-        // TODO switch annotations also
-        bottom_annotations = await get_annotation(a.id);
-        top_annotations = await get_annotation(b.id);
-        console.log("top_annotations", top_annotations);
-        current_annotations = bottom_annotations;
         handle_validation()
         
         setup_secondary_image()
         setUpKonvaCanvas()
+        // TODO switch annotations also
+        bottom_annotations = await get_annotations(a.id);
+        top_annotations = await get_annotations(b.id);
+
+        current_annotations = bottom_annotations;
+        draw_db_annotations();
     }
     document.addEventListener('DOMContentLoaded', () => {
         setup()

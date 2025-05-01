@@ -59,8 +59,7 @@ async function get_image_url(camera) {
     }
 }
 
-async function get_annotation(image_id){
-    console.log("image_id", image_id)
+async function get_annotations(image_id){
     try {
         /* Fetches the annotation objects from the API */
         const url = `${BASE_URL}/api/annotations/?image=${image_id}`;
@@ -74,14 +73,38 @@ async function get_annotation(image_id){
         });
         
         const data = await response.json();
-        console.log("Success:", data);
-
+        console.log("Annotation Success:", data);
+        // FIXME returning the list of rects
+        data.map((db_box, i) => {
+            console.log("cool db_box", db_box)
+            var rect = new Konva.Rect({
+                // coordinates
+                x: db_box.data.x * targetWidth,
+                y: db_box.data.y * targetHeight,
+                width: db_box.data.width * targetWidth,
+                height: db_box.data.height * targetHeight,
+                // color
+                fill: db_box.color,
+                stroke: "rgba(0, 255, 0, 1)",
+                strokeWidth: 2,
+                name: 'rect',
+                strokeScaleEnabled: false,
+                opacity: 0.5,
+                // for transformer
+                draggable: true,
+                // custom properties from the db annotation
+                class: db_box.class_name,
+                id: db_box.id,
+                //FIXME add type here
+            });
+            
+        });
+        // TODO map data to list of rect elements
         return data;
         
     } catch (error) {
         console.error("Error:", error);
-        // FIXME return a json with image_url as member
-        return "/static/images/dummy_image.jpg"; // Fallback image
+        return {}; // Fallback image
     }
 }
 
