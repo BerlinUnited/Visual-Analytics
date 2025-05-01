@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess
 import os
 import re
+import fileinput
 
 
 # Custom key function for natural sorting
@@ -12,6 +13,12 @@ def natural_sort_key(s):
         int(text) if text.isdigit() else text.lower()
         for text in re.split("([0-9]+)", str(s))
     ]
+
+def patch_sql_file(sql_file):
+    for line in fileinput.input(sql_file, inplace=1):
+        if fileinput.isfirstline():
+            print("SET session_replication_role = replica;")
+        print(line, end='')
 
 
 def import_global_tables():
@@ -23,20 +30,17 @@ def import_global_tables():
         "common_logstatus.sql",
         "common_videorecording.sql",
         "behavior_xabslsymbolcomplete.sql",
-        "annotation_annotation.sql",
     ]
 
     for file in sql_table:
         try:
             command = f"psql -h {os.getenv('VAT_POSTGRES_HOST')} -p {os.getenv('VAT_POSTGRES_PORT')} -U {os.getenv('VAT_POSTGRES_USER')} -d {os.getenv('VAT_POSTGRES_DB')} -f '{args.input}/{file}'"
             print(f"running {command}")
-            output_file = "error.txt"
-            f = open(str(output_file), "w")
             proc = subprocess.Popen(
                 command,
                 shell=True,
                 env={"PGPASSWORD": os.environ.get("VAT_POSTGRES_PASS")},
-                stdout=f,
+                stdout=subprocess.DEVNULL,
             )
             return_code = proc.wait()
             if return_code != 0:
@@ -77,6 +81,7 @@ if __name__ == "__main__":
         "cognition_cognitionframe",
         "motion_motionframe",
         "image_naoimage",
+        "annotation_annotation",
         "cognition_ballcandidates",
         "cognition_ballcandidatestop",
         # "cognition_audiodata",
@@ -128,6 +133,9 @@ if __name__ == "__main__":
                 # Check if the number is in the list of numbers
                 if number not in args.ids:
                     continue
+            
+            # HACK
+            patch_sql_file(file_path)
 
             print(f"importing table for log id {number}")
             try:

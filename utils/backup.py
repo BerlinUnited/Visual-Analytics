@@ -98,6 +98,23 @@ def create_motion_temp_table(table, table_name, log_id):
     cur.close()
 
 
+def create_annotation_table(table, table_name, log_id):
+    delete_temp_table(table_name)
+    command = f"""
+    CREATE TABLE {table_name} AS
+    SELECT a.*
+    FROM common_log l
+    JOIN cognition_cognitionframe f ON l.id = f.log_id
+    JOIN image_naoimage i ON f.id = i.frame_id
+    JOIN {table} a ON i.id = a.image_id
+    WHERE l.id = {log_id};
+    """
+    cur = conn.cursor()
+    cur.execute(sql.SQL(command))
+    conn.commit()
+    cur.close()
+
+
 def export_full_tables():
     tables = [
         "common_event",
@@ -107,7 +124,6 @@ def export_full_tables():
         "common_logstatus",
         "common_videorecording",
         "behavior_xabslsymbolcomplete",
-        "annotation_annotation",
     ]
     for table in tables:
         try:
@@ -153,7 +169,7 @@ def export_cognition_tables(log_id, force=False, export_tables=None):
     ]
     if export_tables:
         print(f"Will use tables: {export_tables}")
-        cognition_tables = export_tables
+        cognition_tables = [item for item in cognition_tables if item in export_tables]
         force = True
 
     for table in cognition_tables:
@@ -201,7 +217,7 @@ def export_motion_tables(log_id, force=False, export_tables=None):
     ]
     if export_tables:
         print(f"Will use tables: {export_tables}")
-        motion_tables = export_tables
+        motion_tables = [item for item in motion_tables if item in export_tables]
         force = True
 
     for table in motion_tables:
@@ -212,6 +228,46 @@ def export_motion_tables(log_id, force=False, export_tables=None):
         try:
             temp_table_name = f"temp_{table}"
             create_motion_temp_table(table, temp_table_name, log_id)
+            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            print(f"\trunning {command} > {table}_{log_id}.sql")
+
+            f = open(str(output_file), "w")
+
+            proc = subprocess.Popen(
+                command,
+                shell=True,
+                env={"PGPASSWORD": os.environ.get("PGPASSWORD")},
+                stdout=f,
+            )
+            proc.wait()
+
+            delete_temp_table(temp_table_name)
+            # FIXME the last temp folder is not deleted??? - sometimes I see one temp table - check whats going on there.
+        except Exception as e:
+            print("Exception happened during dump %s" % (e))
+            quit()
+
+        # change the table name in the sql files
+        replace_string_in_first_lines(output_file, "temp_", "", 200)
+
+
+def export_annotation_tables(log_id, force=False, export_tables=None):
+    tables = [
+        "annotation_annotation",
+    ]
+    if export_tables:
+        print(f"Will use tables: {export_tables}")
+        tables = [item for item in tables if item in export_tables]
+        force = True
+    
+    for table in tables:
+        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        if output_file.exists() and not force:
+            continue
+
+        try:
+            temp_table_name = f"temp_{table}"
+            create_annotation_table(table, temp_table_name, log_id)
             command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
             print(f"\trunning {command} > {table}_{log_id}.sql")
 
@@ -272,6 +328,7 @@ def export_split_table(log_id, force=False, export_tables=None):
 
     export_cognition_tables(log_id, force, export_tables)
     export_motion_tables(log_id, force, export_tables)
+    export_annotation_tables(log_id, force, export_tables)
 
 
 if __name__ == "__main__":

@@ -21,9 +21,13 @@ Alternatively you can be more selective about which data you want to backup:
 python utils/backup.py -g -o <my_output_path>
 # select the list of representations to backup
 # any representation will also backup the table holding all the frame information
+# NOTE: you need to use the table name as they are in the database
 python utils/backup.py -g -a -t image_naoimage -o <my_output_path>
 # select all data from specifc logs
 python utils/backup.py -g -l 1 2 3 282 -o <my_output_path>
+
+# for local development creating a backup like this is most useful
+python utils/backup.py -g -a -t image_naoimage annotation_annotation -o <my_output_path>
 ```
 
 For downloading the backups you need to zip the folder first for example like this:
@@ -38,7 +42,8 @@ These kind of backups will only backup VAT data and no user related data.
 Restoring a backup can only work for a database that has no data in the tables you want to restore. Usually the backup restoring is done locally to have some data for development purposes so you can just reset your database:
 
 ```bash
-./utils/dbubtils.sh renew
+cd utils
+./dbubtils.sh renew
 ```
 
 This will completely wipe the database. The script uses the same database credentials the django settings use. Namely those environment variables:
