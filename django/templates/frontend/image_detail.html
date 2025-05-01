@@ -34,8 +34,9 @@
         <form method="POST" action="{% url 'image_detail' log_id current_frame %}">
             {% csrf_token %}
             <label for="filterSelect">Select Frame Filter:</label>
-            <select name="frame_filter" id="filterSelect">
+            <select name="frame_filter" id="filterSelect" onchange="this.form.submit()">
             {% for filter in filters %}
+            <option value="0">None</option>
                 <option value="{{ filter.id }}">{{ filter.name }}</option>
             {% endfor %}
             </select>
@@ -46,8 +47,8 @@
 <div class="timeline-container">
     <div class="timeline_infos">
         <p>Frame: {{current_index}}/{{num_frames}}</p>
-        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %} {% else %}{% endif %}" class="prev-button">Previous</a>
-        <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %} {% else %}{% endif %}" class="next-button">Next</a>
+        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="prev-button">Previous</a>
+        <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="next-button">Next</a>
     </div>
     <div class="timeline" id="timeline">
         {% for frame in frame_numbers %}
