@@ -305,45 +305,55 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  display: inline-flex;
+  align-items: flex-start;
+  padding: 5px;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
 }
 
 #secondaryImage img {
-  max-width: 70%;
-  max-height: 70%;
+  max-width: 150px;
   object-fit: contain;
+  transition: transform 0.2s ease-in-out;
 }
 
-#secondaryImage:hover {
+#secondaryImage img:hover {
   transform: scale(1.05);
 }
 
 .settings {
   background-color: #fff;
-  padding: 20px;
+  padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-#validate_button {
-  width: 100%;
-  padding: 10px;
+.save_buttons{
+  display: flex;
+  gap: 10px;
+}
+
+
+.settings_button {
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
 }
 
-#validate_button:hover {
+.settings_button:hover {
   background-color: rgb(159, 232, 253);
 }
 
-#validate_button.active {
+.settings_button.active {
   background-color: rgb(159, 232, 253);
+}
+
+.annotation_options{
+  display: flex;
+  gap: 10px;
+  padding: 10px;
 }
 
 .settings label {
