@@ -42,6 +42,7 @@ class Annotation(models.Model):
             return colors.get(class_name)
 
     image = models.ForeignKey(NaoImage, on_delete=models.CASCADE, related_name="annotation")
+    # TODO: maybe add log as extra foreign key (needs to be changed in api and on insert scripts)
     type = models.CharField(max_length=20, choices=Types, blank=True, null=True)
     class_name = models.CharField(max_length=20, choices=Classes, blank=True, null=True)
     concealed = models.BooleanField(default=False)

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, F
 
 from .models import Annotation
 from .serializers import AnnotationSerializer
@@ -12,11 +12,15 @@ class AnnotationViewSet(viewsets.ModelViewSet):
     serializer_class = AnnotationSerializer
 
     def get_queryset(self):
+        qs = Annotation.objects.all()
         # we use copy here so that the QueryDict object query_params become mutable
         query_params = self.request.query_params.copy()
-        image_id = int(query_params.pop("image")[0])
-
-        qs = Annotation.objects.filter(image=image_id)
+        if "image" in query_params.keys():
+            image_id = int(query_params.pop("image")[0])
+            qs = qs.filter(image=image_id)
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            qs = qs.filter(image__frame__log=log_id)
 
          # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
@@ -30,6 +34,10 @@ class AnnotationViewSet(viewsets.ModelViewSet):
                 filters &= Q(**{field.name: param_value})
 
         qs = qs.filter(filters)
+        # TODO annotate with frame number
+        qs = qs.annotate(frame_number=F('image__frame__frame_number'))
+        print(qs.values().first())
+
         return qs
     
     # TODO write a create function that checks if json is exactly the same and if so ignores the insert
