@@ -21,6 +21,9 @@ class Annotation(pydantic_v1.BaseModel):
 
     concealed: typing.Optional[bool] = pydantic_v1.Field(default=None)
 
+    is_empty: typing.Optional[bool] = pydantic_v1.Field(default=None)
+
+    validated: typing.Optional[bool] = pydantic_v1.Field(default=None)
     # actual coordinate data
     data: typing.Optional[typing.Dict[str, typing.Any]] = pydantic_v1.Field(
         default=None

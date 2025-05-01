@@ -84,6 +84,8 @@ class AnnotationsClient:
         *,
         class_name: typing.Optional[str] = OMIT,
         concealed: typing.Optional[bool] = OMIT,
+        is_empty: typing.Optional[bool] = OMIT,
+        validated: typing.Optional[bool] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
@@ -94,6 +96,8 @@ class AnnotationsClient:
             json={
                 "class_name": class_name,
                 "concealed": concealed,
+                "is_empty": is_empty,
+                "validated": validated,
                 "data": data,
             },
             request_options=request_options,

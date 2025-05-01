@@ -8,6 +8,7 @@ let imageObj;
 let stage;
 let drawingLayer;
 let tr;
+let selectedShape;
 
 // placeholder for image urls
 let top_image_url;

@@ -60,7 +60,6 @@ async function get_image_url(camera) {
 }
 
 async function get_annotation(image_id){
-    ///api/annotations/?image=7667304
     console.log("image_id", image_id)
     try {
         /* Fetches the annotation objects from the API */
