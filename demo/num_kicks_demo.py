@@ -37,8 +37,8 @@ def group_consecutive_integers(numbers):
 def demo1(client):
     response = client.behavior_frame_option.filter(
         log=282,
-        option_name="decide_game_state",
-        state_name="standby",
+        option_name="path_striker2024",
+        state_name="forwardkick",
     )
     frame_numbers = [frame.frame_number for frame in response]
 
