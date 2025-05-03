@@ -30,7 +30,14 @@ class IsBerlinUnitedOrReadOnly(BasePermission):
         # request.user is the user django could authenticate with by provided
         # authentication methods
         # if no authentication method is provided the user is AnonymousUser
-
+        """
+        # For debugging
+        print(f"\n--- Permission Check ---")
+        print(f"User: {request.user} (Authenticated: {request.user.is_authenticated})")
+        print(request.user.organization)
+        print(f"Method: {request.method}")
+        print(f"View action: {view.action}")
+        """
         # user.is_authenticated is always true if user is VAT_User and false if user is AnonymousUser
         # this only happens if user provides no authentication, invalid authentication like wrong passwords or tokens are blocked somewhere else
         if not request.user.is_authenticated:

@@ -115,6 +115,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # we use copy here so that the QueryDict object query_params become mutable
         query_params = self.request.query_params.copy()
 
+        print(query_params)
         qs = models.NaoImage.objects.all()
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
@@ -136,8 +137,9 @@ class ImageViewSet(viewsets.ModelViewSet):
                 filters &= Q(**{field.name: param_value})
 
         qs = qs.filter(filters)
-        return qs.order_by("frame")
+
         # check if the frontend wants to use a frame filter
+        # FIXME select frame_filter by name
         if "use_filter" in query_params and query_params.get("use_filter") == "1":
             # check if we have a list of frames set here
             frames = models.FrameFilter.objects.filter(
@@ -147,6 +149,8 @@ class ImageViewSet(viewsets.ModelViewSet):
 
             if frames:
                 qs = qs.filter(frame_number__in=frames.frames["frame_list"])
+
+        return qs.order_by("frame")
 
         # if the exclude_annotated parameter is set all images with an existing annotation are not included in the response
         if "exclude_annotated" in query_params:

@@ -59,9 +59,7 @@ async function get_image_url(camera) {
     }
 }
 
-async function get_annotation(image_id){
-    ///api/annotations/?image=7667304
-    console.log("image_id", image_id)
+async function get_annotations(image_id){
     try {
         /* Fetches the annotation objects from the API */
         const url = `${BASE_URL}/api/annotations/?image=${image_id}`;
@@ -81,8 +79,7 @@ async function get_annotation(image_id){
         
     } catch (error) {
         console.error("Error:", error);
-        // FIXME return a json with image_url as member
-        return "/static/images/dummy_image.jpg"; // Fallback image
+        return {}; // Fallback image
     }
 }
 

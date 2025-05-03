@@ -21,21 +21,34 @@
     </div>
     <div class="settings">
         <!-- the buttons will trigger an api call via javascript -->
-        <button id="save_button" type="button">Save Annotations</button>
-        <button id="validate_button" type="button">Validate</button>
-        <label for="classSelect">Select Class for Annotation:</label>
+        <!-- TODO do the buttons next to each other and smaller -->
+        <!-- TODO intel geti only uses one button the meaning shifts based on who created it - think about it -->
+        <div class="save_buttons">
+            <button class="settings_button" id="save_button" type="button">Save Annotations</button>
+            <button class="settings_button" id="validate_button" type="button">Validate All</button>
+        </div>
         <!-- this is just for frontend anyway we dont need this data on the backend-->
-        <select id="classSelect">
-            <option value="robot">Nao</option>
-            <option value="ball">Ball</option>
-            <option value="penaltymark">Penalty Mark</option>
-        </select>
+        <!-- TODO do the selects  next to each other and smaller -->
+        <div class="annotation_options">
+            <select id="classSelect">
+                <option value="">--Please choose a class--</option>
+                <option value="robot">Nao</option>
+                <option value="ball">Ball</option>
+                <option value="penaltymark">Penalty Mark</option>
+            </select>
+            <select id="typeSelect">
+                <option value="box">Bounding Box</option>
+                <option value="polygon">Polygon</option>
+                <option value="point">Point</option>
+            </select>
+        </div>
         <!-- selecting a filter will trigger a redirect-->
         <form method="POST" action="{% url 'image_detail' log_id current_frame %}">
             {% csrf_token %}
             <label for="filterSelect">Select Frame Filter:</label>
-            <select name="frame_filter" id="filterSelect">
+            <select name="frame_filter" id="filterSelect" onchange="this.form.submit()">
             {% for filter in filters %}
+            <option value="">--Please choose a Framefilter--</option>
                 <option value="{{ filter.id }}">{{ filter.name }}</option>
             {% endfor %}
             </select>
@@ -46,9 +59,8 @@
 <div class="timeline-container">
     <div class="timeline_infos">
         <p>Frame: {{current_index}}/{{num_frames}}</p>
-        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %} {% else %}{% endif %}" class="prev-button">Previous</a>
-        <p>Image URL: {{bottom_image.image_url}}</p>
-        <p>Image URL: {{top_image.image_url}}</p>
+        <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="prev-button">Previous</a>
+        <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="next-button">Next</a>
     </div>
     <div class="timeline" id="timeline">
         {% for frame in frame_numbers %}
@@ -89,6 +101,7 @@
     }
     document.addEventListener('DOMContentLoaded', () => {
         setup()
+        
     });
 
 </script>

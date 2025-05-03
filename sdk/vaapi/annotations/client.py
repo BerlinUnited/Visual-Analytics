@@ -84,6 +84,8 @@ class AnnotationsClient:
         *,
         class_name: typing.Optional[str] = OMIT,
         concealed: typing.Optional[bool] = OMIT,
+        is_empty: typing.Optional[bool] = OMIT,
+        validated: typing.Optional[bool] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
@@ -94,6 +96,8 @@ class AnnotationsClient:
             json={
                 "class_name": class_name,
                 "concealed": concealed,
+                "is_empty": is_empty,
+                "validated": validated,
                 "data": data,
             },
             request_options=request_options,
@@ -109,7 +113,6 @@ class AnnotationsClient:
 
     def list(
         self,
-        image: int,
         *,
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
@@ -119,13 +122,13 @@ class AnnotationsClient:
         - kind of only makes sense for statistics on annotations.
         """
         query_params = {k: v for k, v in filters.items()}
-        query_params["image"] = image
         _response = self._client_wrapper.httpx_client.request(
             "api/annotations/",
             method="GET",
             request_options=request_options,
             params=query_params,
         )
+
         try:
             if 200 <= _response.status_code < 300:
                 return pydantic_v1.parse_obj_as(

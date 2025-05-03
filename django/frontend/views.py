@@ -90,8 +90,7 @@ class LogDetailView(DetailView):
     def get_first_frame_number(self, filter_name):
         """Helper method to get the first frame number based on filter"""
         if filter_name and filter_name != "None":
-            filtered_frames = FrameFilter.objects.filter(
-                log_id=self.object, user=self.request.user, name=filter_name
+            filtered_frames = FrameFilter.objects.filter(id=filter_name
             ).first()
 
             if filtered_frames:
@@ -129,13 +128,12 @@ class ImageDetailView(View):
 
         # Apply specific frame filter if provided and valid
         if current_filter_name and current_filter_name != "None":
-            frame_filter = FrameFilter.objects.filter(
-                log_id=log_id, user=user, name=current_filter_name
+            frame_filter = FrameFilter.objects.filter(id=current_filter_name
             ).first()
             if frame_filter and "frame_list" in frame_filter.frames:
                 # Filter the base query by the list from the FrameFilter
                 frame_numbers_qs = frame_numbers_qs.filter(
-                    frame__frame_number__in=frame_filter.frames["frame_list"]
+                    frame_number__in=frame_filter.frames["frame_list"]
                 )
 
         return list(frame_numbers_qs)  # Return the QuerySet initially
@@ -145,6 +143,7 @@ class ImageDetailView(View):
         log_id = context["log_id"] = self.kwargs.get("pk")
         # Default to "None" if not present
         current_filter = self.request.GET.get("filter", "None")
+        print("current_filter", current_filter)
         context["frame_numbers"] = self._get_frame_numbers(
             log_id, request.user, current_filter
         )
@@ -167,7 +166,7 @@ class ImageDetailView(View):
         )
         context["current_index"] = current_index  # Frame number from 0 to len(frames), not equal to the actual recorded framenumber
         context["num_frames"] = len(context["frame_numbers"])
-
+        context["selected_filter_name"]=current_filter
         return render(request, "frontend/image_detail.html", context)
 
     def post(self, request, *args, **kwargs):
@@ -175,18 +174,16 @@ class ImageDetailView(View):
         this handles selecting a frame filter and redirecting it to the first frame of this filter
         """
         selected_frame_filter = request.POST.get('frame_filter')
-        print(selected_frame_filter)
-        # TODO fully implement this
-        # old stuff moved from get function
-        """
-        selected_filter = request.GET.get("filter_selector")
-        if selected_filter:
-            base_url = reverse("log_detail", kwargs={"pk": log_id})
+        print("selected_frame_filter", selected_frame_filter)
+
+        if selected_frame_filter:
+            base_url = reverse("log_detail", kwargs={"pk": self.kwargs.get("pk")})
             redirect_url = (
-                f"{base_url}?filter={context['filters'][int(selected_filter)]['name']}"
+                f"{base_url}?filter={selected_frame_filter}"
             )
+            print(redirect_url)
             return redirect(redirect_url)
-        """
+
 
     def patch(self, request, **kwargs):
         """
