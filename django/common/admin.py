@@ -48,6 +48,7 @@ class LogAdmin(ModelAdmin):
         "player_number",
     ]
     list_display = [
+        "get_event_id",
         "get_game_id",
         "get_id",
         "get_team1",
@@ -61,6 +62,9 @@ class LogAdmin(ModelAdmin):
 
     list_filter_submit = True  # Submit button at the bottom of the filter
     list_filter = [GameExperimentFilter]
+
+    def get_event_id(self, obj):
+        return obj.game.event.id
 
     def get_game_id(self, obj):
         return obj.game.id
@@ -85,6 +89,7 @@ class LogAdmin(ModelAdmin):
 
     get_id.short_description = "Log ID"
     get_game_id.short_description = "Game ID"
+    get_event_id.short_description = "Event ID"
     get_start_time.short_description = "Time"
     get_team1.short_description = "Team 1"
     get_team2.short_description = "Team 2"
