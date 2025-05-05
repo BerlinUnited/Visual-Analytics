@@ -146,6 +146,7 @@ class AnnotationsClient:
         class_name,
         *,
         concealed: typing.Optional[bool] = OMIT,
+        is_empty: typing.Optional[bool] = OMIT,
         data: typing.Optional[typing.Dict[str, typing.Any]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Annotation:
@@ -158,6 +159,7 @@ class AnnotationsClient:
                 "type": type,
                 "class_name": class_name,
                 "concealed": concealed,
+                "is_empty": is_empty,
                 "data": data,
             },
             request_options=request_options,
