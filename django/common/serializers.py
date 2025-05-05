@@ -16,10 +16,22 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LogSerializer(serializers.ModelSerializer):
+    event_name = serializers.ReadOnlyField()
+    game_name = serializers.ReadOnlyField()
+
     class Meta:
         model = models.Log
         # we have to list all the fields here since we want to add game_id and experiment id here to __all__
         fields = "__all__"
+
+    def get_fields(self):
+        fields = super().get_fields()
+        # Manually add 'discounted_price' if not already included
+        if 'event_name' not in fields:
+            fields['event_name'] = serializers.ReadOnlyField()
+        if 'game_name' not in fields:
+            fields['game_name'] = serializers.ReadOnlyField()
+        return fields
 
     def validate(self, data):
         # Ensure either game_id or experiment_id is provided, but not both, only check on creation
