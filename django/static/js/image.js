@@ -73,8 +73,33 @@ async function get_annotations(image_id){
         });
         
         const data = await response.json();
-        console.log("Success:", data);
-
+        console.log("Annotation Success:", data);
+        // FIXME returning the list of rects
+        data.map((db_box, i) => {
+            console.log("cool db_box", db_box)
+            var rect = new Konva.Rect({
+                // coordinates
+                x: db_box.data.x * targetWidth,
+                y: db_box.data.y * targetHeight,
+                width: db_box.data.width * targetWidth,
+                height: db_box.data.height * targetHeight,
+                // color
+                fill: db_box.color,
+                stroke: "rgba(0, 255, 0, 1)",
+                strokeWidth: 2,
+                name: 'rect',
+                strokeScaleEnabled: false,
+                opacity: 0.5,
+                // for transformer
+                draggable: true,
+                // custom properties from the db annotation
+                class: db_box.class_name,
+                id: db_box.id,
+                //FIXME add type here
+            });
+            
+        });
+        // TODO map data to list of rect elements
         return data;
         
     } catch (error) {
