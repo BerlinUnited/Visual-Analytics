@@ -2,17 +2,21 @@ from django.contrib import admin
 from .models import Annotation
 from unfold.admin import ModelAdmin
 from django.conf import settings
+from unfold.contrib.filters.admin import SingleNumericFilter
 
 
-# Register your models here.
 class AnnotationAdmin(ModelAdmin):
     raw_id_fields = ("image",)
+    list_per_page = 20
     list_display = ("get_id", "get_log_id", "get_image_id", "get_frame_number", "class_name", "is_empty", "validated", "get_link")
-
-    def get_id(self, obj):
+    list_filter_submit = True
+    list_filter = [
+        ("image__frame__log__id", SingleNumericFilter),
+    ]
+    def get_log_id(self, obj):
         return obj.image.frame.log.id
 
-    def get_log_id(self, obj):
+    def get_id(self, obj):
         return obj.id
 
     def get_image_id(self, obj):
