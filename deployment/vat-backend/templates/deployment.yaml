@@ -40,8 +40,6 @@ spec:
       - name: backend
         image: ghcr.io/berlinunited/django_backend:latest
         env:
-        - name: DJANGO_DEBUG
-          value: "True"
         - name: USE_POSTGRES
           value: "true"
         - name: VAT_POSTGRES_DB
