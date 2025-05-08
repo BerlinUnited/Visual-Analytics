@@ -34,7 +34,7 @@ class AnnotationViewSet(viewsets.ModelViewSet):
                 filters &= Q(**{field.name: param_value})
 
         qs = qs.filter(filters)
-        # TODO annotate with frame number
+        # annotate with frame number - we could solve this also with properties and serializers
         qs = qs.annotate(frame_number=F('image__frame__frame_number'))
         print(qs.values().first())
 
