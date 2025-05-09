@@ -40,6 +40,11 @@ spec:
       - name: backend
         image: ghcr.io/berlinunited/django_backend:latest
         env:
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: "secretkey"
         - name: USE_POSTGRES
           value: "true"
         - name: VAT_POSTGRES_DB

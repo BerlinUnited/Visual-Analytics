@@ -15,10 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # used to provide cryptographic signing, and should be set to a unique, unpredictable value.
 # read more at https://docs.djangoproject.com/en/5.1/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = "django-insecure-n!-hggli0wd1(2=4!gsrbpt3=px4xxbed$ocvvw2v2+3cq+xz*"
+SECRET_KEY = str(os.getenv('DJANGO_SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
+DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
 
 INTERNAL_IPS = [
     "127.0.0.1",
