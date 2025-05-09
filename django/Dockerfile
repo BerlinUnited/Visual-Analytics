@@ -1,7 +1,8 @@
 FROM ubuntu:22.04
 
 # show the stdout and stderr streams right in the command line instead of getting buffered.
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
 RUN apt-get update && apt-get -y --no-install-recommends install \
     curl \
@@ -21,13 +22,14 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
     nano \
     python-is-python3 \
     python3-dev \
-    postgresql-client-16
+    postgresql-client-16 && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /django
 WORKDIR /django
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 RUN python manage.py collectstatic
 EXPOSE 8000
 

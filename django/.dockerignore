@@ -1,0 +1,6 @@
+.env
+.envrc
+.dockerignore
+
+.ruff_cache
+venv
