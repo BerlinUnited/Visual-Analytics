@@ -1,0 +1,17 @@
+custom:
+    users:
+    - "alice"
+    - "emma"
+
+argo-cd:
+  global:
+    domain: argo.berlin-united.com
+  namespaceOverride: argocd
+  crds:
+    install: true
+
+  configs:
+    cm:
+      create: false
+    rbac:
+      create: false

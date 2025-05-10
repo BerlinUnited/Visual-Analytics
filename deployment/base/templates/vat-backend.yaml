@@ -2,6 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: vat-backend
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: myalias=ghcr.io/berlinunited/django_backend
+    argocd-image-updater.argoproj.io/myalias.update-strategy: newest-build
 spec:
   project: default
   source:

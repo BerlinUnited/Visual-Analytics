@@ -14,7 +14,7 @@ spec:
     spec:
       initContainers:
       - name: django-migrations
-        image: ghcr.io/berlinunited/django_backend:latest
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         command: 
         - /bin/sh
         - -c
@@ -38,7 +38,7 @@ spec:
           value: "5432"
       containers:
       - name: backend
-        image: ghcr.io/berlinunited/django_backend:latest
+        image: ghcr.io/berlinunited/django_backend@sha256:1d7f514da8cc88a91012bfe8194d738c7f185afa459434ba20525e65bdb11a5d
         env:
         - name: DJANGO_SECRET_KEY
           valueFrom:

@@ -1,5 +1,7 @@
 FROM python:3.11-slim-bookworm
 
+LABEL maintainer="Stella Alice Schlotter"
+
 # show the stdout and stderr streams right in the command line instead of getting buffered.
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
