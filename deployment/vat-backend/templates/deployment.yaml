@@ -38,7 +38,7 @@ spec:
           value: "5432"
       containers:
       - name: backend
-        image: ghcr.io/berlinunited/django_backend@sha256:1d7f514da8cc88a91012bfe8194d738c7f185afa459434ba20525e65bdb11a5d
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         env:
         - name: DJANGO_SECRET_KEY
           valueFrom:
@@ -60,14 +60,5 @@ spec:
           value: "postgres-postgresql.postgres.svc.cluster.local"
         - name: VAT_POSTGRES_PORT
           value: "5432"
-        - name: VAT_BACKUP_FOLDER
-          value: "/backup"
-        volumeMounts:
-        - mountPath: /backup
-          name: backupmount
       imagePullSecrets:
       - name: github-access
-      volumes:
-      - name: backupmount
-        hostPath:
-          path: /opt/backup # path to a folder on the actual node

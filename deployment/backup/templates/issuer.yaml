@@ -1,0 +1,22 @@
+# https://github.com/vadimkim/cert-manager-webhook-hetzner
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod-backup
+  namespace: {{ .Values.namespace }}
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    # ACME Email address
+    email: stella.a.schlotter@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector:
+        dnsNames:
+        - 'backup.berlin-united.com'
+      dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            name: cloudflare-token
+            key: DATA

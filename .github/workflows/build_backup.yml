@@ -1,13 +1,13 @@
-name: Build Django Image
+name: Build Backup Image
 
 on:
   push:
     branches: ['main']
-    paths: ['django/**']
+    paths: ['utils/backup.py', '.github/workflows/build_backup.yml', 'deployment/backup/**']
     
 # This creates an environment variable called `IMAGE_NAME ` with the value `ghtoken_product_demo`.
 env:
-  IMAGE_NAME: django_backend
+  IMAGE_NAME: backup
 #
 jobs:
   # This pushes the image to GitHub Packages.
@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build image
-        working-directory: ./django
+        working-directory: ./utils
         run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
