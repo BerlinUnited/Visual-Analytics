@@ -45,17 +45,22 @@ async function get_image_url(camera) {
                 "Content-Type": "application/json",
                 "X-CSRFToken": csrfToken,
             },
-        });
-        
+        }); 
+        // FIXME how to handle dummy images correctly and make sure to not fetch annotations
         const data = await response.json();
+        
+        if (data.length == 0){
+            console.log("data is too short")
+            console.log(data)
+            return {image_url: "/static/images/dummy_image.jpg"}; // Fallback image
+        }
         console.log("Success:", data);
-
         return data[0];
         
     } catch (error) {
         console.error("Error:", error);
         // FIXME return a json with image_url as member
-        return "/static/images/dummy_image.jpg"; // Fallback image
+        return {image_url: "/static/images/dummy_image.jpg"}; // Fallback image
     }
 }
 
