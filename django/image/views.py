@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,7 +16,9 @@ from . import models
 import time
 
 
+
 class ImageCountView(APIView):
+    @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request):
         # Get filter parameters from query string
         query_params = request.query_params.copy()
