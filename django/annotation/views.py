@@ -1,3 +1,4 @@
+from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
@@ -5,6 +6,47 @@ from django.db.models import Q, F
 
 from .models import Annotation
 from .serializers import AnnotationSerializer
+
+
+class AnnotationCount(APIView):
+    def get(self, request):
+        # Get filter parameters from query string
+        query_params = request.query_params.copy()
+        print(query_params)
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            qs = Annotation.objects.filter(image__frame__log=log_id)
+        else:
+            qs = Annotation.objects.all()
+        
+        # Handle boolean flags here
+        if "validated" in query_params.keys():
+            validated_value = query_params.pop("validated")[0]
+            print("validated_value:", validated_value)
+            if validated_value == 'true':
+                print("filter validation")
+                qs=qs.filter(validated=True)
+            elif validated_value == 'false':
+                qs= qs.filter(validated=False)
+        # TODO we have other boolean flags and maybe there is way to do that better
+
+        filters = Q()
+        for field in Annotation._meta.fields:
+            param_value = query_params.get(field.name)
+            if param_value == "None" or param_value == "null":
+                filters &= Q(**{f"{field.name}__isnull": True})
+                # print(f"filter with {field.name} = {param_value}")
+            elif param_value:
+                # print(f"filter with {field.name} = {param_value}")
+                filters &= Q(**{field.name: param_value})
+
+        # apply filters if provided
+        qs = qs.filter(filters)
+
+        # get the count
+        count = qs.count()
+
+        return Response({"count": count}, status=status.HTTP_200_OK)
 
 
 class AnnotationViewSet(viewsets.ModelViewSet):
