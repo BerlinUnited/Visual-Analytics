@@ -9,7 +9,6 @@ from django.db.models import Q, Count
 from django.db import connection
 from psycopg2.extras import execute_values
 
-from common.models import Log
 from . import serializers
 from . import models
 
