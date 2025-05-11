@@ -1,3 +1,3 @@
-vaapi>=0.6.12
+vaapi>=0.6.17
 iterfzf==1.4.0.54.3
 opencv-python
