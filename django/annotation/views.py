@@ -12,7 +12,7 @@ class AnnotationCount(APIView):
     def get(self, request):
         # Get filter parameters from query string
         query_params = request.query_params.copy()
-        print(query_params)
+
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
             qs = Annotation.objects.filter(image__frame__log=log_id)
@@ -22,9 +22,7 @@ class AnnotationCount(APIView):
         # Handle boolean flags here
         if "validated" in query_params.keys():
             validated_value = query_params.pop("validated")[0]
-            print("validated_value:", validated_value)
             if validated_value == 'true':
-                print("filter validation")
                 qs=qs.filter(validated=True)
             elif validated_value == 'false':
                 qs= qs.filter(validated=False)
@@ -78,7 +76,6 @@ class AnnotationViewSet(viewsets.ModelViewSet):
         qs = qs.filter(filters)
         # annotate with frame number - we could solve this also with properties and serializers
         qs = qs.annotate(frame_number=F('image__frame__frame_number'))
-        print(qs.values().first())
 
         return qs
     
