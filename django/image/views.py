@@ -16,7 +16,6 @@ from . import models
 import time
 
 
-
 class ImageCountView(APIView):
     @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request):
@@ -188,10 +187,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         image_id = self.kwargs["pk"]  # image id from the url: /api/image/17018/
         data = self.request.data
 
-        # we ignore the fields that act as unique identifiers here
-        update_fields = {
-            k: v for k, v in data.items() if k not in ["frame", "camera", "type"]
-        }
+        # 
+        update_fields = {k: v for k, v in data.items()}
         updated = models.NaoImage.objects.filter(id=image_id).update(**update_fields)
 
         status_code = status.HTTP_201_CREATED if updated else status.HTTP_200_OK
