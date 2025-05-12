@@ -6,6 +6,7 @@ app_name = "annotation"
 
 urlpatterns = [
     path("annotation-count/", views.AnnotationCount.as_view(), name="annotation-count"),
+    path("annotation-task/",views.AnnotationTask.as_view(),name="annotation-task")
 ]
 
 router = routers.DefaultRouter()

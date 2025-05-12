@@ -3,11 +3,53 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q, F
-
+import random
+from django.conf import settings
 from .models import Annotation
 from .serializers import AnnotationSerializer
 
 
+class AnnotationTask(APIView):
+    def get(self,request):
+
+        query_params = request.query_params.copy()
+
+        queryset = Annotation.objects.filter(validated=False)
+
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            queryset = queryset.filter(image__frame__log=log_id)
+
+        if "amount" in query_params.keys():
+            amount = int(query_params.pop("amount")[0])
+        else:
+            amount = 50
+
+        # FIXME allow for other filters like class name here
+
+        links = []
+
+        if len(queryset) < amount:
+            amount= len(queryset)
+
+        queryset = list(queryset)
+        for i in range(amount):
+
+            annotation = random.choice(queryset)
+            queryset.remove(annotation)
+            if settings.DEBUG:
+                # Development - use localhost
+                domain = "127.0.0.1:8000"
+                scheme = "http"
+            else:
+                # Production - use your actual domain
+                domain = "vat.berlin-united.com"  
+                scheme = "https"
+            links.append(f"{scheme}://{domain}/log/{annotation.image.frame.log.id}/frame/{annotation.image.frame.frame_number}?filter=None")
+
+        return Response({"result": links}, status=status.HTTP_200_OK)
+        
+        
 class AnnotationCount(APIView):
     def get(self, request):
         # Get filter parameters from query string
