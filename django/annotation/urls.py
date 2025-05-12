@@ -6,6 +6,7 @@ app_name = "annotation"
 
 urlpatterns = [
     path("annotation-count/", views.AnnotationCount.as_view(), name="annotation-count"),
+    path("annotation-unvalidated/",views.AnnotationsUnvalidated.as_view(),name="unvalidated_annotations")
 ]
 
 router = routers.DefaultRouter()
