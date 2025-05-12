@@ -18,7 +18,7 @@ class EventListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["events"] = Event.objects.all()
+        context["events"] = Event.objects.all().order_by("start_day")
         return context
 
 
@@ -30,7 +30,7 @@ class GameListView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["games"] = Game.objects.filter(event_id=context["event"])
+        context["games"] = Game.objects.filter(event_id=context["event"]).order_by("start_time")
 
         return context
 
@@ -43,7 +43,7 @@ class GameLogListView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["game_logs"] = Log.objects.filter(game=context["game"].id)
+        context["game_logs"] = Log.objects.filter(game=context["game"].id).order_by("player_number")
 
         return context
 

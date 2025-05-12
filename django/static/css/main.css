@@ -413,3 +413,76 @@ body {
 .frame_button.active {
   background-color: rgb(159, 232, 253);
 }
+
+/* Classification Labels for an image */
+
+.buttons-container {
+  padding-top: 5px;
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 15px
+}
+
+.toggle-button {
+  width: fit-content;
+  padding: 0.1rem 0.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dog class button */
+.toggle-button.dog {
+  background-color: #e9ecef;
+  color: #4361ee;
+  border: 2px solid #4361ee;
+}
+
+.toggle-button.dog.active {
+  background-color: #4361ee;
+  color: white;
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.3);
+}
+
+/* Cat class button */
+.toggle-button.cat {
+  background-color: #e9ecef;
+  color: #f72585;
+  border: 2px solid #f72585;
+}
+
+.toggle-button.cat.active {
+  background-color: #f72585;
+  color: white;
+  box-shadow: 0 0 0 2px rgba(247, 37, 133, 0.3);
+}
+
+/* Bird class button */
+.toggle-button.bird {
+  background-color: #e9ecef;
+  color: #4cc9f0;
+  border: 2px solid #4cc9f0;
+}
+
+.toggle-button.bird.active {
+  background-color: #4cc9f0;
+  color: white;
+  box-shadow: 0 0 0 2px rgba(76, 201, 240, 0.3);
+}
+
+/* Other class button */
+.toggle-button.other {
+  background-color: #e9ecef;
+  color: #7209b7;
+  border: 2px solid #7209b7;
+}
+
+.toggle-button.other.active {
+  background-color: #7209b7;
+  color: white;
+  box-shadow: 0 0 0 2px rgba(114, 9, 183, 0.3);
+}

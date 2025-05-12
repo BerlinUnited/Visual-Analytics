@@ -57,6 +57,12 @@
 </div>
 
 <div class="timeline-container">
+    <div class="buttons-container">
+        <button class="toggle-button dog" onclick="toggleActive(this)">Dog</button>
+        <button class="toggle-button cat" onclick="toggleActive(this)">Cat</button>
+        <button class="toggle-button bird" onclick="toggleActive(this)">Bird</button>
+        <button class="toggle-button other" onclick="toggleActive(this)">Other</button>
+    </div>
     <div class="timeline_infos">
         <p>Frame: {{current_index}}/{{num_frames}}</p>
         <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="prev-button">Previous</a>
@@ -103,6 +109,18 @@
         setup()
         
     });
+    function toggleActive(button) {
+      // Get all buttons
+      const buttons = document.querySelectorAll('.toggle-button');
+      
+      // Remove active class from all buttons
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Add active class to clicked button
+      button.classList.add('active');
+    }
 
 </script>
 {% endblock %}
