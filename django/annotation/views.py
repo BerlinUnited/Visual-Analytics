@@ -9,7 +9,7 @@ from .models import Annotation
 from .serializers import AnnotationSerializer
 
 
-class AnnotationsUnvalidated(APIView):
+class AnnotationTask(APIView):
     def get(self,request):
 
         query_params = request.query_params.copy()
