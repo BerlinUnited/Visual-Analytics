@@ -25,6 +25,8 @@ class AnnotationTask(APIView):
         else:
             amount = 50
 
+        # FIXME allow for other filters like class name here
+
         links = []
 
         if len(queryset) < amount:
