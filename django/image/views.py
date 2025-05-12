@@ -241,7 +241,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # 
         update_fields = {k: v for k, v in data.items()}
         updated = models.NaoImage.objects.filter(id=image_id).update(**update_fields)
-
+        # FIXME can we use get instead of filter and can we return the image we updated here???
         status_code = status.HTTP_201_CREATED if updated else status.HTTP_200_OK
         return Response({}, status=status_code)
 
