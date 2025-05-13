@@ -44,7 +44,7 @@ function draw_db_annotations(){
             color: db_box.color,
             //FIXME add type here
         });
-        
+        console.log("rect", rect)
 
         drawingLayer.add(rect);
         rect.on('transformend', () => {
@@ -208,6 +208,37 @@ window.addEventListener('keydown', (e) => {
         })
         .catch(error => {
             console.error('Error making DELETE request:', error);
+        });
+    }
+    if (e.key === 's'&& selectedShape){
+        fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": my_csrfToken,
+            },
+            
+            body: JSON.stringify({
+                data: {
+                    x: selectedShape.attrs.x / targetWidth,
+                    y: selectedShape.attrs.y / targetHeight,
+                    width: selectedShape.attrs.width / targetWidth,
+                    height: selectedShape.attrs.width / targetHeight,
+                }
+            }),
+            credentials: 'include'  // Important for session auth
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log('Update successful:', data);
+        })
+        .catch(error => {
+            console.error('Error making PATCH request:', error);
         });
     }
 });
