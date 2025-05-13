@@ -43,6 +43,22 @@ function draw_db_annotations(){
             validated: db_box.validated,
             color: db_box.color,
             //FIXME add type here
+            // for boundary checks
+            dragBoundFunc: function(pos) {
+                const stageWidth = stage.width();
+                const stageHeight = stage.height();
+                const rectWidth = rect.width();
+                const rectHeight = rect.height();
+                
+                // Calculate boundaries
+                let x = Math.max(0, Math.min(pos.x, stageWidth - rectWidth));
+                let y = Math.max(0, Math.min(pos.y, stageHeight - rectHeight));
+                
+                return {
+                  x: x,
+                  y: y
+                };
+            }
         });
         console.log("rect", rect)
 
@@ -223,7 +239,7 @@ window.addEventListener('keydown', (e) => {
                     x: selectedShape.attrs.x / targetWidth,
                     y: selectedShape.attrs.y / targetHeight,
                     width: selectedShape.attrs.width / targetWidth,
-                    height: selectedShape.attrs.width / targetHeight,
+                    height: selectedShape.attrs.height / targetHeight,
                 }
             }),
             credentials: 'include'  // Important for session auth
