@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from django.db.models import Q, F
+from django.db.models import Q, F,Count
 import random
 from django.conf import settings
 from .models import Annotation
@@ -24,6 +24,23 @@ class AnnotationTask(APIView):
             amount = int(query_params.pop("amount")[0])
         else:
             amount = 50
+
+        # FIXME: this is just a hack we need to figure how to filter better for annotation data
+        if "x" in query_params.keys():
+            x = int(query_params.pop("x")[0])
+            queryset = queryset.filter(data__x=x)
+
+        if "x_gte" in query_params.keys():
+            x = int(query_params.pop("x_gte")[0])
+            queryset = queryset.filter(data__x__gte=x)
+
+        #allows filtering for annotations that exist multiple times for the same image
+        if "multiple_annotations" in query_params.keys() and query_params.get("multiple_annotations")=='1':
+            image_ids_with_duplicates = Annotation.objects.values('image_id') \
+                                            .annotate(annotation_count=Count('id')) \
+                                            .filter(annotation_count__gt=1) \
+                                            .values_list('image_id', flat=True)
+            queryset = queryset.filter(image__in=list(image_ids_with_duplicates))
 
         filters = Q()
         for field in Annotation._meta.fields:
@@ -114,15 +131,6 @@ class AnnotationViewSet(viewsets.ModelViewSet):
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
             qs = qs.filter(image__frame__log=log_id)
-
-        # FIXME: this is just a hack we need to figure how to filter better for annotation data
-        if "x" in query_params.keys():
-            x = int(query_params.pop("x")[0])
-            qs = qs.filter(data__x=x)
-
-        if "x_gte" in query_params.keys():
-            x = int(query_params.pop("x_gte")[0])
-            qs = qs.filter(data__x__gte=x)
 
          # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
