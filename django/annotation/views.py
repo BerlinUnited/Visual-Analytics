@@ -25,7 +25,18 @@ class AnnotationTask(APIView):
         else:
             amount = 50
 
-        # FIXME allow for other filters like class name here
+        filters = Q()
+        for field in Annotation._meta.fields:
+            param_value = query_params.get(field.name)
+            if param_value == "None" or param_value == "null":
+                filters &= Q(**{f"{field.name}__isnull": True})
+                # print(f"filter with {field.name} = {param_value}")
+            elif param_value:
+                # print(f"filter with {field.name} = {param_value}")
+                filters &= Q(**{field.name: param_value})
+
+        # apply filters if provided
+        queryset = queryset.filter(filters)
 
         links = []
 
@@ -104,6 +115,15 @@ class AnnotationViewSet(viewsets.ModelViewSet):
             log_id = int(query_params.pop("log")[0])
             qs = qs.filter(image__frame__log=log_id)
 
+        # FIXME: this is just a hack we need to figure how to filter better for annotation data
+        if "x" in query_params.keys():
+            x = int(query_params.pop("x")[0])
+            qs = qs.filter(data__x=x)
+
+        if "x_gte" in query_params.keys():
+            x = int(query_params.pop("x_gte")[0])
+            qs = qs.filter(data__x__gte=x)
+
          # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
         for field in Annotation._meta.fields:
@@ -114,7 +134,6 @@ class AnnotationViewSet(viewsets.ModelViewSet):
             elif param_value:
                 # print(f"filter with {field.name} = {param_value}")
                 filters &= Q(**{field.name: param_value})
-
         qs = qs.filter(filters)
         # annotate with frame number - we could solve this also with properties and serializers
         qs = qs.annotate(frame_number=F('image__frame__frame_number'))
