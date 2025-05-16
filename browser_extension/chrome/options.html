@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>VAT Validator Settings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <img class="header-logo" src="naoth-bu-2012-blue-mini.png" alt="Home" />
+    Berlin United Visual Analytics
+  </header>
+
+  <aside class="sidebar_container">
+    <div class="sidebar">
+      <ul>
+        <li><a href="https://vat.berlin-united.com">Home</a></li>
+        <li><a href="">Settings</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="content">
+    <h2>API Settings</h2>
+    <label for="apiToken">API Token:</label>
+    <input type="password" id="apiToken" placeholder="Enter your API token">
+    <label for="amount">Tab Number</label>
+    <input type="number" id="amount" placeholder="Enter Number of Tabs to open">
+    <label for="className">Class Name</label>
+    <input type="string" id="className" placeholder="Enter the class name">
+
+    <button id="save" class="save_button">Save Settings</button>
+    <div id="status" class="status"></div>
+  </main>
+  <script src="options.js"></script>
+</body>
+
+</html>
