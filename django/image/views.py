@@ -117,7 +117,7 @@ class ImagePageSet(viewsets.ModelViewSet):
     queryset = models.NaoImage.objects.all()
     serializer_class = serializers.ImageSerializer
     pagination_class = LargeResultsSetPagination
-    
+
     def get_queryset(self):
         # we use copy here so that the QueryDict object query_params become mutable
         query_params = self.request.query_params.copy()
