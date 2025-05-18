@@ -27,3 +27,7 @@ class NaoImage(models.Model):
 
     def __str__(self):
         return f"{self.frame}-{self.camera}-{self.type}"
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number

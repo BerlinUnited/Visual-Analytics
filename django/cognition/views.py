@@ -24,9 +24,11 @@ class DynamicModelMixin:
         model = self.get_model()
         query_params = self.request.query_params.copy()
 
+        qs = models.objects.all()
         # if log_id was set filter for it
-        log_id = int(query_params.pop("log_id")[0])
-        queryset = model.objects.filter(frame__log=log_id)
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            qs = qs.filter(frame__log=log_id)
 
         filters = Q()
         for field in model._meta.fields:

@@ -169,7 +169,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         # we use copy here so that the QueryDict object query_params become mutable
         query_params = self.request.query_params.copy()
 
-        print(query_params)
         qs = models.NaoImage.objects.all()
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
