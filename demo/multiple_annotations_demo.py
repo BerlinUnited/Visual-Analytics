@@ -1,22 +1,13 @@
-import requests
 import os
 import subprocess
+from vaapi.client import Vaapi
 
-base_url=os.getenv("VAT_API_URL")
-api_key=os.getenv("VAT_API_TOKEN")
+if __name__ == "__main__":
+    client = Vaapi(
+        base_url=os.environ.get("VAT_API_URL"),
+        api_key=os.environ.get("VAT_API_TOKEN"),
+    )
 
-default_headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"Token {api_key}",
-        }
-
-#filtering still works
-query_params = {
-   "amount":10
-}
-
-resp = requests.get(f"{base_url}api/annotation-task/multiple",headers=default_headers,params=query_params)
-
-for link in resp.json()["result"]:
-    subprocess.run(['powershell.exe', '-Command', f'Start-Process "{link}"'])
+    links = client.annotations.multiple(amount=10)["result"]
+    for link in links:
+        subprocess.run(['powershell.exe', '-Command', f'Start-Process "{link}"'])
