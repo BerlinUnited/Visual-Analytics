@@ -18,6 +18,7 @@
                 <a href="{% url 'game_detail' game.id %}">
                     <img src="{% static 'images/robocup.jpeg' %}" alt="RoboCup Image" />
                 </a>
+                <button class="star-button" id="{{game.id}}" onclick="toggleStarGame(this, {{game.id}})" data-is-favorite="False">★</button>
             </div>
             <div class="event_content">
                 <p class="event_title">Game: {{ game.team1 }} vs {{game.team2}}
@@ -30,4 +31,110 @@
         </div>
         {% endfor %}
     </div>
-    {% endblock %}
+</div>
+<script>
+const BASE_URL = window.location.protocol === 'https:' 
+    ? `https://{{ request.get_host }}` 
+    : `http://{{ request.get_host }}`;
+const csrfToken = "{{ csrf_token }}";  // Django template variable
+
+document.addEventListener('DOMContentLoaded', function() {
+    const starButtons = document.querySelectorAll('.star-button');
+
+    starButtons.forEach(button => {
+        console.log(button.id)
+        // query the logs for each game and check if any of them is_favourite
+        fetch(`${BASE_URL}/api/logs/?game=${button.id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrfToken,
+            },
+            credentials: 'include'  // Important for session auth
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log('GET successful:', data);
+            data.forEach(log => {
+                if(log.is_favourite === true){
+                    button.classList.add('favorite');
+                    button.dataset.isFavorite = 'True'
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error making PATCH request:', error);
+        });
+        });
+});
+
+function toggleStarGame(button, game_id) {
+    // Prevent the click from bubbling to the anchor tag
+    event.stopPropagation();
+    
+    // Toggle the visual state
+    button.classList.toggle('favorite');
+    
+    // Get current state and toggle it
+    // FIXME the upper/lower case for the booleans is pretty weird
+    // its uppercase when coming from python
+    const isFavorite = button.dataset.isFavorite === 'True';
+    const newState = !isFavorite;
+    button.dataset.isFavorite = newState;
+
+    // get all logs for the game
+    fetch(`${BASE_URL}/api/logs/?game=${game_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        credentials: 'include'  // Important for session auth
+    })
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        data.forEach(log => {
+            console.log(log.id)
+            // TODO change state in db
+            fetch(`${BASE_URL}/api/logs/${log.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "X-CSRFToken": csrfToken,
+                },
+                
+                body: JSON.stringify({
+                    is_favourite: newState,
+                }),
+                credentials: 'include'  // Important for session auth
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Update successful:', data);
+            })
+            .catch(error => {
+                console.error('Error making PATCH request:', error);
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Error making PATCH request:', error);
+    });
+}
+</script>
+{% endblock %}

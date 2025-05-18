@@ -19,38 +19,39 @@ def generic_filter(queryset,query_params):
         # apply filters if provided
         return queryset.filter(filters)
 
+
 class AnnotationTaskMultiple(APIView):
     def get(self,request):
 
         query_params = request.query_params.copy()
 
-        queryset = Annotation.objects.filter(validated=False)
+        qs = Annotation.objects.filter(validated=False)
 
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
-            queryset = queryset.filter(image__frame__log=log_id)
+            qs = qs.filter(image__frame__log=log_id)
 
         if "amount" in query_params.keys():
             amount = int(query_params.pop("amount")[0])
         else:
             amount = 50
     
-        queryset = generic_filter(queryset,query_params)
+        qs = generic_filter(qs,query_params)
 
         image_ids_with_duplicates = Annotation.objects.values('image_id') \
                                         .annotate(annotation_count=Count('id')) \
                                         .filter(annotation_count__gt=1) \
                                         .values_list('image_id', flat=True)
-        queryset = queryset.filter(image__in=list(image_ids_with_duplicates))
+        qs = qs.filter(image__in=list(image_ids_with_duplicates))
 
         links = []
-        if len(queryset) < amount:
-            amount= len(queryset)
+        if len(qs) < amount:
+            amount= len(qs)
 
-        queryset = list(queryset)
+        qs = list(qs)
         for i in range(amount):
-            annotation = random.choice(queryset)
-            queryset.remove(annotation)
+            annotation = random.choice(qs)
+            qs.remove(annotation)
             if settings.DEBUG:
                 # Development - use localhost
                 domain = "127.0.0.1:8000"
@@ -136,28 +137,37 @@ class AnnotationTask(APIView):
 
         query_params = request.query_params.copy()
 
-        queryset = Annotation.objects.filter(validated=False)
+        qs = Annotation.objects.filter(validated=False)
 
         if "log" in query_params.keys():
+            # if specific log is requested use this
             log_id = int(query_params.pop("log")[0])
-            queryset = queryset.filter(image__frame__log=log_id)
+            qs = qs.filter(image__frame__log=log_id)
+        else:
+            # use favourite logs if available
+            qs_temp = qs.filter(image__frame__log__is_favourite=True)
+            count = qs_temp.count()
+
+            # if there are no more annotations to validate fallback on all logs
+            if count > 0:
+                qs = qs_temp
 
         if "amount" in query_params.keys():
             amount = int(query_params.pop("amount")[0])
         else:
             amount = 50
 
-        queryset = generic_filter(queryset,query_params)
+        qs = generic_filter(qs,query_params)
 
         links = []
 
-        if len(queryset) < amount:
-            amount= len(queryset)
+        if len(qs) < amount:
+            amount= len(qs)
 
-        queryset = list(queryset)
+        qs = list(qs)
         for i in range(amount):
-            annotation = random.choice(queryset)
-            queryset.remove(annotation)
+            annotation = random.choice(qs)
+            qs.remove(annotation)
             if settings.DEBUG:
                 # Development - use localhost
                 domain = "127.0.0.1:8000"

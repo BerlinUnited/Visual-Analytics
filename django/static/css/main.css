@@ -9,33 +9,32 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   display: grid;
-  grid-template-columns: 200px 1fr; /* Sidebar width, remaining for content */
-  grid-template-rows: auto 1fr; /* Header height, remaining for content, timeline height */
+  grid-template-columns: 200px 1fr;
+  /* Sidebar width, remaining for content */
+  grid-template-rows: auto 1fr;
+  /* Header height, remaining for content, timeline height */
   grid-template-areas:
-  "header header"
-  "nav content";
+    "header header"
+    "nav content";
   padding: 0;
   margin: 0;
   min-height: 100vh;
   box-sizing: border-box;
-  background: radial-gradient(
-      circle at 50% 50%,
+  background: radial-gradient(circle at 50% 50%,
       rgb(159, 232, 253) 20%,
-      transparent 80%
-  ),
-    conic-gradient(
-      from 45deg at 50% 50%,
+      transparent 80%),
+    conic-gradient(from 45deg at 50% 50%,
       rgb(255, 129, 170) 0%,
       rgb(159, 232, 253) 25%,
       rgb(255, 129, 170) 50%,
       rgb(159, 232, 253) 75%,
-      rgb(255, 129, 170) 100%
-    );
+      rgb(255, 129, 170) 100%);
 }
 
 .header {
-  grid-column: 1 / -1; /* Span across all columns */
-  
+  grid-column: 1 / -1;
+  /* Span across all columns */
+
   color: black;
   padding-left: 16px;
   align-items: center;
@@ -43,7 +42,7 @@ body {
   height: 50px;
 }
 
-.header-logo{
+.header-logo {
   height: 80%;
 }
 
@@ -54,7 +53,8 @@ body {
   padding-bottom: 20px;
   display: flex;
   flex-direction: column;
-  background-color: #f4f4f4; /* Match body background */
+  background-color: #f4f4f4;
+  /* Match body background */
 }
 
 .sidebar {
@@ -98,16 +98,19 @@ body {
   grid-template-columns: 3fr auto;
   grid-template-rows: 1fr 200px;
   gap: 20px;
-  background-color: #f4f4f4; /* Match body background */
+  background-color: #f4f4f4;
+  /* Match body background */
   padding: 20px;
-  overflow: hidden; /* Prevent scrolling within content area */
+  overflow: hidden;
+  /* Prevent scrolling within content area */
 }
 
 /* For event list view */
 .projects_section {
   grid-area: content;
   padding: 20px;
-  background-color: #f4f4f4; /* Match body background */
+  background-color: #f4f4f4;
+  /* Match body background */
   overflow: hidden;
   height: 100%;
   display: flex;
@@ -117,6 +120,7 @@ body {
 .project_boxes {
   overflow-y: auto;
 }
+
 .project_boxes.jsGridView {
   --min: 300px;
   --gap: 1rem;
@@ -145,22 +149,25 @@ body {
 
 /* */
 .event_card {
-    border-radius: 0.75rem;
-    border: 1px solid grey;
-    background-color: hsl(0 0% 100%);
+  border-radius: 0.75rem;
+  border: 1px solid grey;
+  background-color: hsl(0 0% 100%);
 }
 
-.event_header{
+.event_header {
   padding: 1.5rem;
   flex-direction: column;
   display: flex;
+  position: relative;
 }
+
 /* this is really weird why does img need to be a direct child of something that is display flex*/
-.event_header a{
+.event_header a {
   flex-direction: column;
   display: flex;
 }
-.event_content{
+
+.event_content {
   padding-top: 0px;
   padding: 1.5rem;
 }
@@ -171,7 +178,7 @@ body {
   font-weight: 600;
 }
 
-.event_footer{
+.event_footer {
   padding-top: 0px;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -179,10 +186,11 @@ body {
   align-items: center;
   display: flex;
 }
+
 .event_progressbar {
-    height: 8px;
-    border-radius: 8px;
-    width: 100%;
+  height: 8px;
+  border-radius: 8px;
+  width: 100%;
 }
 
 /* Annotation View */
@@ -209,7 +217,7 @@ body {
 .grid_item_annotation {
   flex: 1;
   display: flex;
- 
+
 
   justify-content: center;
   align-items: center;
@@ -219,22 +227,44 @@ body {
 }
 
 .grid_item_annotation img {
-  aspect-ratio: 4 / 3; /* Maintain the 4:3 aspect ratio */
-  object-fit: contain; /* Scale the image while preserving the aspect ratio */
-  height: 100%; /* Prevent the image from exceeding the container's height */
+  aspect-ratio: 4 / 3;
+  /* Maintain the 4:3 aspect ratio */
+  object-fit: contain;
+  /* Scale the image while preserving the aspect ratio */
+  height: 100%;
+  /* Prevent the image from exceeding the container's height */
   max-width: 100%;
 }
 
 /* Timeline */
-.timeline-container { 
+.timeline-container {
   background-color: #ffffff;
   overflow: hidden;
 }
 
 .test {
-  overflow-x: auto; /* Enables horizontal scrolling */
-  white-space: nowrap; /* Prevents wrapping of boxes   */
+  overflow-x: auto;
+  /* Enables horizontal scrolling */
+  white-space: nowrap;
+  /* Prevents wrapping of boxes   */
   padding-bottom: 5px;
+}
+
+.star-button {
+  position: absolute;
+  right: 30px;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+  z-index: 10;
+  color: #fff;
+  /* Gray color */
+  transition: color 0.3s;
+}
+
+.star-button.favorite {
+  color: gold;
+  /* Golden color when active */
 }
 
 
@@ -278,13 +308,14 @@ body {
   overflow: hidden;
 }
 
-.big_image_wrapper{
+.big_image_wrapper {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 #mainImage {
   display: block;
   cursor: default;
@@ -329,7 +360,7 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.save_buttons{
+.save_buttons {
   display: flex;
   gap: 10px;
 }
@@ -350,7 +381,7 @@ body {
   background-color: rgb(159, 232, 253);
 }
 
-.annotation_options{
+.annotation_options {
   display: flex;
   gap: 10px;
   padding: 10px;
@@ -363,7 +394,7 @@ body {
   font-weight: bold;
 }
 
-.settings select, button {
+.settings_button {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -372,21 +403,31 @@ body {
   color: #333;
 }
 
-.settings select:focus {
+.settings_select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+}
+
+.settings_select:focus {
   outline: none;
   border-color: #159, 232, 253;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .timeline-container {
-  grid-column: 1 / -1; /* Start after sidebar, span to the end */
+  grid-column: 1 / -1;
+  /* Start after sidebar, span to the end */
   padding-left: 10px;
   background-color: #fff;
   border-radius: 8px;
-  
+
 }
 
-.timeline{
+.timeline {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   overflow-x: auto;
   white-space: nowrap;
