@@ -31,7 +31,7 @@ if __name__ == "__main__":
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
     response = client.imudata.list(
-        log_id=1,
+        log=1,
     )
     print(response)
 

@@ -26,7 +26,7 @@ class LogSerializer(serializers.ModelSerializer):
 
     def get_fields(self):
         fields = super().get_fields()
-        # Manually add 'discounted_price' if not already included
+
         if 'event_name' not in fields:
             fields['event_name'] = serializers.ReadOnlyField()
         if 'game_name' not in fields:
