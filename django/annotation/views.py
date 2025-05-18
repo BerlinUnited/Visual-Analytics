@@ -8,7 +8,6 @@ from django.conf import settings
 from .models import Annotation
 from .serializers import AnnotationSerializer
 
-
 def generic_filter(queryset,query_params):
         filters = Q()
         for field in Annotation._meta.fields:
@@ -38,7 +37,6 @@ class AnnotationTaskMultiple(APIView):
     
         queryset = generic_filter(queryset,query_params)
 
-        
         image_ids_with_duplicates = Annotation.objects.values('image_id') \
                                         .annotate(annotation_count=Count('id')) \
                                         .filter(annotation_count__gt=1) \
@@ -46,13 +44,11 @@ class AnnotationTaskMultiple(APIView):
         queryset = queryset.filter(image__in=list(image_ids_with_duplicates))
 
         links = []
-        print(len(queryset))
         if len(queryset) < amount:
             amount= len(queryset)
 
         queryset = list(queryset)
         for i in range(amount):
-
             annotation = random.choice(queryset)
             queryset.remove(annotation)
             if settings.DEBUG:
@@ -84,12 +80,10 @@ class AnnotationTaskBorder(APIView):
             amount = 50
 
         COORDINATE_KEYS = ["x", "y", "width", "height"]
-       
         LOOKUP_TYPES = {
             "": "",  
             "_gte": "__gte",  
             "_lte": "__lte", 
-
         }
 
         active_filters = {}
@@ -97,25 +91,15 @@ class AnnotationTaskBorder(APIView):
         for coord_key in COORDINATE_KEYS:
             for query_suffix, orm_lookup_suffix in LOOKUP_TYPES.items():
                 param_name = f"{coord_key}{query_suffix}"
-
                 if param_name in query_params:
                     value_str = query_params.get(param_name)
-
                     if value_str is not None and value_str != '': # Ensure value is present
                         try:
                             value = float(value_str)
-                            
-                            # Construct the filter key for the ORM
-                            # e.g., "data__x__gte"
                             filter_key = f"data__{coord_key}{orm_lookup_suffix}"
-                            
                             # Add to our dictionary of active filters
                             active_filters[filter_key] = value
-                            
-                           
-                            query_params.pop(param_name) # Ensure this doesn't affect other logic
-                                                        # if query_params is shared.
-
+                            query_params.pop(param_name)                   
                         except ValueError:
                             print(f"Warning: Invalid value for query parameter '{param_name}': '{value_str}'. Skipping.")
                             pass
@@ -133,7 +117,6 @@ class AnnotationTaskBorder(APIView):
 
         queryset = list(queryset)
         for i in range(amount):
-
             annotation = random.choice(queryset)
             queryset.remove(annotation)
             if settings.DEBUG:
@@ -173,7 +156,6 @@ class AnnotationTask(APIView):
 
         queryset = list(queryset)
         for i in range(amount):
-
             annotation = random.choice(queryset)
             queryset.remove(annotation)
             if settings.DEBUG:
@@ -187,7 +169,6 @@ class AnnotationTask(APIView):
             links.append(f"{scheme}://{domain}/log/{annotation.image.frame.log.id}/frame/{annotation.image.frame.frame_number}?filter=None")
 
         return Response({"result": links}, status=status.HTTP_200_OK)
-        
         
 class AnnotationCount(APIView):
     def get(self, request):

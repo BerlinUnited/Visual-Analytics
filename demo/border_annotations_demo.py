@@ -12,7 +12,6 @@ default_headers = {
             "Authorization": f"Token {api_key}",
         }
 
-
 query_params = {
    "amount":10,
    "y_gte": 0.01,
@@ -20,9 +19,6 @@ query_params = {
     "x_gte":0.9, #right border
     # "x_lte":0.01 #left border
 }
-
-
-
 
 resp = requests.get(f"{base_url}api/annotation-task/border",headers=default_headers,params=query_params)
 

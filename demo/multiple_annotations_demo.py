@@ -5,7 +5,6 @@ import subprocess
 base_url=os.getenv("VAT_API_URL")
 api_key=os.getenv("VAT_API_TOKEN")
 
-
 default_headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -16,7 +15,6 @@ default_headers = {
 query_params = {
    "amount":10
 }
-
 
 resp = requests.get(f"{base_url}api/annotation-task/multiple",headers=default_headers,params=query_params)
 
