@@ -24,7 +24,7 @@ class DynamicModelMixin:
         model = self.get_model()
         query_params = self.request.query_params.copy()
 
-        qs = models.objects.all()
+        qs = model.objects.all()
         # if log_id was set filter for it
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
@@ -35,7 +35,7 @@ class DynamicModelMixin:
             param_value = query_params.get(field.name)
             if param_value:
                 filters &= Q(**{field.name: param_value})
-        return queryset.filter(filters)
+        return qs.filter(filters)
 
 
 class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
