@@ -5,6 +5,23 @@ metadata:
     app.kubernetes.io/name: argocd-image-updater-config
     app.kubernetes.io/part-of: argocd-image-updater
   name: argocd-image-updater-config
+data:
+  applications_api: argocd
+  # The address of Argo CD API endpoint - defaults to argocd-server.argocd
+  argocd.server_addr: argo.berlin-united.com
+  # Whether to use GRPC-web protocol instead of GRPC over HTTP/2
+  argocd.grpc_web: "true"
+  # Whether to ignore invalid TLS cert from Argo CD API endpoint
+  argocd.insecure: "false"
+  # Whether to use plain text connection (http) instead of TLS (https)
+  argocd.plaintext: "false"
+  registries.conf: |
+    registries:
+    - name: GitHub
+      prefix: ghcr.io
+      api_url: https://ghcr.io
+      credentials: pullsecret:argocd/github-access
+      default: true
 ---
 apiVersion: v1
 kind: ConfigMap

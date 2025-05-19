@@ -42,6 +42,10 @@ class AudioData(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -58,6 +62,10 @@ class BallModel(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -73,6 +81,10 @@ class BallCandidates(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="ballcandidates"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -92,6 +104,10 @@ class BallCandidatesTop(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -109,6 +125,10 @@ class CameraMatrix(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="cameramatrix"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -128,6 +148,10 @@ class CameraMatrixTop(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -145,6 +169,10 @@ class OdometryData(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="odometrydata"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -164,6 +192,10 @@ class FieldPercept(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -181,6 +213,10 @@ class FieldPerceptTop(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="fieldpercepttop"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -200,6 +236,10 @@ class GoalPercept(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -217,6 +257,10 @@ class GoalPerceptTop(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="goalpercepttop"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -236,6 +280,10 @@ class MultiBallPercept(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -253,6 +301,10 @@ class RansacCirclePercept2018(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="ransaccirclepercept2018"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -272,6 +324,10 @@ class RansacLinePercept(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -290,6 +346,10 @@ class RobotInfo(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -305,6 +365,10 @@ class ShortLinePercept(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="shortlinepercept"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -324,6 +388,10 @@ class ScanLineEdgelPercept(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -341,6 +409,10 @@ class ScanLineEdgelPerceptTop(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="scanlineedgelpercepttop"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
@@ -360,6 +432,10 @@ class TeamMessageDecision(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -378,6 +454,10 @@ class Teamstate(models.Model):
     )
     representation_data = models.JSONField(blank=True, null=True)
 
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
+
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"
 
@@ -393,6 +473,10 @@ class WhistlePercept(models.Model):
         CognitionFrame, on_delete=models.CASCADE, related_name="whistlepercept"
     )
     representation_data = models.JSONField(blank=True, null=True)
+
+    @property
+    def frame_number(self):
+        return self.frame.frame_number
 
     def __str__(self):
         return f"{self.frame}--{self.__class__.__name__}"

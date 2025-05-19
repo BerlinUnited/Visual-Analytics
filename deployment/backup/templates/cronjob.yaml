@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup
+spec:
+  schedule: "0 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: ghcr.io/berlinunited/backup:latest
+            imagePullPolicy: Always
+            command: ["python"]
+            args: 
+            - "backup.py"
+            - "--db_host"
+            - "$(VAT_POSTGRES_HOST)"
+            - "--db_port"
+            - "$(VAT_POSTGRES_PORT)"
+            - "-f"
+            - "-a"
+            - "-g"
+            - "-t"
+            - "image_naoimage" 
+            - "annotation_annotation"
+            - "-o"
+            - "/replbackup"
+            env:
+            - name: VAT_POSTGRES_DB
+              value: "vat"
+            - name: VAT_POSTGRES_USER
+              value: "naoth"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: "password"
+            - name: VAT_POSTGRES_HOST
+              value: "postgres-postgresql.postgres.svc.cluster.local"
+            - name: VAT_POSTGRES_PORT
+              value: "5432"
+            volumeMounts:
+            - mountPath: /replbackup
+              name: backupmount
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: github-access
+          volumes:
+          - name: backupmount
+            hostPath:
+              path: /mnt/backup/postgres_backups # path to a folder on the actual node

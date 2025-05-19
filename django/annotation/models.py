@@ -47,7 +47,8 @@ class Annotation(models.Model):
     class_name = models.CharField(max_length=20, choices=Classes, blank=True, null=True)
     concealed = models.BooleanField(default=False)
     # we want to say that an image does not contain any of the classes
-    is_empty = models.BooleanField(blank=True, null=True)
+    is_empty = models.BooleanField(blank=True, null=True) # TODO proably not that useful
+    #labels = models.JSONField(blank=True, null=True)
     validated = models.BooleanField(default=False)
     data = models.JSONField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -55,3 +56,10 @@ class Annotation(models.Model):
 
 
 # TODO build models for labeling situations
+
+# TODO build models for ball patches
+#class BallPatches(models.Model):
+#    # TODO how can i use the information about which sha is best, like ordering or figuring out in which branches they are etc.
+#    image = models.ForeignKey(NaoImage, on_delete=models.CASCADE, related_name="ballpatches")
+#    commit = models.CharField(max_length=40, blank=True, null=True)
+#    data = models.JSONField(blank=True, null=True)

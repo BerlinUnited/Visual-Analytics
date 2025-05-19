@@ -1,4 +1,4 @@
-name: build django container
+name: Build Django Image
 
 on:
   push:

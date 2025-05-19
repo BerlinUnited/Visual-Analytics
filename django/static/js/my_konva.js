@@ -3,7 +3,7 @@ const getBoundingBoxTransformer = () => {
     var tr = new Konva.Transformer();
     tr.rotateEnabled(false);
     tr.flipEnabled(false);
-    tr.anchorStroke("green");
+    tr.anchorStroke("000");
     tr.anchorFill('white');
     tr.keepRatio(false);
     tr.ignoreStroke(true);
@@ -29,8 +29,8 @@ function draw_db_annotations(){
             width: db_box.data.width * targetWidth,
             height: db_box.data.height * targetHeight,
             // color
-            fill: db_box.color,
-            stroke: "rgba(0, 255, 0, 1)",
+            fill: db_box.validated == true ? "green" : db_box.color,
+            stroke: "000",
             strokeWidth: 2,
             name: 'rect',
             strokeScaleEnabled: false,
@@ -40,9 +40,27 @@ function draw_db_annotations(){
             // custom properties from the db annotation
             class: db_box.class_name,
             id: db_box.id,
+            validated: db_box.validated,
+            color: db_box.color,
             //FIXME add type here
+            // for boundary checks
+            dragBoundFunc: function(pos) {
+                const stageWidth = stage.width();
+                const stageHeight = stage.height();
+                const rectWidth = rect.width();
+                const rectHeight = rect.height();
+                
+                // Calculate boundaries
+                let x = Math.max(0, Math.min(pos.x, stageWidth - rectWidth));
+                let y = Math.max(0, Math.min(pos.y, stageHeight - rectHeight));
+                
+                return {
+                  x: x,
+                  y: y
+                };
+            }
         });
-        
+        console.log("rect", rect)
 
         drawingLayer.add(rect);
         rect.on('transformend', () => {
@@ -136,9 +154,9 @@ function switchImage() {
 }
 
 function handle_select(target){
-    console.log("clicked on ", target)
     let element = document.getElementById("classSelect");
     element.value = target.attrs.class;
+    // selectedShape is a global object
     selectedShape = target;
 }
 
@@ -146,13 +164,16 @@ window.addEventListener('keydown', (e) => {
     const my_csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     // Check if 'v' is pressed and we have a selected node
     if (e.key === 'v' && selectedShape) {
+        // toggle the validated flag here
+        selectedShape.attrs.validated = !selectedShape.attrs.validated
+
         // Do something with the selected node
-        console.log('Pressed V with selected node:', selectedShape);
-        console.log(my_csrfToken)
+        const fill_color = selectedShape.attrs.validated == true ? "green" : selectedShape.attrs.color;
+
         // Example action: change the fill color
-        selectedShape.fill(getRandomColor());
+        selectedShape.fill(fill_color);
         drawingLayer.batchDraw();
-        console.log("annotation id", selectedShape.attrs.id)
+
         fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
             method: 'PATCH',
             headers: {
@@ -161,7 +182,7 @@ window.addEventListener('keydown', (e) => {
             },
             
             body: JSON.stringify({
-                validated: true,
+                validated: selectedShape.attrs.validated,
             }),
             credentials: 'include'  // Important for session auth
         })
@@ -171,7 +192,65 @@ window.addEventListener('keydown', (e) => {
             }
             return response.json();
         })
-        .then(data => {
+        .then((data) => {
+            console.log('Update successful:', data);
+        })
+        .catch(error => {
+            console.error('Error making PATCH request:', error);
+        });
+    }
+    if (e.key === 'Delete' && selectedShape){
+        console.log("delete annotation")
+        fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": my_csrfToken,
+            },
+            credentials: 'include'  // Important for session auth
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            //return response.json();
+        })
+        .then(() => {
+            console.log('Delete successful:');
+            
+            tr.nodes([]); // remove the transformer from the selected object
+            selectedShape.remove(); // Remove the shape from the layer
+            drawingLayer.batchDraw(); // redraw the layer
+        })
+        .catch(error => {
+            console.error('Error making DELETE request:', error);
+        });
+    }
+    if (e.key === 's'&& selectedShape){
+        fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": my_csrfToken,
+            },
+            
+            body: JSON.stringify({
+                data: {
+                    x: selectedShape.attrs.x / targetWidth,
+                    y: selectedShape.attrs.y / targetHeight,
+                    width: selectedShape.attrs.width / targetWidth,
+                    height: selectedShape.attrs.height / targetHeight,
+                }
+            }),
+            credentials: 'include'  // Important for session auth
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
             console.log('Update successful:', data);
         })
         .catch(error => {
@@ -179,12 +258,3 @@ window.addEventListener('keydown', (e) => {
         });
     }
 });
-  
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}

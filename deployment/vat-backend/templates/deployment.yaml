@@ -14,7 +14,7 @@ spec:
     spec:
       initContainers:
       - name: django-migrations
-        image: ghcr.io/berlinunited/django_backend:latest
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         command: 
         - /bin/sh
         - -c
@@ -38,8 +38,13 @@ spec:
           value: "5432"
       containers:
       - name: backend
-        image: ghcr.io/berlinunited/django_backend:latest
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         env:
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: "secretkey"
         - name: USE_POSTGRES
           value: "true"
         - name: VAT_POSTGRES_DB
@@ -55,14 +60,5 @@ spec:
           value: "postgres-postgresql.postgres.svc.cluster.local"
         - name: VAT_POSTGRES_PORT
           value: "5432"
-        - name: VAT_BACKUP_FOLDER
-          value: "/backup"
-        volumeMounts:
-        - mountPath: /backup
-          name: backupmount
       imagePullSecrets:
       - name: github-access
-      volumes:
-      - name: backupmount
-        hostPath:
-          path: /opt/backup # path to a folder on the actual node

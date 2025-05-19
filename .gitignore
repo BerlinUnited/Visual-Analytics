@@ -5,6 +5,6 @@ venv/
 
 # django
 *.sqlite3
-
+django/staticfiles/
 # ignore secrets
 .envrc

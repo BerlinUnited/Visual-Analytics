@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backup-filesystem 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backup-filesystem
+  template:
+    metadata:
+      labels:
+        app: backup-filesystem
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+        - name: backupmount
+          mountPath: /replbackup
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      - name: backupmount
+        hostPath:
+          path: /mnt/backup/postgres_backups # path to a folder on the actual node

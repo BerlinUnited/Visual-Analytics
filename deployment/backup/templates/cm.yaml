@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+        listen *:80;
+        server_name backup.berlin-united.com;
+
+        root /replbackup;
+        autoindex on;
+
+        location ~* \.mp4$ {
+            mp4;
+            mp4_buffer_size 1m;
+            mp4_max_buffer_size 5m;
+            add_header Content-Type "video/mp4";
+            add_header Accept-Ranges bytes;
+        }
+        location ~* \.png$ {
+            add_header Content-Type "image/png";
+        }
+      }
+    }

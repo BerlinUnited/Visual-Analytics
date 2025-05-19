@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backup-filesystem
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: backup-filesystem
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      if ($http_user_agent ~* (Googlebot|Google-InspectionTool|AdsBot-Google|Mediapartners-Google|Googlebot-Mobile|Googlebot-Image|Googlebot-Video|Googlebot-News|SemrushBot|meta-externalagent)) {
+        return 403;
+      }
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header Supports-Loading-Mode "credentialed-prerender";
+      add_header Cache-Control "public";
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "backup.berlin-united.com"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: backup-svc
+                port:
+                  number: 80
+  tls:
+  - hosts:
+    - "backup.berlin-united.com"
+    secretName: tls-cert-backup

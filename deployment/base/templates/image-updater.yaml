@@ -12,7 +12,7 @@ spec:
       releaseName: image-updater
   destination:
     server: https://kubernetes.default.svc
-    namespace: image-updater
+    namespace: argocd
   syncPolicy:
     automated: {}
     syncOptions:

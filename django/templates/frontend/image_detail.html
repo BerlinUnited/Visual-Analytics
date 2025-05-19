@@ -30,13 +30,13 @@
         <!-- this is just for frontend anyway we dont need this data on the backend-->
         <!-- TODO do the selects  next to each other and smaller -->
         <div class="annotation_options">
-            <select id="classSelect">
+            <select id="classSelect" class="settings_select">
                 <option value="">--Please choose a class--</option>
                 <option value="robot">Nao</option>
                 <option value="ball">Ball</option>
                 <option value="penaltymark">Penalty Mark</option>
             </select>
-            <select id="typeSelect">
+            <select id="typeSelect" class="settings_select">
                 <option value="box">Bounding Box</option>
                 <option value="polygon">Polygon</option>
                 <option value="point">Point</option>
@@ -57,6 +57,12 @@
 </div>
 
 <div class="timeline-container">
+    <div class="buttons-container">
+        <button class="toggle-button dog" onclick="toggleActive(this)">Dog</button>
+        <button class="toggle-button cat" onclick="toggleActive(this)">Cat</button>
+        <button class="toggle-button bird" onclick="toggleActive(this)">Bird</button>
+        <button class="toggle-button other" onclick="toggleActive(this)">Other</button>
+    </div>
     <div class="timeline_infos">
         <p>Frame: {{current_index}}/{{num_frames}}</p>
         <a href="{% if prev_frame %}{% url 'image_detail' log_id prev_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="prev-button">Previous</a>
@@ -103,6 +109,18 @@
         setup()
         
     });
+    function toggleActive(button) {
+      // Get all buttons
+      const buttons = document.querySelectorAll('.toggle-button');
+      
+      // Remove active class from all buttons
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Add active class to clicked button
+      button.classList.add('active');
+    }
 
 </script>
 {% endblock %}

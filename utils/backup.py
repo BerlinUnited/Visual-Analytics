@@ -1,25 +1,13 @@
 import argparse
+from datetime import datetime
 from pathlib import Path
 import subprocess
 import os
 import fileinput
 import psycopg2
+import shutil
 from psycopg2 import sql
 import time
-
-# setup postgres connection
-DB_HOST = "localhost"
-DB_PORT = "1234"
-DB_USER = "naoth"
-DB_NAME = "vat"
-
-conn = psycopg2.connect(
-    host=DB_HOST,
-    port=DB_PORT,
-    dbname=DB_NAME,
-    user=DB_USER,
-    password=os.environ.get("PGPASSWORD"),
-)
 
 
 def replace_string_in_first_lines(file_path, old_string, new_string, num_lines):
@@ -127,9 +115,9 @@ def export_full_tables():
     ]
     for table in tables:
         try:
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {table} --data-only"
+            command = f"pg_dump -h {args.db_host} -p {args.db_port} -U {args.db_user} -d {args.db_name} -t {table} --data-only"
             print(f"running {command} > {table}.sql")
-            output_file = Path(args.output) / f"{table}.sql"
+            output_file = Path(output_folder) / f"{table}.sql"
             f = open(str(output_file), "w")
             proc = subprocess.Popen(
                 command,
@@ -168,19 +156,18 @@ def export_cognition_tables(log_id, force=False, export_tables=None):
         "cognition_whistlepercept",
     ]
     if export_tables:
-        print(f"Will use tables: {export_tables}")
         cognition_tables = [item for item in cognition_tables if item in export_tables]
         force = True
 
     for table in cognition_tables:
-        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        output_file = Path(output_folder) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
             continue
 
         try:
             temp_table_name = f"temp_{table}"
             create_cognition_temp_table(table, temp_table_name, log_id)
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            command = f"pg_dump -h {args.db_host} -p {args.db_port} -U {args.db_user} -d {args.db_name} -t {temp_table_name} --data-only"
             print(f"\trunning {command} > {table}_{log_id}.sql")
 
             f = open(str(output_file), "w")
@@ -216,19 +203,18 @@ def export_motion_tables(log_id, force=False, export_tables=None):
         "motion_sensorjointdata",
     ]
     if export_tables:
-        print(f"Will use tables: {export_tables}")
         motion_tables = [item for item in motion_tables if item in export_tables]
         force = True
 
     for table in motion_tables:
-        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        output_file = Path(output_folder) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
             continue
 
         try:
             temp_table_name = f"temp_{table}"
             create_motion_temp_table(table, temp_table_name, log_id)
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            command = f"pg_dump -h {args.db_host} -p {args.db_port} -U {args.db_user} -d {args.db_name} -t {temp_table_name} --data-only"
             print(f"\trunning {command} > {table}_{log_id}.sql")
 
             f = open(str(output_file), "w")
@@ -256,19 +242,18 @@ def export_annotation_tables(log_id, force=False, export_tables=None):
         "annotation_annotation",
     ]
     if export_tables:
-        print(f"Will use tables: {export_tables}")
         tables = [item for item in tables if item in export_tables]
         force = True
     
     for table in tables:
-        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        output_file = Path(output_folder) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
             continue
 
         try:
             temp_table_name = f"temp_{table}"
             create_annotation_table(table, temp_table_name, log_id)
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            command = f"pg_dump -h {args.db_host} -p {args.db_port} -U {args.db_user} -d {args.db_name} -t {temp_table_name} --data-only"
             print(f"\trunning {command} > {table}_{log_id}.sql")
 
             f = open(str(output_file), "w")
@@ -298,14 +283,14 @@ def export_split_table(log_id, force=False, export_tables=None):
     ]
 
     for table in tables:
-        output_file = Path(args.output) / f"{table}_{log_id}.sql"
+        output_file = Path(output_folder) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
             continue
 
         try:
             temp_table_name = f"temp_{table}"
             create_temp_table(table, temp_table_name, log_id)
-            command = f"pg_dump -h {DB_HOST} -p {DB_PORT} -U {DB_USER} -d {DB_NAME} -t {temp_table_name} --data-only"
+            command = f"pg_dump -h {args.db_host} -p {args.db_port} -U {args.db_user} -d {args.db_name} -t {temp_table_name} --data-only"
             print(f"\trunning {command} > {table}_{log_id}.sql")
 
             f = open(str(output_file), "w")
@@ -364,9 +349,25 @@ if __name__ == "__main__":
         type=str,
         help="table names to export",
     )
-
+    # default arguments are correct if you use forwarding as described in the docs
+    parser.add_argument("--db_host", required=False, default="localhost", help="")
+    parser.add_argument("--db_port", required=False, default="1234", help="")
+    parser.add_argument("--db_user", required=False, default="naoth", help="")
+    parser.add_argument("--db_name", required=False, default="vat", help="")
     args = parser.parse_args()
-    Path(args.output).mkdir(exist_ok=True, parents=True)
+
+    # setup postgres connection
+    conn = psycopg2.connect(
+        host=args.db_host,
+        port=args.db_port,
+        dbname=args.db_name,
+        user=args.db_user,
+        password=os.environ.get("PGPASSWORD"),
+    )
+    today = datetime.now()
+    datestring = today.strftime("%Y%m%d%H")
+    output_folder = Path(args.output) / Path(datestring)
+    Path(output_folder).mkdir(exist_ok=True, parents=True)
 
     if args.global_tables:
         print("will export tables that are the same for all log ids")
@@ -378,7 +379,6 @@ if __name__ == "__main__":
             t0 = time.time()
             export_split_table(log_id, args.force, args.tables)
             t1 = time.time()
-            print(f"time to export: {t1 - t0}s")
 
     elif args.all:
         log_ids = get_all_log_ids()
@@ -388,6 +388,14 @@ if __name__ == "__main__":
             t0 = time.time()
             export_split_table(log_id, args.force, args.tables)
             t1 = time.time()
-            print(f"time to export: {t1 - t0}s")
     
     conn.close()
+
+    # zip
+    print("zip all sql files")
+    command = f"tar --use-compress-program='pigz -k -3' -cf {args.output}/{datestring}.tar.gz -C {args.output} {datestring}/"
+    proc = subprocess.Popen(command,shell=True)
+    proc.wait()
+
+    print("cleanup sql files")
+    shutil.rmtree(str(output_folder))

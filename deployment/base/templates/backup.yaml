@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backup
+  annotations:
+spec:
+  project: default
+  source:
+    repoURL: 'git@github.com:efcy/visual_analytics.git'
+    path: deployment/backup
+    targetRevision: HEAD
+    helm:
+      releaseName: backup
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: backup
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

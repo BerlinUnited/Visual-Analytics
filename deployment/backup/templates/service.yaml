@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backup-svc
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: backup-filesystem 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: backup-filesystem 
