@@ -5,6 +5,6 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  # just the public ip address of the goal server for now
-  - 138.201.203.171	- 138.201.203.171
+  # use the public ip address of the only k8s node
+  - 141.20.26.37 - 141.20.26.37
       
