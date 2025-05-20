@@ -4,7 +4,7 @@ import os
 
 def get_logs():
     response = client.ballmodel.list(
-        log_id=30,
+        log=30,
     )
     print(response[1])
 
