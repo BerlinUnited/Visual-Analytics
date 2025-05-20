@@ -7,15 +7,30 @@ data:
     user nginx;
     worker_processes  1;
     events {
-      worker_connections  10240;
+      worker_connections  1024;
     }
     http {
       server {
         listen *:80;
         server_name logs.berlin-united.com;
 
+        keepalive_timeout 65;
+        keepalive_requests 100;
+
         root /mnt/repl;
-        autoindex on;
+        autoindex off;
+
+        location / {
+          if ($request_method = 'OPTIONS') {
+              add_header 'Access-Control-Allow-Origin' '*';
+              add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+              add_header 'Access-Control-Allow-Headers' 'x-berlin-handshake';
+              add_header 'Access-Control-Max-Age' 1728000;
+              add_header 'Content-Type' 'text/plain; charset=utf-8';
+              add_header 'Content-Length' 0;
+              return 204;
+          }
+        }
 
         location ~* \.mp4$ {
             mp4;
@@ -25,7 +40,24 @@ data:
             add_header Accept-Ranges bytes;
         }
         location ~* \.png$ {
-            add_header Content-Type "image/png";
+            
+          if ($request_method = 'OPTIONS') {
+              add_header 'Access-Control-Allow-Origin' '*';
+              add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+              add_header 'Access-Control-Allow-Headers' 'x-berlin-handshake';
+              add_header 'Access-Control-Max-Age' 1728000;
+              add_header 'Content-Type' 'text/plain; charset=utf-8';
+              add_header 'Content-Length' 0;
+              return 204;
+          }
+
+          if ($http_x_berlin_handshake = "") {
+            return 403;
+          }
+
+          add_header Content-Type "image/png";
+          add_header 'Access-Control-Allow-Origin' '*';
+          add_header 'Access-Control-Allow-Methods' 'GET';
         }
       }
     }

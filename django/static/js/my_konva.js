@@ -1,3 +1,17 @@
+
+async function loadImageWithHeader(url) {
+    const response = await fetch(url, {
+        headers: {
+            "X-Berlin-Handshake": "a1b0a1b0a1"
+        }
+    });
+
+    if (!response.ok) throw new Error('Failed to load image');
+
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+}
+
 const getBoundingBoxTransformer = () => {
     // create new transformer
     var tr = new Konva.Transformer();
@@ -15,11 +29,11 @@ const getBoundingBoxTransformer = () => {
         "bottom-right",
     ]);
     tr.anchorCornerRadius(10);
-  
-    return tr;
-  };
 
-function draw_db_annotations(){
+    return tr;
+};
+
+function draw_db_annotations() {
     current_annotations.map((db_box, i) => {
         console.log("db_box", db_box)
         var rect = new Konva.Rect({
@@ -44,19 +58,19 @@ function draw_db_annotations(){
             color: db_box.color,
             //FIXME add type here
             // for boundary checks
-            dragBoundFunc: function(pos) {
+            dragBoundFunc: function (pos) {
                 const stageWidth = stage.width();
                 const stageHeight = stage.height();
                 const rectWidth = rect.width();
                 const rectHeight = rect.height();
-                
+
                 // Calculate boundaries
                 let x = Math.max(0, Math.min(pos.x, stageWidth - rectWidth));
                 let y = Math.max(0, Math.min(pos.y, stageHeight - rectHeight));
-                
+
                 return {
-                  x: x,
-                  y: y
+                    x: x,
+                    y: y
                 };
             }
         });
@@ -67,7 +81,7 @@ function draw_db_annotations(){
             // Get updated dimensions
             const newWidth = rect.width() * rect.scaleX();
             const newHeight = rect.height() * rect.scaleY();
-        
+
             // Reset scale to 1 after applying
             rect.width(newWidth);
             rect.height(newHeight);
@@ -93,8 +107,8 @@ function draw_db_annotations(){
     });
 }
 
-function setUpKonvaCanvas(){
-    ({targetWidth, targetHeight} = get_canvas_dims());
+function setUpKonvaCanvas() {
+    ({ targetWidth, targetHeight } = get_canvas_dims());
 
     stage = new Konva.Stage({
         container: 'konva',
@@ -105,55 +119,61 @@ function setUpKonvaCanvas(){
     stage.add(layer);
 
     imageObj = new Image();
-    imageObj.src = bottom_image_url;
+    loadImageWithHeader(bottom_image_url)
+        .then(blobUrl => {
+            imageObj.src = blobUrl;
+        })
+        .catch(error => {
+            console.error('Error loading image:', error);
+        });
 
-    imageObj.onload = function() {        
+    imageObj.onload = function () {
         // Create Konva image
         konvaImage = new Konva.Image({
             image: imageObj,
             width: targetWidth,
             height: targetHeight,
         });
-        
+
         layer.add(konvaImage);
         layer.draw();
     };
     drawingLayer = new Konva.Layer({ name: 'drawingLayer' });
     stage.add(drawingLayer);
-    
+
 }
 
 function switchImage() {
     is_bottom_main = !is_bottom_main;
-    if(is_bottom_main){
+    if (is_bottom_main) {
         current_annotations = bottom_annotations;
-    }else{
+    } else {
         current_annotations = top_annotations;
     }
     console.log("is_bottom_main", is_bottom_main)
     const secondaryImageContainer = document.getElementById("secondaryImage");
     const secondaryImage = secondaryImageContainer.querySelector('img');
-    
+
     const old_url = imageObj.src;
     const newUrl = secondaryImage.src;
     imageObj = new Image();
-    imageObj.onload = function() {
-      // Update the image property of your Konva.Image node
-      konvaImage.image(imageObj);
-      
-      // Redraw the layer
-      konvaImage.getLayer().batchDraw();
+    imageObj.onload = function () {
+        // Update the image property of your Konva.Image node
+        konvaImage.image(imageObj);
+
+        // Redraw the layer
+        konvaImage.getLayer().batchDraw();
     };
     imageObj.src = newUrl;
     secondaryImage.src = old_url;
-    
+
     //
     tr.detach();
     drawingLayer.destroyChildren();
     draw_db_annotations();
 }
 
-function handle_select(target){
+function handle_select(target) {
     let element = document.getElementById("classSelect");
     element.value = target.attrs.class;
     // selectedShape is a global object
@@ -180,26 +200,26 @@ window.addEventListener('keydown', (e) => {
                 'Content-Type': 'application/json',
                 "X-CSRFToken": my_csrfToken,
             },
-            
+
             body: JSON.stringify({
                 validated: selectedShape.attrs.validated,
             }),
             credentials: 'include'  // Important for session auth
         })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log('Update successful:', data);
-        })
-        .catch(error => {
-            console.error('Error making PATCH request:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Update successful:', data);
+            })
+            .catch(error => {
+                console.error('Error making PATCH request:', error);
+            });
     }
-    if (e.key === 'Delete' && selectedShape){
+    if (e.key === 'Delete' && selectedShape) {
         console.log("delete annotation")
         fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
             method: 'DELETE',
@@ -209,31 +229,31 @@ window.addEventListener('keydown', (e) => {
             },
             credentials: 'include'  // Important for session auth
         })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            //return response.json();
-        })
-        .then(() => {
-            console.log('Delete successful:');
-            
-            tr.nodes([]); // remove the transformer from the selected object
-            selectedShape.remove(); // Remove the shape from the layer
-            drawingLayer.batchDraw(); // redraw the layer
-        })
-        .catch(error => {
-            console.error('Error making DELETE request:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                //return response.json();
+            })
+            .then(() => {
+                console.log('Delete successful:');
+
+                tr.nodes([]); // remove the transformer from the selected object
+                selectedShape.remove(); // Remove the shape from the layer
+                drawingLayer.batchDraw(); // redraw the layer
+            })
+            .catch(error => {
+                console.error('Error making DELETE request:', error);
+            });
     }
-    if (e.key === 's'&& selectedShape){
+    if (e.key === 's' && selectedShape) {
         fetch(`${BASE_URL}/api/annotations/${selectedShape.attrs.id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 "X-CSRFToken": my_csrfToken,
             },
-            
+
             body: JSON.stringify({
                 data: {
                     x: selectedShape.attrs.x / targetWidth,
@@ -244,17 +264,17 @@ window.addEventListener('keydown', (e) => {
             }),
             credentials: 'include'  // Important for session auth
         })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log('Update successful:', data);
-        })
-        .catch(error => {
-            console.error('Error making PATCH request:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Update successful:', data);
+            })
+            .catch(error => {
+                console.error('Error making PATCH request:', error);
+            });
     }
 });

@@ -1,4 +1,4 @@
-function get_canvas_dims(){
+function get_canvas_dims() {
     const leftContainer = document.querySelector('.big_image_wrapper');
 
     const containerWidth = leftContainer.clientWidth;
@@ -36,39 +36,9 @@ async function get_image_url(camera) {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const logId = pathParts[1];
         const frame_number = pathParts[3];
-        
-        const url = `${BASE_URL}/api/image/?camera=${camera}&log=${logId}&frame_number=${frame_number}`;
-        
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken,
-            },
-        }); 
-        // FIXME how to handle dummy images correctly and make sure to not fetch annotations
-        const data = await response.json();
-        
-        if (data.length == 0){
-            console.log("data is too short")
-            console.log(data)
-            return {image_url: "/static/images/dummy_image.jpg"}; // Fallback image
-        }
-        console.log("Success:", data);
-        return data[0];
-        
-    } catch (error) {
-        console.error("Error:", error);
-        // FIXME return a json with image_url as member
-        return {image_url: "/static/images/dummy_image.jpg"}; // Fallback image
-    }
-}
 
-async function get_annotations(image_id){
-    try {
-        /* Fetches the annotation objects from the API */
-        const url = `${BASE_URL}/api/annotations/?image=${image_id}`;
-        
+        const url = `${BASE_URL}/api/image/?camera=${camera}&log=${logId}&frame_number=${frame_number}`;
+
         const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -76,7 +46,37 @@ async function get_annotations(image_id){
                 "X-CSRFToken": csrfToken,
             },
         });
-        
+        // FIXME how to handle dummy images correctly and make sure to not fetch annotations
+        const data = await response.json();
+
+        if (data.length == 0) {
+            console.log("data is too short")
+            console.log(data)
+            return { image_url: "/static/images/dummy_image.jpg" }; // Fallback image
+        }
+        console.log("Success:", data);
+        return data[0];
+
+    } catch (error) {
+        console.error("Error:", error);
+        // FIXME return a json with image_url as member
+        return { image_url: "/static/images/dummy_image.jpg" }; // Fallback image
+    }
+}
+
+async function get_annotations(image_id) {
+    try {
+        /* Fetches the annotation objects from the API */
+        const url = `${BASE_URL}/api/annotations/?image=${image_id}`;
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+        });
+
         const data = await response.json();
         console.log("Annotation Success:", data);
         // FIXME returning the list of rects
@@ -102,21 +102,28 @@ async function get_annotations(image_id){
                 id: db_box.id,
                 //FIXME add type here
             });
-            
+
         });
         // TODO map data to list of rect elements
         return data;
-        
+
     } catch (error) {
         console.error("Error:", error);
         return {}; // Fallback image
     }
 }
 
-function setup_secondary_image(){
+function setup_secondary_image() {
     const secondaryImageContainer = document.getElementById("secondaryImage");
     const secondaryImage = secondaryImageContainer.querySelector('img');
 
     secondaryImageContainer.addEventListener('click', switchImage);
-    secondaryImage.src = top_image_url;
+
+    loadImageWithHeader(top_image_url)
+        .then(blobUrl => {
+            secondaryImage.src = blobUrl;
+        })
+        .catch(error => {
+            console.error('Error loading image:', error);
+        });
 }
