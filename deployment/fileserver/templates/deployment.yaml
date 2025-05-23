@@ -23,7 +23,14 @@ spec:
           subPath: nginx.conf
           readOnly: true
         - name: replmount
-          mountPath: /mnt/repl         
+          mountPath: /mnt/repl
+        resources:
+          requests:
+            memory: "800Mi"
+            cpu: "1"
+          limits:
+            memory: "1000Mi"
+            cpu: "2"
       volumes:
       - name: nginx-conf
         configMap:
