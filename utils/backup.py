@@ -76,7 +76,7 @@ def create_motion_temp_table(table, table_name, log_id):
     CREATE TABLE {table_name} AS
     SELECT i.*
     FROM common_log l
-    JOIN cognition_motionframe f ON l.id = f.log_id
+    JOIN motion_motionframe f ON l.id = f.log_id
     JOIN {table} i ON f.id = i.frame_id
     WHERE l.id = {log_id};
     """
