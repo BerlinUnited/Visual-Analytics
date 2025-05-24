@@ -26,4 +26,6 @@ postgresql:
         value: vat
       - name: PGUSER
         value: postgres
+    
+    extraEnvVarsSecret: postgres-env
 # TODO: no persistence?
