@@ -31,7 +31,8 @@ You can add a user in the values.yaml. This user will have the admin role by def
 
 After adding the user you need the cli to change the password
 ```bash
- argocd account update-password --account <account name>
+argocd login argo.berlin-united.com
+argocd account update-password --account <account name>
 ```
 If you need an api token you can create that in the UI or with the Argocd CLI
 
