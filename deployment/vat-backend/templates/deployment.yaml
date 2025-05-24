@@ -39,6 +39,13 @@ spec:
       containers:
       - name: backend
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        resources:
+          requests:
+            memory: "3Gi"
+            cpu: "2"
+          limits:
+            memory: "4Gi"
+            cpu: "5"
         env:
         - name: DJANGO_SECRET_KEY
           valueFrom:
