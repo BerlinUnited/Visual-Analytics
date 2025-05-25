@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'git@github.com:efcy/visual_analytics.git'
+    repoURL: 'git@github.com:BerlinUnited/Visual-Analytics.git'
     path: deployment/vat-backend
     targetRevision: HEAD
     helm:

@@ -23,11 +23,28 @@ class ValidatedDownFilter(DropdownFilter):
         # return the original queryset
         return queryset
 class LogFilter(SingleNumericFilter):
-    title = "Log"   
-
+    title = "Log"
+    
+    def __init__(self,
+        field,
+        request,
+        params,
+        model,
+        model_admin: ModelAdmin,
+        field_path: str,):
+        super().__init__(field,request, params, model, model_admin,field_path)
+        self.title = 'Log'
+        
 class ImageFilter(SingleNumericFilter):
-    parameter_name = "image"
-    title ="Image"
+    def __init__(self,
+        field,
+        request,
+        params,
+        model,
+        model_admin: ModelAdmin,
+        field_path: str,):
+        super().__init__(field,request, params, model, model_admin,field_path)
+        self.title = 'Image'
 
 class AnnotationAdmin(ModelAdmin):
     raw_id_fields = ("image",)
@@ -40,8 +57,8 @@ class AnnotationAdmin(ModelAdmin):
         ValidatedDownFilter,
         ("type",ChoicesDropdownFilter)
     ]
+
     def get_log_id(self, obj):
-       
         return obj.image.frame.log.id
 
     get_log_id.short_description = "Log ID"
@@ -49,7 +66,7 @@ class AnnotationAdmin(ModelAdmin):
     def get_id(self, obj):
         return obj.id
 
-    get_log_id.short_description = "ID"
+    get_id.short_description = "ID"
 
     def get_image_id(self, obj):
         return obj.image.id

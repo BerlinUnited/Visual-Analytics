@@ -321,6 +321,14 @@ subjects:
 apiVersion: v1
 data:
   allow-snippet-annotations: "true"
+  proxy-set-headers: "ingress-nginx/custom-headers"
+  http-snippet: |
+    add_header X-Robots-Tag "noai";
+    add_header X-Robots-Tag "Google-Extended: none";
+    add_header X-Robots-Tag "GPTBot: none";
+    add_header X-Robots-Tag "ChatGPT-User: none";
+    add_header X-Robots-Tag "anthropic-ai: none";
+    add_header X-Robots-Tag "CCBot: none";
 kind: ConfigMap
 metadata:
   labels:

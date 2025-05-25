@@ -17,8 +17,9 @@
         <div class="event_card">
             <div class="event_header">
                 <a href="{% url 'log_detail' log.id %}">
-                <img src="{% static 'images/robocup.jpeg' %}" alt="RoboCup Image" />
+                    <img src="{% static 'images/robocup.jpeg' %}" alt="RoboCup Image" />
                 </a>
+                <button class="star-button" onclick="toggleStarLog(this, {{log.id}})" data-is-favorite="{{log.is_favourite}}">★</button>
             </div>
             <div class="event_content">
                 <p class="event_title">Player Number: {{log.player_number}}</p>
@@ -29,6 +30,67 @@
             </div>
         </div>
         {% endfor %}
-  </div>
+    </div>
+</div>
+<script>
+    const BASE_URL = window.location.protocol === 'https:' 
+    ? `https://{{ request.get_host }}` 
+    : `http://{{ request.get_host }}`;
+    const csrfToken = "{{ csrf_token }}";  // Django template variable
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const starButtons = document.querySelectorAll('.star-button');
 
+        starButtons.forEach(button => {
+            console.log(button.dataset.isFavorite)
+            if(button.dataset.isFavorite === 'True'){
+                button.classList.add('favorite');
+            };
+        });
+    });
+
+function toggleStarLog(button, log_id) {
+    // Prevent the click from bubbling to the anchor tag
+    event.stopPropagation();
+    console.log("pressed ", log_id)
+    // Toggle the visual state
+    button.classList.toggle('favorite');
+
+    // Get current state and toggle it
+    // FIXME the upper/lower case for the booleans is pretty weird
+    // its uppercase when coming from python
+    const isFavorite = button.dataset.isFavorite === 'True';
+    const newState = !isFavorite;
+    button.dataset.isFavorite = newState;
+
+    console.log(newState)
+    // Here you could add code to save the favorite state
+    // to localStorage or send it to a server
+    fetch(`${BASE_URL}/api/logs/${log_id}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrfToken,
+            },
+            
+            body: JSON.stringify({
+                is_favourite: newState,
+            }),
+            credentials: 'include'  // Important for session auth
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log('Update successful:', data);
+        })
+        .catch(error => {
+            console.error('Error making PATCH request:', error);
+        });
+}   
+</script>
 {% endblock %}
