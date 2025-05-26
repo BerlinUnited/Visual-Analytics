@@ -69,10 +69,11 @@
         <a href="{% if next_frame %}{% url 'image_detail' log_id next_frame %}?filter={{ selected_filter_name|urlencode }} {% else %}{% endif %}" class="next-button">Next</a>
     </div>
     <div class="timeline" id="timeline">
-        {% for frame in frame_numbers %}
-        <a href="{% url 'image_detail' log_id frame %}?filter={{ selected_filter_name|urlencode }}"
-            class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
+        <!--
+       {% for url in frame_urls %}
+            <a href="{{ url }}" class="timeline-box {% if frame == current_frame %}timeline-active{% endif %}"></a>
         {% endfor %}
+        -->
     </div>
 </div>
 </main>
