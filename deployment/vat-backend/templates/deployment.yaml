@@ -41,11 +41,11 @@ spec:
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         resources:
           requests:
-            memory: "3Gi"
-            cpu: "2"
-          limits:
             memory: "4Gi"
-            cpu: "5"
+            cpu: "10"
+          limits:
+            memory: "6Gi"
+            cpu: "10"
         env:
         - name: DJANGO_SECRET_KEY
           valueFrom:
