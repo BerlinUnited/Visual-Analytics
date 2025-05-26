@@ -322,6 +322,7 @@ apiVersion: v1
 data:
   allow-snippet-annotations: "true"
   proxy-set-headers: "ingress-nginx/custom-headers"
+  use-proxy-protocol: "true"  # needed for preserving the source ip after tls termination
   http-snippet: |
     add_header X-Robots-Tag "noai";
     add_header X-Robots-Tag "Google-Extended: none";
@@ -343,6 +344,11 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations: 
+    # i saw this applied to the loadbalancer service in the cluster - not sure where this is coming from
+    # metallb.universe.tf/ip-allocated-from-pool: first-pool
+    # needed for preserving the source ip after tls terminiation, proxy protocol needs to be enabled in the cm as well
+    metallb.universe.tf/proxy-protocol: "true"
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx

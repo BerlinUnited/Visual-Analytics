@@ -9,7 +9,37 @@ data:
     events {
       worker_connections  1024;
     }
+
     http {
+      # Define whitelist and rate limiting variables
+      geo $rate_limit {
+          default 1;
+          141.20.0.0/16 0; # Whitelist entire 141.20.x.x range
+      }
+
+      # Define the real IP variable
+      map $http_x_forwarded_for $real_ip {
+          ~^(\d+\.\d+\.\d+\.\d+) $1;  # Take first IP in X-Forwarded-For
+          default $remote_addr;        # Fallback to remote_addr
+      }
+
+      map $rate_limit $limit_key {
+        0 "";          # No key (no rate limiting) for whitelisted IPs
+        1 $real_ip; # Use IP as key for rate limiting others
+      }
+
+      limit_req_zone $limit_key zone=global_rate_limit:10m rate=2r/s;
+      limit_req_status 429;
+      limit_conn_status 429;
+
+      log_format rate_limit_debug '[$time_local] Remote: $remote_addr '
+                           'XFF: $http_x_forwarded_for '
+                           'RealIP: $real_ip '
+                           'Status: $limit_req_status';
+
+      # Additional debug log (goes to stdout with custom format)
+      access_log /dev/stdout rate_limit_debug;
+
       server {
         listen *:80;
         server_name logs.berlin-united.com;
@@ -21,6 +51,9 @@ data:
         autoindex off;
 
         location / {
+          limit_req zone=global_rate_limit nodelay;
+          limit_req_log_level warn;
+
           if ($request_method = 'OPTIONS') {
               add_header 'Access-Control-Allow-Origin' '*';
               add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
@@ -33,14 +66,19 @@ data:
         }
 
         location ~* \.mp4$ {
-            mp4;
-            mp4_buffer_size 1m;
-            mp4_max_buffer_size 5m;
-            add_header Content-Type "video/mp4";
-            add_header Accept-Ranges bytes;
+          limit_req zone=global_rate_limit nodelay;
+          limit_req_log_level warn;
+
+          mp4;
+          mp4_buffer_size 1m;
+          mp4_max_buffer_size 5m;
+          add_header Content-Type "video/mp4";
+          add_header Accept-Ranges bytes;
         }
         location ~* \.png$ {
-            
+          limit_req zone=global_rate_limit nodelay;
+          limit_req_log_level warn;
+
           if ($request_method = 'OPTIONS') {
               add_header 'Access-Control-Allow-Origin' '*';
               add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
@@ -49,10 +87,6 @@ data:
               add_header 'Content-Type' 'text/plain; charset=utf-8';
               add_header 'Content-Length' 0;
               return 204;
-          }
-
-          if ($http_x_berlin_handshake = "") {
-            return 403;
           }
 
           add_header Content-Type "image/png";

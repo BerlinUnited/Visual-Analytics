@@ -24,7 +24,7 @@ const getBoundingBoxTransformer = () => {
     tr.borderStrokeWidth(0);
     tr.enabledAnchors([
         "top-left",
-        "top-right",
+        "top-right", 
         "bottom-left",
         "bottom-right",
     ]);

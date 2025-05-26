@@ -6,11 +6,16 @@ metadata:
   labels:
     app: log-filesystem
   annotations:
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "700m"
+    # Enable real IP detection for this ingress
     nginx.ingress.kubernetes.io/server-snippet: |
       if ($http_user_agent ~* (Googlebot|Google-InspectionTool|AdsBot-Google|Mediapartners-Google|Googlebot-Mobile|Googlebot-Image|Googlebot-Video|Googlebot-News|SemrushBot|meta-externalagent|gptbot)) {
         return 403;
       }
+
     nginx.ingress.kubernetes.io/configuration-snippet: |
+
       add_header Supports-Loading-Mode "credentialed-prerender";
       add_header Cache-Control "public";
 spec:
