@@ -11,30 +11,33 @@ data:
     }
 
     http {
+      set_real_ip_from 0.0.0.0/0;
+
+      # Specify that the real IP is in the X-Forwarded-For header.
+      real_ip_header X-Forwarded-For;
+
+      # Tell Nginx to use the rightmost IP in the list as the client IP,
+      # which is the most secure option to prevent spoofing.
+      real_ip_recursive on;
+
       # Define whitelist and rate limiting variables
-      geo $rate_limit {
+      geo $is_whitelisted  {
           default 1;
           141.20.0.0/16 0; # Whitelist entire 141.20.x.x range
       }
 
-      # Define the real IP variable
-      map $http_x_forwarded_for $real_ip {
-          ~^(\d+\.\d+\.\d+\.\d+) $1;  # Take first IP in X-Forwarded-For
-          default $remote_addr;        # Fallback to remote_addr
+      map $is_whitelisted  $limit_key {
+        0 "";         # No key (no rate limiting) for whitelisted IPs
+        1 $remote_addr;   # Use IP as key for rate limiting others
       }
 
-      map $rate_limit $limit_key {
-        0 "";          # No key (no rate limiting) for whitelisted IPs
-        1 $real_ip; # Use IP as key for rate limiting others
-      }
-
-      limit_req_zone $limit_key zone=global_rate_limit:10m rate=2r/s;
+      limit_req_zone $limit_key zone=global_rate_limit:10m rate=10r/s;
       limit_req_status 429;
       limit_conn_status 429;
 
       log_format rate_limit_debug '[$time_local] Remote: $remote_addr '
                            'XFF: $http_x_forwarded_for '
-                           'RealIP: $real_ip '
+                           'RealIP: $remote_addr '
                            'Status: $limit_req_status';
 
       # Additional debug log (goes to stdout with custom format)

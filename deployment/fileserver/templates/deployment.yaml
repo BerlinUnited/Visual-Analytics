@@ -41,3 +41,4 @@ spec:
       - name: replmount
         hostPath:
           path: /mnt/repl # path to a folder on the actual node
+      revisionHistoryLimit: 3
