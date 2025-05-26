@@ -147,10 +147,14 @@ class AnnotationTask(APIView):
             # use favourite logs if available
             qs_temp = qs.filter(image__frame__log__is_favourite=True)
             count = qs_temp.count()
-            print(f"num favourite annotations: {count}")
+
             # if there are no more annotations to validate fallback on all logs
             if count > 0:
                 qs = qs_temp
+            else:
+                prio_only = query_params.pop("prio_only")[0]
+                if prio_only  == 'true':
+                    return Response({"result": []}, status=status.HTTP_200_OK)
 
         if "amount" in query_params.keys():
             amount = int(query_params.pop("amount")[0])
