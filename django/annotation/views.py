@@ -168,10 +168,8 @@ class AnnotationTask(APIView):
         if len(qs) < amount:
             amount= len(qs)
 
-        qs = list(qs)
-        for i in range(amount):
-            annotation = random.choice(qs)
-            qs.remove(annotation)
+        qs = list(qs)[:amount]
+        for annotation in qs:
             if settings.DEBUG:
                 # Development - use localhost
                 domain = "127.0.0.1:8000"
