@@ -17,6 +17,7 @@ from drf_spectacular.utils import (
     OpenApiResponse,
     OpenApiExample,
 )
+from django.db import models as django_models
 from django.template import loader
 
 User = get_user_model()
@@ -295,6 +296,14 @@ class LogViewSet(viewsets.ModelViewSet):
         for field in models.Log._meta.fields:
             param_value = query_params.get(field.name)
             if param_value:
+                if isinstance(field, django_models.BooleanField):
+                    # Convert string to boolean for boolean fields
+                    if param_value.lower() in ('true', '1', 'yes'):
+                        param_value = True
+                    elif param_value.lower() in ('false', '0', 'no'):
+                        param_value = False
+                    else:
+                        continue  # Skip invalid boolean values
                 filters &= Q(**{field.name: param_value})
 
         return queryset.filter(filters)
