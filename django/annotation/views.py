@@ -234,6 +234,9 @@ class AnnotationViewSet(viewsets.ModelViewSet):
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
             qs = qs.filter(image__frame__log=log_id)
+        if "camera" in query_params.keys():
+            camera = query_params.pop("camera")[0]
+            qs = qs.filter(image__camera=camera)
 
          # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
         filters = Q()
