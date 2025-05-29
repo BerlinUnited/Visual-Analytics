@@ -31,7 +31,7 @@ data:
         1 $remote_addr;   # Use IP as key for rate limiting others
       }
 
-      limit_req_zone $limit_key zone=global_rate_limit:10m rate=10r/s;
+      limit_req_zone $limit_key zone=global_rate_limit:10m rate=40r/s;
       limit_req_status 429;
       limit_conn_status 429;
 
