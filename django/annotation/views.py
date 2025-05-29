@@ -133,53 +133,46 @@ class AnnotationTaskBorder(APIView):
         return Response({"result": links}, status=status.HTTP_200_OK)
 
 class AnnotationTask(APIView):
-    def get(self,request):
-
+    def get(self, request):
         query_params = request.query_params.copy()
-
+        
+        # Handle prio_only parameter
+        prio_only = query_params.pop("prio_only", [False])[0]
+        
+        # Base queryset
         qs = Annotation.objects.filter(validated=False)
-
-        if "log" in query_params.keys():
-            # if specific log is requested use this
+        
+        # Filter by log if specified
+        if "log" in query_params:
             log_id = int(query_params.pop("log")[0])
             qs = qs.filter(image__frame__log=log_id)
         else:
-            # use favourite logs if available
+            # Try favourite logs first
             qs_temp = qs.filter(image__frame__log__is_favourite=True)
-            count = qs_temp.count()
-
-            # if there are no more annotations to validate fallback on all logs
-            if count > 0:
+            if qs_temp.exists():
                 qs = qs_temp
-            else:
-                prio_only = query_params.pop("prio_only")[0]
-                if prio_only  == 'true':
-                    return Response({"result": []}, status=status.HTTP_200_OK)
-
-        if "amount" in query_params.keys():
-            amount = int(query_params.pop("amount")[0])
-        else:
-            amount = 50
-
-        qs = generic_filter(qs,query_params)
-
-        links = []
-
-        if len(qs) < amount:
-            amount= len(qs)
-
-        qs = list(qs)[:amount]
-        for annotation in qs:
-            if settings.DEBUG:
-                # Development - use localhost
-                domain = "127.0.0.1:8000"
-                scheme = "http"
-            else:
-                # Production - use your actual domain
-                domain = "vat.berlin-united.com"  
-                scheme = "https"
-            links.append(f"{scheme}://{domain}/log/{annotation.image.frame.log.id}/frame/{annotation.image.frame.frame_number}?filter=None")
-
+            elif prio_only == 'true':
+                return Response({"result": []}, status=status.HTTP_200_OK)
+        
+        # Handle amount parameter
+        amount = min(
+            int(query_params.pop("amount", [50])[0]),
+            qs.count()
+        )
+        
+        # Apply generic filter and limit results
+        qs = generic_filter(qs, query_params)[:amount]
+        
+        # Build links
+        domain = "127.0.0.1:8000" if settings.DEBUG else "vat.berlin-united.com"
+        scheme = "http" if settings.DEBUG else "https"
+        
+        links = [
+            f"{scheme}://{domain}/log/{ann.image.frame.log.id}/"
+            f"frame/{ann.image.frame.frame_number}?filter=None"
+            for ann in qs
+        ]
+        
         return Response({"result": links}, status=status.HTTP_200_OK)
         
 class AnnotationCount(APIView):
