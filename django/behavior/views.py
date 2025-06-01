@@ -14,6 +14,7 @@ import time
 from . import serializers
 from . import models
 
+from utils.generic_filter import generic_filter
 
 class BehaviorFrameCountView(APIView):
     def get(self, request):
@@ -51,13 +52,9 @@ class BehaviorOptionViewSet(viewsets.ModelViewSet):
         queryset = models.BehaviorOption.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.BehaviorOption._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.BehaviorOption,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)
@@ -147,13 +144,9 @@ class BehaviorOptionStateViewSet(viewsets.ModelViewSet):
         queryset = models.BehaviorOptionState.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.BehaviorOptionState._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.BehaviorOptionState,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)
@@ -231,13 +224,9 @@ class BehaviorFrameOptionViewSet(viewsets.ModelViewSet):
         queryset = models.BehaviorFrameOption.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.BehaviorFrameOption._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.BehaviorOptionFrame,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)

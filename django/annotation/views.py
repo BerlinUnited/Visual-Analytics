@@ -7,19 +7,7 @@ import random
 from django.conf import settings
 from .models import Annotation
 from .serializers import AnnotationSerializer
-
-def generic_filter(queryset,query_params):
-        filters = Q()
-        for field in Annotation._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-            elif param_value:
-                filters &= Q(**{field.name: param_value})
-        # apply filters if provided
-        return queryset.filter(filters)
-
-
+from utils.generic_filter import generic_filter
 class AnnotationTaskMultiple(APIView):
     def get(self,request):
 
@@ -36,7 +24,7 @@ class AnnotationTaskMultiple(APIView):
         else:
             amount = 50
     
-        qs = generic_filter(qs,query_params)
+        qs = generic_filter(Annotation,qs,query_params)
 
         image_ids_with_duplicates = Annotation.objects.values('image_id') \
                                         .annotate(annotation_count=Count('id')) \
@@ -109,7 +97,7 @@ class AnnotationTaskBorder(APIView):
         if active_filters:
             queryset = queryset.filter(**active_filters)
 
-        queryset = generic_filter(queryset,query_params)
+        queryset = generic_filter(Annotation,queryset,query_params)
 
         links = []
 
@@ -195,19 +183,8 @@ class AnnotationCount(APIView):
                 qs= qs.filter(validated=False)
         # TODO we have other boolean flags and maybe there is way to do that better
 
-        filters = Q()
-        for field in Annotation._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
-
-        # apply filters if provided
-        qs = qs.filter(filters)
-
+        qs = generic_filter(Annotation,qs,query_params)
+        
         # get the count
         count = qs.count()
 
@@ -231,17 +208,7 @@ class AnnotationViewSet(viewsets.ModelViewSet):
             camera = query_params.pop("camera")[0]
             qs = qs.filter(image__camera=camera)
 
-         # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
-        filters = Q()
-        for field in Annotation._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
-        qs = qs.filter(filters)
+        qs = generic_filter(Annotation,qs,query_params)
         # annotate with frame number - we could solve this also with properties and serializers
         qs = qs.annotate(frame_number=F('image__frame__frame_number'))
 
