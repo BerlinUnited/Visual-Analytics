@@ -224,7 +224,7 @@ class BehaviorFrameOptionViewSet(viewsets.ModelViewSet):
         queryset = models.BehaviorFrameOption.objects.all()
         query_params = self.request.query_params
 
-        queryset = generic_filter(models.BehaviorOptionFrame,queryset,query_params)
+        queryset = generic_filter(models.BehaviorFrameOption,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
         return queryset
 
@@ -309,14 +309,10 @@ class XabslSymbolSparseViewSet(viewsets.ModelViewSet):
 
         # FIXME combine with behaviorfull
         # FIXME filter does not seem to work because we now store json
-        filters = Q()
-        for field in models.XabslSymbolSparse._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.XabslSymbolSparse,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
-
+        return queryset
+    
     def create(self, request, *args, **kwargs):
         starttime = time.time()
         # FIXME should be for bulk insert
@@ -351,13 +347,9 @@ class XabslSymbolCompleteViewSet(viewsets.ModelViewSet):
         queryset = models.XabslSymbolComplete.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.XabslSymbolComplete._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.XabslSymbolComplete,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         starttime = time.time()

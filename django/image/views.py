@@ -13,7 +13,7 @@ from . import serializers
 from . import models
 
 import time
-
+from utils.generic_filter import generic_filter
 
 class ImageCountView(APIView):
     @method_decorator(cache_page(60 * 60 * 2))
@@ -27,18 +27,7 @@ class ImageCountView(APIView):
         else:
             qs = models.NaoImage.objects.all()
 
-        filters = Q()
-        for field in models.NaoImage._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
-
-        # apply filters if provided
-        qs = qs.filter(filters)
+        qs = generic_filter(models.NaoImage,qs,query_params)
 
         # get the count
         count = qs.count()
@@ -133,18 +122,7 @@ class ImagePageSet(viewsets.ModelViewSet):
             frame_number = int(query_params.pop("frame_number")[0])
             qs = qs.filter(frame__frame_number=frame_number)
 
-        # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
-        filters = Q()
-        for field in models.NaoImage._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
-
-        qs = qs.filter(filters)
+        qs = generic_filter(models.NaoImage,qs,query_params)
 
         # check if the frontend wants to use a frame filter
         # FIXME select frame_filter by name
@@ -178,18 +156,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             frame_number = int(query_params.pop("frame_number")[0])
             qs = qs.filter(frame__frame_number=frame_number)
 
-        # This is a generic filter on the queryset, the supplied filter must be a field in the Image model
-        filters = Q()
-        for field in models.NaoImage._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
-
-        qs = qs.filter(filters)
+        qs = generic_filter(models.NaoImage,qs,query_params)
 
         # check if the frontend wants to use a frame filter
         # FIXME select frame_filter by name

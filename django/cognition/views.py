@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.apps import apps
 from psycopg2.extras import execute_values
 import json
-
+from utils.generic_filter import generic_filter
 
 class DynamicModelMixin:
     def get_model(self):
@@ -30,12 +30,8 @@ class DynamicModelMixin:
             log_id = int(query_params.pop("log")[0])
             qs = qs.filter(frame__log=log_id)
 
-        filters = Q()
-        for field in model._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
-        return qs.filter(filters)
+        qs = generic_filter(model,qs,query_params)
+        return qs
 
 
 class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
@@ -188,13 +184,9 @@ class CognitionFrameViewSet(viewsets.ModelViewSet):
         queryset = CognitionFrame.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in CognitionFrame._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(CognitionFrame,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)

@@ -19,7 +19,7 @@ from drf_spectacular.utils import (
 )
 from django.db import models as django_models
 from django.template import loader
-
+from utils.generic_filter import generic_filter
 User = get_user_model()
 
 
@@ -292,21 +292,9 @@ class LogViewSet(viewsets.ModelViewSet):
         queryset = models.Log.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.Log._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                if isinstance(field, django_models.BooleanField):
-                    # Convert string to boolean for boolean fields
-                    if param_value.lower() in ('true', '1', 'yes'):
-                        param_value = True
-                    elif param_value.lower() in ('false', '0', 'no'):
-                        param_value = False
-                    else:
-                        continue  # Skip invalid boolean values
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.Log,queryset,query_params)
 
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -337,13 +325,9 @@ class LogStatusViewSet(viewsets.ModelViewSet):
         queryset = models.LogStatus.objects.all()
         query_params = self.request.query_params
 
-        filters = Q()
-        for field in models.LogStatus._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value:
-                filters &= Q(**{field.name: param_value})
+        queryset = generic_filter(models.Log,queryset,query_params)
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
-        return queryset.filter(filters)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         # we get and remove log_id from the request data before validating the rest of the data
