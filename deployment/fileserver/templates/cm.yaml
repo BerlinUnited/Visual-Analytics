@@ -51,7 +51,11 @@ data:
         keepalive_requests 100;
 
         root /mnt/repl;
-        autoindex off;
+        autoindex on;
+
+        location ~* /(extracted)/ {
+          autoindex off;
+        }
 
         location / {
           limit_req zone=global_rate_limit nodelay;
