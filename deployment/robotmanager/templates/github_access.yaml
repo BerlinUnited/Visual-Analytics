@@ -16,10 +16,6 @@ spec:
       engineVersion: v2
       data:
         .dockerconfigjson: "{{ `{{ .token }}` }}"
-  #data:
-  #- secretKey: GithubRegistry
-  #  remoteRef:
-  #    key: token
   dataFrom:
   - extract:
       key: GithubRegistry

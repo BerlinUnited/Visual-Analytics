@@ -12,8 +12,48 @@ spec:
       labels:
         app: robot-manager
     spec:
+      initContainers:
+      - name: django-migrations
+        image: ghcr.io/visual-analytics-toolbox/django_backend:latest
+        command: 
+        - /bin/sh
+        - -c
+        - |
+          python manage.py migrate
+        env:
+        - name: USE_POSTGRES
+          value: "true"
+        - name: RM_POSTGRES_DB
+          value: "rm"
+        - name: RM_POSTGRES_USER
+          value: "rm_admin"
+        - name: RM_POSTGRES_PASS
+          valueFrom:
+            secretKeyRef:
+              name: postgres-rm-secret
+              key: "password"
+        - name: RM_POSTGRES_HOST
+          value: "robotmanager-postgresql.robotmanager.svc.cluster.local"
+        - name: RM_POSTGRES_PORT
+          value: "5432"
       containers:
       - name: backend
-        image: ghcr.io/johanhartung/robot_api:master
+        image: ghcr.io/visual-analytics-toolbox/django_backend:latest
+        env:
+        - name: USE_POSTGRES
+          value: "true"
+        - name: RM_POSTGRES_DB
+          value: "rm"
+        - name: RM_POSTGRES_USER
+          value: "rm_admin"
+        - name: RM_POSTGRES_PASS
+          valueFrom:
+            secretKeyRef:
+              name: postgres-rm-secret
+              key: "password"
+        - name: RM_POSTGRES_HOST
+          value: "robotmanager-postgresql.robotmanager.svc.cluster.local"
+        - name: RM_POSTGRES_PORT
+          value: "5432"
       imagePullSecrets:
       - name: github-access

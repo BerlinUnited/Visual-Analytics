@@ -4,6 +4,7 @@ description: A Helm chart with cert-manager as subchart
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
+
 dependencies:
   - name: cert-manager
     version: v1.14.5
