@@ -16,7 +16,7 @@ postgresql:
       user: "postgres"
       scripts:
           00_init_db.sh: |
-            echo "RM_POSTGRES_DB: $RM_POSTGRES_DB"
+
             # Check if user exists, if not create it
             psql -d postgres -c "DO \$\$ 
             BEGIN
@@ -26,7 +26,6 @@ postgresql:
             END
             \$\$;"
 
-            echo "RM_POSTGRES_DB: $RM_POSTGRES_DB"
             # Check if database exists, if not create it (assuming you want this too)
             echo "SELECT 'CREATE DATABASE $RM_POSTGRES_DB' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$RM_POSTGRES_DB')\gexec" | psql -d postgres 
 
