@@ -1,8 +1,6 @@
 import pytest
-from django.urls import reverse
-from rest_framework import status
-from common.serializers import *
-from .factories import *
+from common.serializers import EventSerializer, GameSerializer, ExperimentSerializer, LogSerializer, LogStatusSerializer
+from .factories import EventFactory, GameFactory, ExperimentFactory, LogFactory, LogStatusFactory
 
 pytestmark = pytest.mark.unit
 
