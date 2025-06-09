@@ -1,10 +1,18 @@
 import pytest
 from common.models import Event, Game, Log, Experiment, VideoRecording, LogStatus
-from .factories import EventFactory, GameFactory, ExperimentFactory, VideoRecordingFactory, LogFactory, LogStatusFactory
+from .factories import (
+    EventFactory,
+    GameFactory,
+    ExperimentFactory,
+    VideoRecordingFactory,
+    LogFactory,
+    LogStatusFactory,
+)
+
 pytestmark = pytest.mark.unit
 
-class TestCommonModels:
 
+class TestCommonModels:
     @pytest.mark.django_db
     def test_event(self):
         EventFactory.create(name="RC2024")
@@ -19,7 +27,7 @@ class TestCommonModels:
             team1="Team A",
             team2="Team B",
             half="half1",
-            start_time="2024-01-01 12:00:00+00:00"
+            start_time="2024-01-01 12:00:00+00:00",
         )
         assert Game.objects.count() == 1
         db_game = Game.objects.first()
@@ -31,10 +39,7 @@ class TestCommonModels:
 
     @pytest.mark.django_db
     def test_experiment(self):
-        ExperimentFactory.create(
-            name="test_experiment",
-            field="Field A"
-        )
+        ExperimentFactory.create(name="test_experiment", field="Field A")
         assert Experiment.objects.count() == 1
         db_experiment = Experiment.objects.first()
         assert db_experiment.name == "test_experiment"
@@ -44,8 +49,8 @@ class TestCommonModels:
     @pytest.mark.django_db
     def test_video_recording_with_game(self):
         urls = {
-            'main': 'https://youtube.com/watch?v=123',
-            'alternate': 'https://youtube.com/watch?v=456'
+            "main": "https://youtube.com/watch?v=123",
+            "alternate": "https://youtube.com/watch?v=456",
         }
         VideoRecordingFactory.create(urls=urls)
         assert VideoRecording.objects.count() == 1
@@ -56,14 +61,9 @@ class TestCommonModels:
 
     @pytest.mark.django_db
     def test_video_recording_with_experiment(self):
-        urls = {
-            'main': 'https://youtube.com/watch?v=789'
-        }
+        urls = {"main": "https://youtube.com/watch?v=789"}
         experiment = ExperimentFactory.create()
-        VideoRecordingFactory.create(
-            experiment=experiment,
-            urls=urls
-        )
+        VideoRecordingFactory.create(experiment=experiment, urls=urls)
         assert VideoRecording.objects.count() == 1
         db_recording = VideoRecording.objects.first()
         assert db_recording.urls == urls
@@ -78,7 +78,7 @@ class TestCommonModels:
             head_number=42,
             body_serial="B12345678",
             head_serial="H87654321",
-            representation_list=["Image", "BallModel"]
+            representation_list=["Image", "BallModel"],
         )
         assert Log.objects.count() == 1
         db_log = Log.objects.first()
@@ -96,10 +96,10 @@ class TestCommonModels:
     def test_log_type_property(self):
         game = GameFactory.create()
         experiment = ExperimentFactory.create()
-        
+
         game_log = LogFactory.create(game=game, experiment=None)
         experiment_log = LogFactory.create(game=None, experiment=experiment)
-        
+
         assert game_log.log_type == game
         assert experiment_log.log_type == experiment
 
@@ -111,7 +111,7 @@ class TestCommonModels:
             half="half1",
         )
         log = LogFactory.create(game=game)
-        
+
         assert log.event_name == game.event.name
         assert log.game_name == "Team A_vs_Team B_half1"
 
@@ -123,30 +123,26 @@ class TestCommonModels:
             BallModel=3000,
             Image=2500,
             ImageTop=2500,
-            num_motion_frames=8000
+            num_motion_frames=8000,
         )
-        
+
         assert LogStatus.objects.count() == 1
         db_log_status = LogStatus.objects.first()
-        
+
         # Check relationship with Log
         assert db_log_status.log is not None
         assert isinstance(db_log_status.log, Log)
-        
+
         # Check specific values we set
         assert db_log_status.AudioData == 5000
         assert db_log_status.BallModel == 3000
         assert db_log_status.Image == 2500
         assert db_log_status.ImageTop == 2500
         assert db_log_status.num_motion_frames == 8000
-        
+
         # Verify some fields are nullable
         log_status_minimal = LogStatusFactory.create(
-            log=LogFactory.create(),
-            AudioData=None,
-            BallModel=None
+            log=LogFactory.create(), AudioData=None, BallModel=None
         )
         assert log_status_minimal.AudioData is None
         assert log_status_minimal.BallModel is None
-
-

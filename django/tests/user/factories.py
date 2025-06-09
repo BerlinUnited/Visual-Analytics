@@ -8,6 +8,6 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
 
-    username = factory.Faker('name')
-    email = factory.Faker('email')
-    password = factory.Faker('password')
+    username = factory.Faker("name")
+    email = factory.Faker("email")
+    password = factory.Faker("password")
