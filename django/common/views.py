@@ -1,7 +1,6 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from . import serializers
-from rest_framework.permissions import AllowAny
 from . import models
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
