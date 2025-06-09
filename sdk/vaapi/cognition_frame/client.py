@@ -211,7 +211,6 @@ class CognitionFrameClient:
         data: typing.List[CognitionFrame] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> CognitionFrame:
-
         _response = self._client_wrapper.httpx_client.request(
             "api/cognitionframe/update/",
             method="PATCH",

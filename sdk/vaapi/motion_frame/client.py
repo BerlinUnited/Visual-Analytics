@@ -211,7 +211,6 @@ class MotionFrameClient:
         data: typing.List[MotionFrame] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> MotionFrame:
-
         _response = self._client_wrapper.httpx_client.request(
             "api/motionframe/update/",
             method="PATCH",

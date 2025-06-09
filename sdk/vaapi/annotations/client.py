@@ -204,7 +204,7 @@ class AnnotationsClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
+
     def task(
         self,
         request_options: typing.Optional[RequestOptions] = None,
@@ -236,7 +236,7 @@ class AnnotationsClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
+
     def border(
         self,
         request_options: typing.Optional[RequestOptions] = None,
@@ -268,7 +268,7 @@ class AnnotationsClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    
+
     def multiple(
         self,
         request_options: typing.Optional[RequestOptions] = None,
@@ -300,4 +300,3 @@ class AnnotationsClient:
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)
         raise ApiError(status_code=_response.status_code, body=_response_json)
-    

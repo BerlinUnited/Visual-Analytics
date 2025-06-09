@@ -101,7 +101,6 @@ class XabslSymbolClientComplete:
         symbol_value: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> XabslSymbolComplete:
-        
         _response = self._client_wrapper.httpx_client.request(
             f"api/behavior/symbol/complete/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -128,7 +127,6 @@ class XabslSymbolClientComplete:
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
     ) -> typing.List[XabslSymbolComplete]:
-        
         query_params = {k: v for k, v in filters.items() if v is not None}
         _response = self._client_wrapper.httpx_client.request(
             "api/xabsl-symbol/",

@@ -335,11 +335,13 @@ class BehaviorFrameOptionClient:
         _response = self._client_wrapper.httpx_client.request(
             url, method="GET", request_options=request_options, params=query_params
         )
-        #print(_response.text)
+        # print(_response.text)
         try:
             if 200 <= _response.status_code < 300:
-                return pydantic_v1.parse_obj_as(typing.List[CognitionFrame], _response.json())  # type: ignore
-                #return _response.json()
+                return pydantic_v1.parse_obj_as(
+                    typing.List[CognitionFrame], _response.json()
+                )  # type: ignore
+                # return _response.json()
             _response_json = _response.json()
         except JSONDecodeError:
             raise ApiError(status_code=_response.status_code, body=_response.text)

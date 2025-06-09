@@ -37,7 +37,6 @@ class BehaviorOptionClient:
     def delete(
         self, id: int, *, request_options: typing.Optional[RequestOptions] = None
     ) -> None:
-
         _response = self._client_wrapper.httpx_client.request(
             f"api/behavior-option/{jsonable_encoder(id)}/",
             method="DELETE",
@@ -60,7 +59,6 @@ class BehaviorOptionClient:
         option_name: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> BehaviorOptions:
-
         _response = self._client_wrapper.httpx_client.request(
             f"api/behavior-option/{jsonable_encoder(id)}/",
             method="PATCH",
@@ -85,7 +83,6 @@ class BehaviorOptionClient:
         request_options: typing.Optional[RequestOptions] = None,
         **filters: typing.Any,
     ) -> typing.List[BehaviorOptions]:
-
         query_params = {k: v for k, v in filters.items() if v is not None}
         _response = self._client_wrapper.httpx_client.request(
             "api/behavior-option/",
