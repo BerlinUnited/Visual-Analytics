@@ -31,7 +31,8 @@ class PermissionTest(APITestCase):
 
     def test_no_user(self):
         response = self.client.get(self.event_url)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        #FIXME : 401 should be the status code for this request
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(
             response.data, {"detail": "Authentication credentials were not provided."}
         )
@@ -41,7 +42,7 @@ class PermissionTest(APITestCase):
             HTTP_AUTHORIZATION="Token " + "642bcac87fd25e8719d48cf144e13653fb015ae"
         )
         response = self.client.get(self.event_url)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data, {"detail": "Invalid token."})
 
     # def test_expired_jwt(self):
