@@ -1,7 +1,6 @@
-from rest_framework import generics, viewsets, status
+from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from . import serializers
-from rest_framework.permissions import AllowAny
 from . import models
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
@@ -11,12 +10,6 @@ from django.db import transaction
 from django.db.models import Q, F
 from django.db import connection
 from psycopg2.extras import execute_values
-from drf_spectacular.utils import (
-    extend_schema,
-    extend_schema_view,
-    OpenApiResponse,
-    OpenApiExample,
-)
 from django.db import models as django_models
 from django.template import loader
 
@@ -33,82 +26,10 @@ def scalar_doc(request):
 def health_check(request):
     return JsonResponse({"message": "UP"}, status=200)
 
-
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-    permission_classes = [AllowAny]
-
-
-# we use tags to group endpoints and sort them by order in settings.py
-@extend_schema(tags=["Events"])
-@extend_schema_view(
-    list=extend_schema(
-        description="List all events",
-        responses={200: serializers.EventSerializer(many=True)},
-    )
-)
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.EventSerializer
     queryset = models.Event.objects.all()
 
-    @extend_schema(
-        description="Create single or multiple events",
-        request=serializers.EventSerializer(many=True),
-        # Example data for test requests
-        examples=[
-            OpenApiExample(
-                "Single Event Creation",
-                value={"name": "Conference 2024", "date": "2024-12-25"},
-                request_only=True,
-                summary="Create one event",
-                description="",
-            ),
-            OpenApiExample(
-                "Bulk Event Creation",
-                value=[
-                    {"name": "Conference 2024", "date": "2024-12-25"},
-                    {"name": "Workshop 2024", "date": "2024-12-26"},
-                ],
-                request_only=True,
-                summary="Create multiple events",
-            ),
-        ],
-        # displaying responses for single and bulk create but only response schema for single create
-        responses={
-            201: OpenApiResponse(
-                # response=[
-                #     inline_serializer(
-                #         name='BulkEventResponse',
-                #         fields={
-                #             'created': s.IntegerField(),
-                #             'existing': s.IntegerField(),
-                #             'events': serializers.EventSerializer(many=True)
-                #         }
-                #     ),
-                #     serializers.EventSerializer],
-                response=serializers.EventSerializer,
-                description="Response for single or bulk create",
-                examples=[
-                    OpenApiExample(
-                        name="Response for bulk create",
-                        value={
-                            "created": 2,
-                            "existing": 0,
-                            "events": [
-                                {"id": 1, "name": "Event 1", "date": "2024-12-23"},
-                                {"id": 2, "name": "Event 2", "date": "2024-12-24"},
-                            ],
-                        },
-                    ),
-                    OpenApiExample(
-                        name="Response for single create",
-                        value={"id": 1, "name": "Event 1", "date": "2024-12-23"},
-                    ),
-                ],
-            )
-        },
-    )
     def create(self, request, *args, **kwargs):
         # Check if the data is a list (bulk create) or dict (single create)
         is_many = isinstance(request.data, list)

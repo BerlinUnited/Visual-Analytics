@@ -1,5 +1,4 @@
 from vaapi.client import Vaapi
-from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
 import requests

@@ -1,6 +1,5 @@
 import graphene
 
-import annotation.schema
 import common.schema
 import image.schema
 
