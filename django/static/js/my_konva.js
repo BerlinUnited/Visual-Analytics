@@ -119,13 +119,7 @@ function setUpKonvaCanvas() {
     stage.add(layer);
 
     imageObj = new Image();
-    loadImageWithHeader(bottom_image_url)
-        .then(blobUrl => {
-            imageObj.src = blobUrl;
-        })
-        .catch(error => {
-            console.error('Error loading image:', error);
-        });
+    imageObj.src = bottom_image_url
 
     imageObj.onload = function () {
         // Create Konva image

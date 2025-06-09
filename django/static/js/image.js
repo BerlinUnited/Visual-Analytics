@@ -119,11 +119,5 @@ function setup_secondary_image() {
 
     secondaryImageContainer.addEventListener('click', switchImage);
 
-    loadImageWithHeader(top_image_url)
-        .then(blobUrl => {
-            secondaryImage.src = blobUrl;
-        })
-        .catch(error => {
-            console.error('Error loading image:', error);
-        });
+    secondaryImage.src = top_image_url;
 }
