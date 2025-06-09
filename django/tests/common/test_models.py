@@ -15,7 +15,7 @@ class TestCommonModels:
 
     @pytest.mark.django_db
     def test_game(self):
-        game = GameFactory.create(
+        GameFactory.create(
             team1="Team A",
             team2="Team B",
             half="half1",
@@ -31,7 +31,7 @@ class TestCommonModels:
 
     @pytest.mark.django_db
     def test_experiment(self):
-        experiment = ExperimentFactory.create(
+        ExperimentFactory.create(
             name="test_experiment",
             field="Field A"
         )
@@ -47,7 +47,7 @@ class TestCommonModels:
             'main': 'https://youtube.com/watch?v=123',
             'alternate': 'https://youtube.com/watch?v=456'
         }
-        recording = VideoRecordingFactory.create(urls=urls)
+        VideoRecordingFactory.create(urls=urls)
         assert VideoRecording.objects.count() == 1
         db_recording = VideoRecording.objects.first()
         assert db_recording.urls == urls
@@ -60,7 +60,7 @@ class TestCommonModels:
             'main': 'https://youtube.com/watch?v=789'
         }
         experiment = ExperimentFactory.create()
-        recording = VideoRecordingFactory.create(
+        VideoRecordingFactory.create(
             experiment=experiment,
             urls=urls
         )
@@ -118,7 +118,7 @@ class TestCommonModels:
     @pytest.mark.django_db
     def test_log_status(self):
         # Create a LogStatus with specific values
-        log_status = LogStatusFactory.create(
+        LogStatusFactory.create(
             AudioData=5000,
             BallModel=3000,
             Image=2500,
