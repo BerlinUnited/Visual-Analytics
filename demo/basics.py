@@ -6,7 +6,7 @@ def get_logs():
     response = client.logs.list()
     for log in response:
         print(f"{log.event_name} - {log.game_name} - Player: {log.player_number}")
-    
+
     # you can print all fields of a log with:
     # response[0].dict()
 

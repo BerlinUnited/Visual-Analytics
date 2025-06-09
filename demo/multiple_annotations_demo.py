@@ -10,4 +10,4 @@ if __name__ == "__main__":
 
     links = client.annotations.multiple(amount=10)["result"]
     for link in links:
-        subprocess.run(['powershell.exe', '-Command', f'Start-Process "{link}"'])
+        subprocess.run(["powershell.exe", "-Command", f'Start-Process "{link}"'])

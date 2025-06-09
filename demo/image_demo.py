@@ -30,17 +30,17 @@ def example_histogram():
     blurredness_values = [val.blurredness_value for val in response]
     plt.title("brightness_values")
     plt.hist(brightness_values)
-    plt.show() 
+    plt.show()
 
     plt.title("blurredness_values")
     plt.hist(blurredness_values)
-    plt.show() 
+    plt.show()
 
 
 def get_image_list():
     """
     Get Top Images from log 155 and print the first image
-    The list is not sorted. The actual image data is not part of the response. 
+    The list is not sorted. The actual image data is not part of the response.
     You have to get that from the returned image url
     """
     response = client.image.list(
@@ -49,17 +49,28 @@ def get_image_list():
     )
     print(response[0])
 
+
 def print_image_stats():
     all_top_images = client.image.get_image_count(camera="TOP")["count"]
     all_bottom_images = client.image.get_image_count(camera="BOTTOM")["count"]
 
-    top_images_values_not_calculated = client.image.get_image_count(camera="TOP", blurredness_value="None")["count"]
-    bottom_images_values_not_calculated = client.image.get_image_count(camera="BOTTOM", blurredness_value="None")["count"]
-    
-    top_calculated_perc = 100 - (top_images_values_not_calculated / all_top_images) * 100
-    bottom_calculated_perc = 100 - (bottom_images_values_not_calculated / all_bottom_images) * 100
+    top_images_values_not_calculated = client.image.get_image_count(
+        camera="TOP", blurredness_value="None"
+    )["count"]
+    bottom_images_values_not_calculated = client.image.get_image_count(
+        camera="BOTTOM", blurredness_value="None"
+    )["count"]
+
+    top_calculated_perc = (
+        100 - (top_images_values_not_calculated / all_top_images) * 100
+    )
+    bottom_calculated_perc = (
+        100 - (bottom_images_values_not_calculated / all_bottom_images) * 100
+    )
     print(f"Top Images where blurredness factor is calculated: {top_calculated_perc}%")
-    print(f"Bottom Images where blurredness factor is calculated: {bottom_calculated_perc}%")
+    print(
+        f"Bottom Images where blurredness factor is calculated: {bottom_calculated_perc}%"
+    )
 
 
 if __name__ == "__main__":
@@ -67,5 +78,5 @@ if __name__ == "__main__":
         base_url=os.environ.get("VAT_API_URL"),
         api_key=os.environ.get("VAT_API_TOKEN"),
     )
-    
+
     print_image_stats()
