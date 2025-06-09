@@ -1,4 +1,9 @@
-# Run Django Tests
+# Run Tests
 ```bash
-python manage.py test
+cd django
+pytest
+```
+# Run Tests for specific app
+```bash
+pytest -k <app-name>
 ```
