@@ -26,6 +26,7 @@ def scalar_doc(request):
 def health_check(request):
     return JsonResponse({"message": "UP"}, status=200)
 
+
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.EventSerializer
     queryset = models.Event.objects.all()
@@ -219,9 +220,9 @@ class LogViewSet(viewsets.ModelViewSet):
             if param_value:
                 if isinstance(field, django_models.BooleanField):
                     # Convert string to boolean for boolean fields
-                    if param_value.lower() in ('true', '1', 'yes'):
+                    if param_value.lower() in ("true", "1", "yes"):
                         param_value = True
-                    elif param_value.lower() in ('false', '0', 'no'):
+                    elif param_value.lower() in ("false", "0", "no"):
                         param_value = False
                     else:
                         continue  # Skip invalid boolean values

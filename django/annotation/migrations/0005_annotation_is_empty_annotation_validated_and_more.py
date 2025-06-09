@@ -4,30 +4,57 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('annotation', '0004_initial'),
+        ("annotation", "0004_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='annotation',
-            name='is_empty',
+            model_name="annotation",
+            name="is_empty",
             field=models.BooleanField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='validated',
+            model_name="annotation",
+            name="validated",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='annotation',
-            name='class_name',
-            field=models.CharField(blank=True, choices=[('nao', 'Nao'), ('ball', 'Ball'), ('penaltymark', 'Penalty Mark'), ('referee', 'Referee'), ('goalpost', 'Goalpost'), ('t_cross', 'T Cross'), ('center_cross', 'Center Cross'), ('circle_cross', 'Circle Cross'), ('l_cross', 'L Cross'), ('line', 'Line'), ('own_contour', 'Own_Contour')], max_length=20, null=True),
+            model_name="annotation",
+            name="class_name",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("nao", "Nao"),
+                    ("ball", "Ball"),
+                    ("penaltymark", "Penalty Mark"),
+                    ("referee", "Referee"),
+                    ("goalpost", "Goalpost"),
+                    ("t_cross", "T Cross"),
+                    ("center_cross", "Center Cross"),
+                    ("circle_cross", "Circle Cross"),
+                    ("l_cross", "L Cross"),
+                    ("line", "Line"),
+                    ("own_contour", "Own_Contour"),
+                ],
+                max_length=20,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='annotation',
-            name='type',
-            field=models.CharField(blank=True, choices=[('bbox', 'Bounding Box'), ('segmentation', 'Segmentation'), ('polygon', 'Polygon'), ('pose', 'Pose'), ('point', 'Point')], max_length=20, null=True),
+            model_name="annotation",
+            name="type",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("bbox", "Bounding Box"),
+                    ("segmentation", "Segmentation"),
+                    ("polygon", "Polygon"),
+                    ("pose", "Pose"),
+                    ("point", "Point"),
+                ],
+                max_length=20,
+                null=True,
+            ),
         ),
     ]

@@ -108,10 +108,11 @@ class ImageUpdateView(APIView):
             return cursor.rowcount
         print(time.time() - starttime)
 
+
 class LargeResultsSetPagination(LimitOffsetPagination):
     default_limit = 10
-    page_size_query_param = 'page_size'
-    
+    page_size_query_param = "page_size"
+
 
 class ImagePageSet(viewsets.ModelViewSet):
     queryset = models.NaoImage.objects.all()
@@ -237,7 +238,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         image_id = self.kwargs["pk"]  # image id from the url: /api/image/17018/
         data = self.request.data
 
-        # 
+        #
         update_fields = {k: v for k, v in data.items()}
         updated = models.NaoImage.objects.filter(id=image_id).update(**update_fields)
         # FIXME can we use get instead of filter and can we return the image we updated here???

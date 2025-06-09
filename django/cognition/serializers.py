@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    CognitionFrame, 
+    CognitionFrame,
     FrameFilter,
     AudioData,
     BallModel,
@@ -22,8 +22,8 @@ from .models import (
     ScanLineEdgelPerceptTop,
     TeamMessageDecision,
     Teamstate,
-    WhistlePercept
-    )
+    WhistlePercept,
+)
 
 
 class CognitionFrameSerializer(serializers.ModelSerializer):
@@ -216,11 +216,3 @@ class WhistlePerceptSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhistlePercept
         fields = "__all__"
-
-
-
-
-
-
-
-

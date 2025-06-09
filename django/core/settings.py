@@ -15,10 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 # used to provide cryptographic signing, and should be set to a unique, unpredictable value.
 # read more at https://docs.djangoproject.com/en/5.1/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = str(os.getenv('DJANGO_SECRET_KEY'))
+SECRET_KEY = str(os.getenv("DJANGO_SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
+DEBUG = os.getenv("DJANGO_DEBUG") == "True"
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "vat.berlin-united.com"]
 # users need to authenticate with session or token to use any endpoint
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
@@ -82,7 +82,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'django.middleware.csrf.CsrfViewMiddleware',
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -251,6 +251,6 @@ if not DEBUG:
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 "IGNORE_EXCEPTIONS": True,  # if redis is down django can still function
-            }
+            },
         }
     }

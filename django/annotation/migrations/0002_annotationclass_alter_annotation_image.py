@@ -5,27 +5,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('annotation', '0001_initial'),
-        ('image', '0003_alter_naoimage_frame'),
+        ("annotation", "0001_initial"),
+        ("image", "0003_alter_naoimage_frame"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AnnotationClass',
+            name="AnnotationClass",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40, unique=True)),
-                ('color', models.CharField(blank=True, max_length=10, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=40, unique=True)),
+                ("color", models.CharField(blank=True, max_length=10, null=True)),
             ],
             options={
-                'verbose_name_plural': 'Annotation Classes',
+                "verbose_name_plural": "Annotation Classes",
             },
         ),
         migrations.AlterField(
-            model_name='annotation',
-            name='image',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, related_name='annotation', serialize=False, to='image.naoimage'),
+            model_name="annotation",
+            name="image",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                primary_key=True,
+                related_name="annotation",
+                serialize=False,
+                to="image.naoimage",
+            ),
         ),
     ]

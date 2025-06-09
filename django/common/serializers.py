@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from . import models
 
+
 class LogSerializer(serializers.ModelSerializer):
     event_name = serializers.ReadOnlyField()
     game_name = serializers.ReadOnlyField()
@@ -13,10 +14,10 @@ class LogSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super().get_fields()
 
-        if 'event_name' not in fields:
-            fields['event_name'] = serializers.ReadOnlyField()
-        if 'game_name' not in fields:
-            fields['game_name'] = serializers.ReadOnlyField()
+        if "event_name" not in fields:
+            fields["event_name"] = serializers.ReadOnlyField()
+        if "game_name" not in fields:
+            fields["game_name"] = serializers.ReadOnlyField()
         return fields
 
     def validate(self, data):

@@ -86,13 +86,13 @@ class Log(models.Model):
 
     @property
     def log_type(self):
-        # TODO how is this supposed to work? 
+        # TODO how is this supposed to work?
         if self.game_id is not None:
             return self.game
         if self.experiment_id is not None:
             return self.experiment
         raise AssertionError("Neither 'log_game_id' nor 'log_experiment_id' is set")
-    
+
     @property
     def event_name(self):
         return self.game.event.name
@@ -101,6 +101,7 @@ class Log(models.Model):
     def game_name(self):
         game_name = f"{self.game.team1}_vs_{self.game.team2}_{self.game.half}"
         return game_name
+
 
 class LogStatus(models.Model):
     log = models.OneToOneField(

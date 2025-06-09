@@ -5,26 +5,64 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('annotation', '0003_remove_annotation_image_delete_annotationclass_and_more'),
-        ('image', '0003_alter_naoimage_frame'),
+        ("annotation", "0003_remove_annotation_image_delete_annotationclass_and_more"),
+        ("image", "0003_alter_naoimage_frame"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Annotation',
+            name="Annotation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(blank=True, choices=[('bbox', 'Bounding Box'), ('segmentation', 'Segmentation'), ('polygon', 'Polygon')], max_length=20, null=True)),
-                ('class_name', models.CharField(blank=True, choices=[('nao', 'Nao'), ('ball', 'Ball'), ('penaltymark', 'Penalty Mark')], max_length=20, null=True)),
-                ('concealed', models.BooleanField(default=False)),
-                ('data', models.JSONField(blank=True, null=True)),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='annotation', to='image.naoimage')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "type",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("bbox", "Bounding Box"),
+                            ("segmentation", "Segmentation"),
+                            ("polygon", "Polygon"),
+                        ],
+                        max_length=20,
+                        null=True,
+                    ),
+                ),
+                (
+                    "class_name",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("nao", "Nao"),
+                            ("ball", "Ball"),
+                            ("penaltymark", "Penalty Mark"),
+                        ],
+                        max_length=20,
+                        null=True,
+                    ),
+                ),
+                ("concealed", models.BooleanField(default=False)),
+                ("data", models.JSONField(blank=True, null=True)),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="annotation",
+                        to="image.naoimage",
+                    ),
+                ),
             ],
         ),
     ]

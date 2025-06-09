@@ -34,7 +34,7 @@ class BehaviorSymbolCountView(APIView):
         # Get filter parameters from query string
         log_id = request.query_params.get("log")
 
-        # 
+        #
         queryset = models.XabslSymbolSparse.objects.filter(frame__log=log_id)
 
         # Get the count

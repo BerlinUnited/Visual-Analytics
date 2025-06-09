@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('common', '0009_logstatus_whistlepercept'),
+        ("common", "0009_logstatus_whistlepercept"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='log',
-            name='is_favourite',
+            model_name="log",
+            name="is_favourite",
             field=models.BooleanField(default=False),
         ),
     ]

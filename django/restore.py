@@ -14,11 +14,12 @@ def natural_sort_key(s):
         for text in re.split("([0-9]+)", str(s))
     ]
 
+
 def patch_sql_file(sql_file):
     for line in fileinput.input(sql_file, inplace=1):
         if fileinput.isfirstline():
             print("SET session_replication_role = replica;")
-        print(line, end='')
+        print(line, end="")
 
 
 def import_global_tables():
@@ -133,7 +134,7 @@ if __name__ == "__main__":
                 # Check if the number is in the list of numbers
                 if number not in args.ids:
                     continue
-            
+
             # HACK
             patch_sql_file(file_path)
 

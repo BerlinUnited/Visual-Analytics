@@ -30,7 +30,9 @@ class GameListView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["games"] = Game.objects.filter(event_id=context["event"]).order_by("start_time")
+        context["games"] = Game.objects.filter(event_id=context["event"]).order_by(
+            "start_time"
+        )
 
         return context
 
@@ -43,7 +45,9 @@ class GameLogListView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["game_logs"] = Log.objects.filter(game=context["game"].id).order_by("player_number")
+        context["game_logs"] = Log.objects.filter(game=context["game"].id).order_by(
+            "player_number"
+        )
 
         return context
 
@@ -90,8 +94,7 @@ class LogDetailView(DetailView):
     def get_first_frame_number(self, filter_name):
         """Helper method to get the first frame number based on filter"""
         if filter_name and filter_name != "None":
-            filtered_frames = FrameFilter.objects.filter(id=filter_name
-            ).first()
+            filtered_frames = FrameFilter.objects.filter(id=filter_name).first()
 
             if filtered_frames:
                 first_image = (
@@ -128,8 +131,7 @@ class ImageDetailView(View):
 
         # Apply specific frame filter if provided and valid
         if current_filter_name and current_filter_name != "None":
-            frame_filter = FrameFilter.objects.filter(id=current_filter_name
-            ).first()
+            frame_filter = FrameFilter.objects.filter(id=current_filter_name).first()
             if frame_filter and "frame_list" in frame_filter.frames:
                 # Filter the base query by the list from the FrameFilter
                 frame_numbers_qs = frame_numbers_qs.filter(
@@ -164,26 +166,25 @@ class ImageDetailView(View):
             if current_index < len(context["frame_numbers"]) - 1
             else None
         )
-        context["current_index"] = current_index  # Frame number from 0 to len(frames), not equal to the actual recorded framenumber
+        context["current_index"] = (
+            current_index  # Frame number from 0 to len(frames), not equal to the actual recorded framenumber
+        )
         context["num_frames"] = len(context["frame_numbers"])
-        context["selected_filter_name"]=current_filter
+        context["selected_filter_name"] = current_filter
         return render(request, "frontend/image_detail.html", context)
 
     def post(self, request, *args, **kwargs):
         """
         this handles selecting a frame filter and redirecting it to the first frame of this filter
         """
-        selected_frame_filter = request.POST.get('frame_filter')
+        selected_frame_filter = request.POST.get("frame_filter")
         print("selected_frame_filter", selected_frame_filter)
 
         if selected_frame_filter:
             base_url = reverse("log_detail", kwargs={"pk": self.kwargs.get("pk")})
-            redirect_url = (
-                f"{base_url}?filter={selected_frame_filter}"
-            )
+            redirect_url = f"{base_url}?filter={selected_frame_filter}"
             print(redirect_url)
             return redirect(redirect_url)
-
 
     def patch(self, request, **kwargs):
         """

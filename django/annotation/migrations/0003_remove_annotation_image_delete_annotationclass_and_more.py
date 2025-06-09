@@ -4,20 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('annotation', '0002_annotationclass_alter_annotation_image'),
+        ("annotation", "0002_annotationclass_alter_annotation_image"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='annotation',
-            name='image',
+            model_name="annotation",
+            name="image",
         ),
         migrations.DeleteModel(
-            name='AnnotationClass',
+            name="AnnotationClass",
         ),
         migrations.DeleteModel(
-            name='Annotation',
+            name="Annotation",
         ),
     ]

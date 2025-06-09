@@ -5,16 +5,21 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cognition', '0007_alter_cognitionframe_closest_motion_frame'),
-        ('motion', '0003_motionframe_closest_cognition_frame'),
+        ("cognition", "0007_alter_cognitionframe_closest_motion_frame"),
+        ("motion", "0003_motionframe_closest_cognition_frame"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='motionframe',
-            name='closest_cognition_frame',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='closest_cognition_frame', to='cognition.cognitionframe'),
+            model_name="motionframe",
+            name="closest_cognition_frame",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="closest_cognition_frame",
+                to="cognition.cognitionframe",
+            ),
         ),
     ]

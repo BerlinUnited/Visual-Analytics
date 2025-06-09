@@ -31,7 +31,7 @@ class PermissionTest(APITestCase):
 
     def test_no_user(self):
         response = self.client.get(self.event_url)
-        #FIXME : 401 should be the status code for this request
+        # FIXME : 401 should be the status code for this request
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(
             response.data, {"detail": "Authentication credentials were not provided."}
