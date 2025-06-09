@@ -1,6 +1,6 @@
 import pytest
-from common.models import *
-from .factories import *
+from common.models import Event, Game, Log, Experiment, VideoRecording, LogStatus
+from .factories import EventFactory, GameFactory, ExperimentFactory, VideoRecordingFactory, LogFactory, LogStatusFactory
 pytestmark = pytest.mark.unit
 
 class TestCommonModels:
