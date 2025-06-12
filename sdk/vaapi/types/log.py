@@ -12,37 +12,33 @@ class Log(pydantic_v1.BaseModel):
     #: Foreign key to the game this log is from
     game: typing.Optional[int] = None
 
-    #: Foreign key to the experiment this log is from
     experiment: typing.Optional[int] = None
 
     #: Robot Version, either v5 or v6
     robot_version: typing.Optional[str] = None
 
-    #: player_number
     player_number: typing.Optional[int] = None
 
-    #: head_number
     head_number: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-    #: body_serial
     body_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-    #: head_serial
     head_serial: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-    #: representation_list
     representation_list: typing.Optional[typing.Dict[str, typing.Any]] = (
         pydantic_v1.Field(default=None)
     )
 
-    #: sensor_log_path
     sensor_log_path: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-    #: log_path
     log_path: typing.Optional[str] = pydantic_v1.Field(default=None)
 
-    #: combined_log_path
     combined_log_path: typing.Optional[str] = pydantic_v1.Field(default=None)
+
+    git_commit: typing.Optional[str] = pydantic_v1.Field(default=None)
+
+    is_favourite: typing.Optional[bool] = pydantic_v1.Field(default=None)
+
 
     def json(self, **kwargs: typing.Any) -> str:
         kwargs_with_defaults: typing.Any = {

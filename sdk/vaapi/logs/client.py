@@ -106,6 +106,8 @@ class LogClient:
         sensor_log_path: typing.Optional[str] = OMIT,
         log_path: typing.Optional[str] = OMIT,
         combined_log_path: typing.Optional[str] = OMIT,
+        git_commit: typing.Optional[str] = OMIT,
+        is_favourite: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Log:
         """ """
@@ -124,6 +126,8 @@ class LogClient:
                 "sensor_log_path": sensor_log_path,
                 "log_path": log_path,
                 "combined_log_path": combined_log_path,
+                "git_commit": git_commit,
+                "is_favourite": is_favourite,
             },
             request_options=request_options,
             omit=OMIT,
@@ -211,6 +215,8 @@ class LogClient:
         sensor_log_path: typing.Optional[str] = OMIT,
         log_path: typing.Optional[str] = OMIT,
         combined_log_path: typing.Optional[str] = OMIT,
+        git_commit: typing.Optional[str] = OMIT,
+        is_favourite: typing.Optional[bool] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Log:
         """ """
@@ -229,6 +235,8 @@ class LogClient:
                 "sensor_log_path": sensor_log_path,
                 "log_path": log_path,
                 "combined_log_path": combined_log_path,
+                "git_commit": git_commit,
+                "is_favourite": is_favourite,
             },
             request_options=request_options,
             omit=OMIT,
