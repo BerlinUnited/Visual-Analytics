@@ -126,12 +126,13 @@ class GameViewSet(viewsets.ModelViewSet):
                 request.data.get("field"),
                 request.data.get("start_time"),
                 request.data.get("score"),
+                request.data.get("game_folder"),
                 request.data.get("comment"),
             )
         ]
         with connection.cursor() as cursor:
             query = """
-            INSERT INTO common_game (event_id, team1, team2, half, is_testgame, head_ref, assistent_ref, field, start_time, score, comment)
+            INSERT INTO common_game (event_id, team1, team2, half, is_testgame, head_ref, assistent_ref, field, start_time, score, game_folder, comment)
             VALUES %s
             ON CONFLICT (event_id, start_time, half) DO NOTHING
             RETURNING id;

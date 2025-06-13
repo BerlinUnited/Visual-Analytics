@@ -135,7 +135,7 @@ def export_cognition_tables(log_id, force=False, export_tables=None):
         "image_naoimage",
         "cognition_ballcandidates",
         "cognition_ballcandidatestop",
-        #"cognition_audiodata",
+        # "cognition_audiodata",
         "cognition_ballmodel",
         "cognition_cameramatrix",
         "cognition_cameramatrixtop",
@@ -244,7 +244,7 @@ def export_annotation_tables(log_id, force=False, export_tables=None):
     if export_tables:
         tables = [item for item in tables if item in export_tables]
         force = True
-    
+
     for table in tables:
         output_file = Path(output_folder) / f"{table}_{log_id}.sql"
         if output_file.exists() and not force:
@@ -388,13 +388,13 @@ if __name__ == "__main__":
             t0 = time.time()
             export_split_table(log_id, args.force, args.tables)
             t1 = time.time()
-    
+
     conn.close()
 
     # zip
     print("zip all sql files")
     command = f"tar --use-compress-program='pigz -k -3' -cf {args.output}/{datestring}.tar.gz -C {args.output} {datestring}/"
-    proc = subprocess.Popen(command,shell=True)
+    proc = subprocess.Popen(command, shell=True)
     proc.wait()
 
     print("cleanup sql files")
