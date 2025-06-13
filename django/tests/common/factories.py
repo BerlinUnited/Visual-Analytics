@@ -66,12 +66,7 @@ class VideoRecordingFactory(DjangoModelFactory):
 
         return super()._create(model_class, *args, **kwargs)
 
-    urls = factory.LazyAttribute(
-        lambda _: {
-            "main": f"https://youtube.com/watch?v={''.join(random.choices('abcdefghijklmnopqrstuvwxyz0123456789', k=11))}",
-            "alternate": f"https://youtube.com/watch?v={''.join(random.choices('abcdefghijklmnopqrstuvwxyz0123456789', k=11))}",
-        }
-    )
+    url = factory.Faker("url")
     comment = factory.Faker("text")
 
 

@@ -48,25 +48,22 @@ class TestCommonModels:
 
     @pytest.mark.django_db
     def test_video_recording_with_game(self):
-        urls = {
-            "main": "https://youtube.com/watch?v=123",
-            "alternate": "https://youtube.com/watch?v=456",
-        }
-        VideoRecordingFactory.create(urls=urls)
+        url = "https://youtube.com/watch?v=789"
+        VideoRecordingFactory.create(url=url)
         assert VideoRecording.objects.count() == 1
         db_recording = VideoRecording.objects.first()
-        assert db_recording.urls == urls
+        assert db_recording.url == url
         assert db_recording.game is not None
         assert db_recording.experiment is None
 
     @pytest.mark.django_db
     def test_video_recording_with_experiment(self):
-        urls = {"main": "https://youtube.com/watch?v=789"}
+        url = "https://youtube.com/watch?v=789"
         experiment = ExperimentFactory.create()
-        VideoRecordingFactory.create(experiment=experiment, urls=urls)
+        VideoRecordingFactory.create(experiment=experiment, url=url)
         assert VideoRecording.objects.count() == 1
         db_recording = VideoRecording.objects.first()
-        assert db_recording.urls == urls
+        assert db_recording.url == url
         assert db_recording.game is None
         assert db_recording.experiment == experiment
 

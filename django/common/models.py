@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class Event(models.Model):
@@ -10,6 +11,7 @@ class Event(models.Model):
     location = models.CharField(
         max_length=100, blank=True, null=True
     )  # latitude and longitude in Degrees, minutes, and seconds (DMS)
+    event_folder = models.CharField(max_length=200, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -27,6 +29,7 @@ class Game(models.Model):
     field = models.CharField(max_length=100, blank=True, null=True)
     start_time = models.DateTimeField(blank=True, null=True)
     score = models.CharField(max_length=100, blank=True, null=True)
+    game_folder = models.CharField(max_length=200, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -50,18 +53,21 @@ class Experiment(models.Model):
 
 
 class VideoRecording(models.Model):
-    # we model urls as json field because we can have multiple recordings and sometimes recordings are split up
-    # also sometimes we do have a combined youtube video
+    class Camera(models.TextChoices):
+        GoPro = "GoPro", _("GoPro")
+        PiCam = "PiCam", _("PiCam")
+
     game = models.ForeignKey(
         Game, null=True, blank=True, on_delete=models.CASCADE, related_name="recordings"
     )
     experiment = models.ForeignKey(
         Experiment, null=True, blank=True, on_delete=models.CASCADE
     )
+    video_path = models.CharField(max_length=200, blank=True, null=True)
     # urls should optionally include the youtube links
-    urls = models.JSONField(blank=True, null=True)
+    url = models.CharField(max_length=120, blank=True, null=True)
+    type = models.CharField(max_length=10, choices=Camera, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
-    # TODO add calculated camera matrix here
 
 
 class Log(models.Model):
