@@ -139,42 +139,18 @@ class GameClient:
         raise ApiError(status_code=_response.status_code, body=_response_json)
 
     def list(
-        self, event_id: int, *, request_options: typing.Optional[RequestOptions] = None
+        self,
+        *,
+        request_options: typing.Optional[RequestOptions] = None,
+        **filters: typing.Any,
     ) -> typing.List[Game]:
-        """
-        List all logs.
-
-        You will need to supply the event ID. You can find this in ...
-
-        Parameters
-        ----------
-        event_id : int
-            Event ID
-
-        request_options : typing.Optional[RequestOptions]
-            Request-specific configuration.
-
-        Returns
-        -------
-        typing.List[Log]
-            Log
-
-        Examples
-        --------
-        from vaapi.client import Vaapi
-
-        client = Vaapi(
-            base_url='https://vat.berlin-united.com/',
-            api_key="YOUR_API_KEY",
-        )
-        client.annotations.list(
-            id=1,
-        )
-        """
+        """ """
+        query_params = {k: v for k, v in filters.items() if v is not None}
         _response = self._client_wrapper.httpx_client.request(
-            f"api/games/?event={jsonable_encoder(event_id)}",
+            f"api/games/",
             method="GET",
             request_options=request_options,
+            params=query_params,
         )
         try:
             if 200 <= _response.status_code < 300:
