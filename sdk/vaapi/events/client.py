@@ -100,6 +100,7 @@ class EventsClient:
         end_day: typing.Optional[dt.date] = OMIT,
         country: typing.Optional[str] = OMIT,
         location: typing.Optional[str] = OMIT,
+        event_folder: typing.Optional[str] = OMIT,
         comment: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Event:
@@ -188,6 +189,7 @@ class EventsClient:
                 "end_day": end_day,
                 "country": country,
                 "location": location,
+                "event_folder": event_folder,
                 "comment": comment,
             },
             request_options=request_options,
@@ -253,6 +255,7 @@ class EventsClient:
         end_day: typing.Optional[dt.date] = OMIT,
         country: typing.Optional[str] = OMIT,
         location: typing.Optional[str] = OMIT,
+        event_folder: typing.Optional[str] = OMIT,
         comment: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Event:
@@ -275,6 +278,7 @@ class EventsClient:
                 "end_day": end_day,
                 "country": country,
                 "location": location,
+                "event_folder": event_folder,
                 "comment": comment,
             },
             request_options=request_options,

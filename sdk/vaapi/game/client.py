@@ -106,6 +106,7 @@ class GameClient:
         start_time: typing.Optional[dt.datetime] = OMIT,
         score: typing.Optional[str] = OMIT,
         comment: typing.Optional[str] = OMIT,
+        game_folder: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Game:
         """ """
@@ -123,6 +124,7 @@ class GameClient:
                 "field": field,
                 "start_time": start_time,
                 "score": score,
+                "game_folder": game_folder,
                 "comment": comment,
             },
             request_options=request_options,
@@ -195,6 +197,7 @@ class GameClient:
         field: typing.Optional[str] = OMIT,
         start_time: typing.Optional[dt.datetime] = OMIT,
         score: typing.Optional[str] = OMIT,
+        game_folder: typing.Optional[str] = OMIT,
         comment: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> Game:
@@ -213,6 +216,7 @@ class GameClient:
                 "field": field,
                 "start_time": start_time,
                 "score": score,
+                "game_folder": game_folder,
                 "comment": comment,
             },
             request_options=request_options,
