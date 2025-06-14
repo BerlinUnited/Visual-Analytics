@@ -63,3 +63,25 @@ class LogStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LogStatus
         fields = "__all__"
+
+
+class VideoRecordingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.VideoRecording
+        fields = "__all__"
+
+    def validate(self, data):
+        # Ensure either game_id or experiment_id is provided, but not both, only check on creation
+        if self.context.get("request").method == "POST":
+            game_id = data.get("game")
+            experiment_id = data.get("experiment")
+            if not game_id and not experiment_id:
+                raise serializers.ValidationError(
+                    "Either game or experiment is required."
+                )
+            if game_id and experiment_id:
+                raise serializers.ValidationError(
+                    "Only one of game or experiment is allowed."
+                )
+
+        return data

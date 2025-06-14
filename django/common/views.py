@@ -286,3 +286,47 @@ class LogStatusViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status_code)
+
+
+class VideoViewSet(viewsets.ModelViewSet):
+    queryset = models.VideoRecording.objects.all()
+    serializer_class = serializers.VideoRecordingSerializer
+
+    def get_queryset(self):
+        queryset = models.VideoRecording.objects.all()
+        query_params = self.request.query_params
+
+        filters = Q()
+        for field in models.VideoRecording._meta.fields:
+            param_value = query_params.get(field.name)
+            if param_value:
+                if isinstance(field, django_models.BooleanField):
+                    # Convert string to boolean for boolean fields
+                    if param_value.lower() in ("true", "1", "yes"):
+                        param_value = True
+                    elif param_value.lower() in ("false", "0", "no"):
+                        param_value = False
+                    else:
+                        continue  # Skip invalid boolean values
+                filters &= Q(**{field.name: param_value})
+
+        return queryset.filter(filters)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        validated_data = serializer.validated_data
+
+        instance, created = models.VideoRecording.objects.get_or_create(
+            game=validated_data.get("game"),
+            experiment=validated_data.get("experiment"),
+            type=validated_data.get("type"),
+            video_path=validated_data.get("video_path"),
+            defaults=validated_data,
+        )
+
+        status_code = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status_code)

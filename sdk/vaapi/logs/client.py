@@ -115,8 +115,8 @@ class LogClient:
             f"api/logs/{jsonable_encoder(id)}/",
             method="PATCH",
             json={
-                "log_game": game,
-                "log_experiment": experiment,
+                "game": game,
+                "experiment": experiment,
                 "robot_version": robot_version,
                 "player_number": player_number,
                 "head_number": head_number,

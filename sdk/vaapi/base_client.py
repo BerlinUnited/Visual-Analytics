@@ -21,6 +21,7 @@ from .frame_filter.client import FrameFilterClient
 from .experiment.client import ExperimentClient
 from .motion_frame.client import MotionFrameClient
 from .cognition_frame.client import CognitionFrameClient
+from .video.client import VideoClient
 
 cognition_representation_list = [
     "AudioData",
@@ -108,13 +109,17 @@ class VaapiBase:
         self._client_wrapper = SyncClientWrapper(
             base_url=base_url,
             api_key=api_key,
-            httpx_client=httpx_client
-            if httpx_client is not None
-            else httpx.Client(
-                timeout=_defaulted_timeout, follow_redirects=follow_redirects
-            )
-            if follow_redirects is not None
-            else httpx.Client(timeout=_defaulted_timeout),
+            httpx_client=(
+                httpx_client
+                if httpx_client is not None
+                else (
+                    httpx.Client(
+                        timeout=_defaulted_timeout, follow_redirects=follow_redirects
+                    )
+                    if follow_redirects is not None
+                    else httpx.Client(timeout=_defaulted_timeout)
+                )
+            ),
             timeout=_defaulted_timeout,
         )
         self.annotations = AnnotationsClient(client_wrapper=self._client_wrapper)
@@ -123,6 +128,7 @@ class VaapiBase:
         self.logs = LogClient(client_wrapper=self._client_wrapper)
         self.cognitionframe = CognitionFrameClient(client_wrapper=self._client_wrapper)
         self.motionframe = MotionFrameClient(client_wrapper=self._client_wrapper)
+        self.video = VideoClient(client_wrapper=self._client_wrapper)
         self.behavior_option = BehaviorOptionClient(client_wrapper=self._client_wrapper)
         self.behavior_option_state = BehaviorOptionStateClient(
             client_wrapper=self._client_wrapper
