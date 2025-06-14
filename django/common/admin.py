@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Game, Log, LogStatus, Experiment
+from .models import Event, Game, Log, LogStatus, Experiment, VideoRecording
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import (
     DropdownFilter,
@@ -113,6 +113,7 @@ class LogStatusAdmin(ModelAdmin):
 # this is required for every model
 @admin.register(Event)
 @admin.register(Experiment)
+@admin.register(VideoRecording)
 class CustomAdminClass(ModelAdmin):
     pass
 
