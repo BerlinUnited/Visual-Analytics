@@ -111,6 +111,8 @@ class GameViewSet(viewsets.ModelViewSet):
         if event_id is not None:
             queryset = queryset.filter(event=event_id)
 
+        queryset = queryset.prefetch_related("recordings")
+
         return queryset
 
     def create(self, request, *args, **kwargs):

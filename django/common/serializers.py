@@ -43,14 +43,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class GameSerializer(serializers.ModelSerializer):
-    event_name = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = models.Game
-        fields = "__all__"
-
-
 class ExperimentSerializer(serializers.ModelSerializer):
     event_name = serializers.CharField(read_only=True)
 
@@ -85,3 +77,12 @@ class VideoRecordingSerializer(serializers.ModelSerializer):
                 )
 
         return data
+
+
+class GameSerializer(serializers.ModelSerializer):
+    event_name = serializers.CharField(read_only=True)
+    recordings = VideoRecordingSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Game
+        fields = "__all__"
