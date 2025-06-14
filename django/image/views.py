@@ -8,10 +8,10 @@ from rest_framework.pagination import LimitOffsetPagination
 from django.db.models import Q, Count
 from django.db import connection
 from psycopg2.extras import execute_values
-
+import random
 from . import serializers
 from . import models
-
+from rest_framework.decorators import authentication_classes, permission_classes
 import time
 
 
@@ -44,6 +44,37 @@ class ImageCountView(APIView):
         count = qs.count()
 
         return Response({"count": count}, status=status.HTTP_200_OK)
+
+
+class SynchronizedImage(APIView):
+
+    def get(self, request):
+        # Get filter parameters from query string
+        query_params = request.query_params.copy()
+        print(query_params)
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+
+            qs = models.NaoImage.objects.filter(frame__log=log_id)
+        else:
+            qs = models.NaoImage.objects.all()
+
+        filters = Q()
+        for field in models.NaoImage._meta.fields:
+            param_value = query_params.get(field.name)
+            if param_value == "None" or param_value == "null":
+                filters &= Q(**{f"{field.name}__isnull": True})
+                # print(f"filter with {field.name} = {param_value}")
+            elif param_value:
+                # print(f"filter with {field.name} = {param_value}")
+                filters &= Q(**{field.name: param_value})
+
+        # apply filters if provided
+        qs = qs.filter(filters)
+
+        items = list(qs)
+        random_item = random.choice(items)
+        return Response({"url": random_item.image_url}, status=status.HTTP_200_OK)
 
 
 class ImageUpdateView(APIView):
