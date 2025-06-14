@@ -15,6 +15,7 @@ router.register("games", views.GameViewSet)
 router.register("experiments", views.ExperimentViewSet)
 router.register("logs", views.LogViewSet)
 router.register("log-status", views.LogStatusViewSet)
+router.register("video", views.VideoViewSet)
 
 
 urlpatterns += router.urls
