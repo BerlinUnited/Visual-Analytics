@@ -34,7 +34,6 @@ class TestCommonViews:
             'location': event_data.location,
             'comment': event_data.comment
         }
-        print("\nJSON payload:", event_json)
         # Make POST request to create event
         response = admin_client.post('/api/events/', event_json, format='json')
         
