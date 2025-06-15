@@ -19,7 +19,7 @@ class EventFactory(DjangoModelFactory):
     )
     timezone = factory.Faker("timezone")
     country = factory.Faker("country")
-    location = factory.Faker("local_latlng")
+    location = '41° 53\'00”,41° 53\'00”,'
     comment = factory.Faker("text")
 
 
