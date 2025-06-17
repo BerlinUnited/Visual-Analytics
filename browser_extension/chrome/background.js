@@ -14,6 +14,14 @@ async function getClassName() {
   });
 }
 
+async function getCamera() {
+  return new Promise(resolve => {
+    chrome.storage.sync.get(['camera'], (data) => {
+      resolve(data.camera);
+    });
+  });
+}
+
 async function getAmount() {
   return new Promise(resolve => {
     chrome.storage.sync.get(['amount'], (data) => {
@@ -52,7 +60,8 @@ chrome.action.onClicked.addListener(async () => {
     const apiToken = await getApiToken();
     const amount = await getAmount();
     const className = await getClassName();
-    const response = await fetch(`https://vat.berlin-united.com/api/annotation-task/?amount=${amount}&class_name=${className}`, {
+    const camera = await getCamera();
+    const response = await fetch(`https://vat.berlin-united.com/api/annotation-task/?amount=${amount}&class_name=${className}&camera=${camera}`, {
       headers: { 'Authorization': `Token ${apiToken}` }
     });
     const links = await response.json();
