@@ -119,5 +119,12 @@ function setup_secondary_image() {
 
     secondaryImageContainer.addEventListener('click', switchImage);
 
-    secondaryImage.src = top_image_url;
+    const paramsString = window.location.search;
+    const searchParams = new URLSearchParams(paramsString);
+    if (searchParams.get("camera") === "TOP") {
+        secondaryImage.src = bottom_image_url;
+    } else {
+        secondaryImage.src = top_image_url;
+    }
+
 }

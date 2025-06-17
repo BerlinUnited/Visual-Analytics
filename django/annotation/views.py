@@ -98,9 +98,7 @@ class AnnotationTaskBorder(APIView):
                 param_name = f"{coord_key}{query_suffix}"
                 if param_name in query_params:
                     value_str = query_params.get(param_name)
-                    if (
-                        value_str is not None and value_str != ""
-                    ):  # Ensure value is present
+                    if value_str is not None and value_str != "":  # Ensure value is present
                         try:
                             value = float(value_str)
                             filter_key = f"data__{coord_key}{orm_lookup_suffix}"
@@ -168,6 +166,8 @@ class AnnotationTask(APIView):
         if "camera" in query_params.keys():
             camera = query_params.pop("camera")[0]
             qs = qs.filter(image__camera=camera)
+        else:
+            camera = ""
 
         # Handle amount parameter
         amount = min(int(query_params.pop("amount", [50])[0]), qs.count())
@@ -181,7 +181,7 @@ class AnnotationTask(APIView):
 
         links = [
             f"{scheme}://{domain}/log/{ann.image.frame.log.id}/"
-            f"frame/{ann.image.frame.frame_number}?filter=None"
+            f"frame/{ann.image.frame.frame_number}?filter=None&camera={camera}"
             for ann in qs
         ]
 
@@ -302,6 +302,4 @@ class AnnotationViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

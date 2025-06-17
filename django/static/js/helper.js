@@ -8,9 +8,9 @@ const isObjectEmpty = (objectName) => {
   );
 };
 
-const generateUUID4 = () =>{
+const generateUUID4 = () => {
   // similar to what python would return
-  return crypto.randomUUID().replace(/-/g,"").slice(0,9).toUpperCase();
+  return crypto.randomUUID().replace(/-/g, "").slice(0, 9).toUpperCase();
 }
 
 const getBoundingBoxTransformer = () => {
@@ -24,10 +24,10 @@ const getBoundingBoxTransformer = () => {
   tr.ignoreStroke(true);
   tr.borderStrokeWidth(0);
   tr.enabledAnchors([
-      "top-left",
-      "top-right",
-      "bottom-left",
-      "bottom-right",
+    "top-left",
+    "top-right",
+    "bottom-left",
+    "bottom-right",
   ]);
   tr.anchorCornerRadius(10);
 
@@ -77,16 +77,16 @@ const currentClassListener = () => {
 
 const getCurrentClassColor = () => {
   console.log(currentClass)
-  if(currentClass == 1){
+  if (currentClass == 1) {
     return "rgba(0, 255, 0, 0.5)"
   }
-  if(currentClass == 2){
+  if (currentClass == 2) {
     return "rgba(255, 0, 0, 0.5)"
   }
-  if(currentClass == 3){
+  if (currentClass == 3) {
     return "rgba(0, 0, 255, 0.5)"
   }
-  if(currentClass == 4){
+  if (currentClass == 4) {
     return "rgba(255, 0, 255, 0.5)"
   }
 }
@@ -97,45 +97,45 @@ const saveFunction = () => {
   const stage = Konva.stages.find((s) => s.container().id === 'konva-container1');
   const new_bbox_list = []
   if (stage) {
-      const drawingLayer = stage.findOne('.drawingLayer'); // Retrieve the layer
-      const rects = drawingLayer.find('.bb'); // Find all Rect shapes
-      console.log(rects)
+    const drawingLayer = stage.findOne('.drawingLayer'); // Retrieve the layer
+    const rects = drawingLayer.find('.bb'); // Find all Rect shapes
+    console.log(rects)
 
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      rects.forEach((rect) => {
-          console.log(rect.x(), rect.y());
-          // dont allow too tiny bounding boxes
-          if(Math.abs(rect.height()) * Math.abs(rect.width()) > 50){
-              bbox = {
-                  height: Math.abs(rect.height()) / 480,
-                  width: Math.abs(rect.width()) / 640,
-                  id: generateUUID4(),
-                  x: rect.x() / 640,
-                  y: rect.y() / 480,
-                  label: "ball", // FIXME 
-              }
-              new_bbox_list.push(bbox)
-          }
-        });
-      state.top_image.annotation.bbox = new_bbox_list;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    rects.forEach((rect) => {
+      console.log(rect.x(), rect.y());
+      // dont allow too tiny bounding boxes
+      if (Math.abs(rect.height()) * Math.abs(rect.width()) > 50) {
+        bbox = {
+          height: Math.abs(rect.height()) / 480,
+          width: Math.abs(rect.width()) / 640,
+          id: generateUUID4(),
+          x: rect.x() / 640,
+          y: rect.y() / 480,
+          label: "ball", // FIXME 
+        }
+        new_bbox_list.push(bbox)
+      }
+    });
+    state.top_image.annotation.bbox = new_bbox_list;
 
-      fetch(state.api_url, {
-          method: "PATCH",
-          headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({ 
-              image: state.top_image.id,
-              annotations: state.top_image.annotation 
-          }),
-      })
+    fetch(state.api_url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify({
+        image: state.top_image.id,
+        annotations: state.top_image.annotation
+      }),
+    })
       .then(response => response.json())
       .then(data => {
-          console.log("Success:", data);
+        console.log("Success:", data);
       })
       .catch(error => {
-          console.error("Error:", error);
+        console.error("Error:", error);
       });
   }
 
@@ -143,46 +143,47 @@ const saveFunction = () => {
   const stage2 = Konva.stages.find((s) => s.container().id === 'konva-container2');
   const new_bbox_list2 = []
   if (stage2) {
-      const drawingLayer = stage2.findOne('.drawingLayer'); // Retrieve the layer
-      const rects = drawingLayer.find('.bb'); // Find all Rect shapes
-      console.log(rects)
+    const drawingLayer = stage2.findOne('.drawingLayer'); // Retrieve the layer
+    const rects = drawingLayer.find('.bb'); // Find all Rect shapes
+    console.log(rects)
 
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      rects.forEach((rect) => {
-          console.log("bla:", rect.x(), rect.y(), rect.width(), rect.height());
-          // dont allow too tiny bounding boxes
-          if(Math.abs(rect.height()) * Math.abs(rect.width()) > 50){
-              bbox = {
-                  height: Math.abs(rect.height()) / 480,
-                  width: Math.abs(rect.width()) / 640,
-                  id: generateUUID4(),
-                  x: rect.x() / 640,
-                  y: rect.y() / 480,
-                  label: "ball", // FIXME 
-              }
-              new_bbox_list2.push(bbox)
-          }
-        });
-      state.bottom_image.annotation.bbox = new_bbox_list2;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    rects.forEach((rect) => {
+      console.log("bla:", rect.x(), rect.y(), rect.width(), rect.height());
+      // dont allow too tiny bounding boxes
+      if (Math.abs(rect.height()) * Math.abs(rect.width()) > 50) {
+        bbox = {
+          height: Math.abs(rect.height()) / 480,
+          width: Math.abs(rect.width()) / 640,
+          id: generateUUID4(),
+          x: rect.x() / 640,
+          y: rect.y() / 480,
+          label: "ball", // FIXME 
+        }
+        new_bbox_list2.push(bbox)
+      }
+    });
+    state.bottom_image.annotation.bbox = new_bbox_list2;
 
-      fetch(state.api_url, {
-          method: "PATCH",
-          headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": csrfToken,
-          },
-          body: JSON.stringify({ 
-              image: state.bottom_image.id,
-              annotations: state.bottom_image.annotation 
-          }),
-      })
+    fetch(state.api_url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify({
+        image: state.bottom_image.id,
+        annotations: state.bottom_image.annotation
+      }),
+    })
       .then(response => response.json())
       .then(data => {
-          console.log("Success:", data);
+        console.log("Success:", data);
       })
       .catch(error => {
-          console.error("Error:", error);
+        console.error("Error:", error);
       });
   }
   console.log("Save function triggered!");
 }
+

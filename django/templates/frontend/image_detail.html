@@ -88,6 +88,7 @@
 <script src="{% static 'js/image.js' %}"></script>
 
 <script>
+
     const csrfToken = "{{ csrf_token }}";  // Django template variable
     async function setup(){
         // TODO maybe return the image object here so we can get the id and use that to list out all annotations
@@ -95,15 +96,18 @@
         bottom_image_url = `https://logs.berlin-united.com/${a.image_url}`
         b = await get_image_url("TOP");
         top_image_url = `https://logs.berlin-united.com/${b.image_url}`
+
+        bottom_annotations = await get_annotations(a.id);
+        top_annotations = await get_annotations(b.id);
+        console.log(top_annotations)
         handle_validation()
-        
+
         setup_secondary_image()
         setUpKonvaCanvas()
         // TODO switch annotations also
-        bottom_annotations = await get_annotations(a.id);
-        top_annotations = await get_annotations(b.id);
+        
 
-        current_annotations = bottom_annotations;
+        
         draw_db_annotations();
     }
     document.addEventListener('DOMContentLoaded', () => {

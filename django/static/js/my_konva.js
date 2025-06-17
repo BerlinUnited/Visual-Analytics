@@ -24,7 +24,7 @@ const getBoundingBoxTransformer = () => {
     tr.borderStrokeWidth(0);
     tr.enabledAnchors([
         "top-left",
-        "top-right", 
+        "top-right",
         "bottom-left",
         "bottom-right",
     ]);
@@ -119,7 +119,16 @@ function setUpKonvaCanvas() {
     stage.add(layer);
 
     imageObj = new Image();
-    imageObj.src = bottom_image_url
+    const paramsString = window.location.search;
+    const searchParams = new URLSearchParams(paramsString);
+    if (searchParams.get("camera") === "TOP") {
+        imageObj.src = top_image_url
+        current_annotations = top_annotations;
+    } else {
+        imageObj.src = bottom_image_url
+        current_annotations = bottom_annotations;
+    }
+
 
     imageObj.onload = function () {
         // Create Konva image
