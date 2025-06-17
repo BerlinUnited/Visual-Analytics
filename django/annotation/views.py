@@ -165,6 +165,10 @@ class AnnotationTask(APIView):
             elif prio_only == "true":
                 return Response({"result": []}, status=status.HTTP_200_OK)
 
+        if "camera" in query_params.keys():
+            camera = query_params.pop("camera")[0]
+            qs = qs.filter(image__camera=camera)
+
         # Handle amount parameter
         amount = min(int(query_params.pop("amount", [50])[0]), qs.count())
 
