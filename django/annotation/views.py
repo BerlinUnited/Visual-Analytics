@@ -259,6 +259,7 @@ class AnnotationViewSet(viewsets.ModelViewSet):
 
     # TODO write a create function that checks if json is exactly the same and if so ignores the insert
     def create(self, request, *args, **kwargs):
+        print(request.__dict__)
         # Get the data from the request
         image_id = request.data.get("image")
         annotation_type = request.data.get("type")
