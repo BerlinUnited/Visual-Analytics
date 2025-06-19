@@ -175,9 +175,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # https://github.com/adamchainz/django-cors-headers
-CORS_ALLOW_ALL_ORIGINS = (
-    True  # we shouldn't to this because it makes the cors allowed origins obsolete
-)
+CORS_ALLOW_ALL_ORIGINS = True  # we shouldn't to this because it makes the cors allowed origins obsolete
 CORS_ALLOWS_CREDENTIALS = False
 CORS_ALLOWED_ORIGINS = ["https://vat.berlin-united.com", "http://localhost:8000"]
 
@@ -237,7 +235,7 @@ LOGGING = {
         },
         "django.db": {
             # django also has database level logging
-            "level": "DEBUG"
+            "level": "WARNING"
         },
     },
 }

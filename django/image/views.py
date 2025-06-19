@@ -13,6 +13,10 @@ from . import serializers
 from . import models
 from rest_framework.decorators import authentication_classes, permission_classes
 import time
+from behavior.models import BehaviorFrameOption
+from cognition.models import CognitionFrame
+from django.forms.models import model_to_dict
+import numpy as np
 
 
 class ImageCountView(APIView):
@@ -54,27 +58,54 @@ class SynchronizedImage(APIView):
         print(query_params)
         if "log" in query_params.keys():
             log_id = int(query_params.pop("log")[0])
-
-            qs = models.NaoImage.objects.filter(frame__log=log_id)
         else:
-            qs = models.NaoImage.objects.all()
+            return Response({"g": "Error World"}, status=status.HTTP_200_OK)
 
-        filters = Q()
-        for field in models.NaoImage._meta.fields:
-            param_value = query_params.get(field.name)
-            if param_value == "None" or param_value == "null":
-                filters &= Q(**{f"{field.name}__isnull": True})
-                # print(f"filter with {field.name} = {param_value}")
-            elif param_value:
-                # print(f"filter with {field.name} = {param_value}")
-                filters &= Q(**{field.name: param_value})
+        if "time" in query_params.keys():
+            time = float(query_params.pop("time")[0]) * 1000
+        else:
+            return Response({"g": "Error World"}, status=status.HTTP_200_OK)
 
-        # apply filters if provided
-        qs = qs.filter(filters)
+        if "camera" in query_params.keys():
+            camera = query_params.pop("camera")[0]
+        else:
+            return Response({"g": "Error World"}, status=status.HTTP_200_OK)
 
-        items = list(qs)
-        random_item = random.choice(items)
-        return Response({"url": random_item.image_url}, status=status.HTTP_200_OK)
+        behavior_data_combined = BehaviorFrameOption.objects.select_related(
+            "options_id",  # Joins BehaviorOption
+            "active_state",  # Joins BehaviorOptionState
+            "active_state__option_id",  # Joins BehaviorOption via BehaviorOptionState
+        )
+        behavior_frame_options = behavior_data_combined.filter(
+            frame__log=log_id,
+            options_id__option_name="decide_game_state",
+            active_state__name="standby",
+        )
+        # FIXME we have robots where the behavior logging is broken this breaks this whole thing here
+        # TODO can we always use first here? - we want the instance with the lowest frame number, but we get only ids.
+        # ids work probably as well - but almost impossible to debug if not, also breaks if data is not entered sequentially,
+        print("first value", model_to_dict(behavior_frame_options.first()))
+
+        first_standby_frame_id = behavior_frame_options.values_list("frame", flat=True).first()
+        print("first_standby_frame_id", first_standby_frame_id)
+        first_standby_frame = CognitionFrame.objects.get(id=first_standby_frame_id)
+        print("standby frame", model_to_dict(first_standby_frame))
+
+        cognition_frames = CognitionFrame.objects.filter(log=log_id).order_by("frame_number")
+        cognition_frames = list(cognition_frames)
+        print()
+        print(cognition_frames[0].frame_time)
+        frame_time_diffs = [frame.frame_time - (first_standby_frame.frame_time + time) for frame in cognition_frames]
+        frame_time_diffs = np.array(frame_time_diffs)
+
+        target_frame_index = np.argmin(np.abs(frame_time_diffs))
+        print("target: ", cognition_frames[target_frame_index].frame_number)
+
+        # TODO lets return the image path here
+        target_image = models.NaoImage.objects.filter(
+            frame__log=log_id, frame__frame_number=cognition_frames[target_frame_index].frame_number, camera=camera
+        ).first()
+        return Response({"url": target_image.image_url}, status=status.HTTP_200_OK)
 
 
 class ImageUpdateView(APIView):
@@ -113,9 +144,7 @@ class ImageUpdateView(APIView):
                     case_when_parts.append(f"WHEN id = {item['id']} THEN %s")
 
             if case_when_parts:
-                case_stmt = (
-                    f"""{field} = (CASE {" ".join(case_when_parts)} ELSE {field} END)"""
-                )
+                case_stmt = f"""{field} = (CASE {" ".join(case_when_parts)} ELSE {field} END)"""
                 case_statements.append(case_stmt)
 
         # Collect all values for the parameterized query
@@ -239,9 +268,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         # if the exclude_annotated parameter is set all images with an existing annotation are not included in the response
         if "exclude_annotated" in query_params:
-            qs = qs.annotate(metadata_count=Count("Annotation")).filter(
-                metadata_count=0
-            )
+            qs = qs.annotate(metadata_count=Count("Annotation")).filter(metadata_count=0)
 
         # FIXME built in pagination here, otherwise it could crash something if someone tries to get all representations without filtering
         return qs.order_by("frame")

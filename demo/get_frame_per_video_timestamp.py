@@ -20,11 +20,12 @@ def main(timestamp=7000, log_id=282):
         return frame.frame_number
 
     sorted_frames = sorted(response, key=sort_key_fn)
-    print(sorted_frames[0])  # first standby frame
+    print("first standby frame", sorted_frames[0])  # first standby frame
 
     # TODO get all cognition frames here
     cognition_frames = client.cognitionframe.list(log=282)
     cognition_frames = sorted(cognition_frames, key=sort_key_fn)
+    print("first frame time: ", cognition_frames[0].frame_time)
     frame_time_diffs = [frame.frame_time - (sorted_frames[0].frame_time + timestamp) for frame in cognition_frames]
     frame_time_diffs = np.array(frame_time_diffs)
 
@@ -32,7 +33,7 @@ def main(timestamp=7000, log_id=282):
 
     print(target_frame_index)
     print(frame_time_diffs[target_frame_index])
-    print(cognition_frames[target_frame_index])
+    print("target: ", cognition_frames[target_frame_index])
     # print(min(abs(frame_time_diffs)))
 
 
