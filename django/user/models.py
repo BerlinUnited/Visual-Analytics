@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
 from rest_framework.authtoken.models import Token
-
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+import uuid
 
 class Organization(models.Model):
     name = models.CharField(max_length=100)
@@ -56,3 +58,24 @@ class VATUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class AllowedEmailDomains(models.Model):
+    domain = models.CharField(max_length=100)
+    default_organization = models.ForeignKey(
+        Organization,
+        on_delete=models.SET_NULL,
+        related_name="default_orga",
+        blank=True,
+        null=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class EmailVerificationToken(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    token = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def is_expired(self):
+        # Token expires after 24 hours
+        return timezone.now() > self.created_at + timezone.timedelta(hours=24)

@@ -252,3 +252,12 @@ if not DEBUG:
             },
         }
     }
+
+# This will print emails to console instead of sending them
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Site configuration, this is required for email verification link creation
+SITE_URL = 'http://localhost:8000'  
+#SITE_URL = 'https://vat.berlin-united.com'
+SITE_NAME = 'VAT'
+DEFAULT_FROM_EMAIL = 'your-email@gmail.com'

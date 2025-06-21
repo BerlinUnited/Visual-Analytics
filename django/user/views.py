@@ -38,11 +38,6 @@ def SignupView(request):
     context = {"form": form}
     return render(request, "frontend/signup.html", context)
 
-
-def DummyView(request):
-    return redirect("mylogin")
-
-
 def LogoutView(request):
     logout(request)
     return redirect("mylogin")
