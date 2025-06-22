@@ -252,12 +252,15 @@ if not DEBUG:
             },
         }
     }
+## Configuration for email sending
+    SITE_URL = 'https://vat.berlin-united.com'
+else:
+    SITE_URL = 'http://localhost:8000'  
 
-# This will print emails to console instead of sending them
+# this is for sending emails to console, we can use this for testing anything e-mail related
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Site configuration, this is required for email verification link creation
-SITE_URL = 'http://localhost:8000'  
-#SITE_URL = 'https://vat.berlin-united.com'
-SITE_NAME = 'VAT'
-DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+SITE_NAME = 'Visual Analytics'
+
+DEFAULT_FROM_EMAIL = os.getenv('MAILGRID_FROM_EMAIL')
+EMAIL_API_KEY = os.getenv('MAILGRID_API_KEY')
