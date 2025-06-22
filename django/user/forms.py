@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 class SignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -20,10 +21,10 @@ class SignupForm(UserCreationForm):
             email = email.lower()
             
             domain = email.split('@')[1]
-            if not AllowedEmailDomains.objects.get(domain=domain):
+            qs = AllowedEmailDomains.objects.filter(domain=domain)
+            if qs.count() == 0:
                 raise ValidationError(
-                    f"Your E-Mail adress is not allowed"
-                )
+                    "Your email adress is not allowed")
             
             User = get_user_model()
             if User.objects.filter(email=email).exists():
@@ -67,7 +68,7 @@ class SignupForm(UserCreationForm):
         }
         
         # Render email templates
-        html_message = render_to_string('emails/verification_email.html', context)
+        html_message = render_to_string('email/verification_email.html', context)
         plain_message = strip_tags(html_message)
         
         # Send email
