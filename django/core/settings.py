@@ -262,5 +262,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_NAME = 'Visual Analytics'
 
-DEFAULT_FROM_EMAIL = os.getenv('MAILGRID_FROM_EMAIL')
-EMAIL_API_KEY = os.getenv('MAILGRID_API_KEY')
+DEFAULT_FROM_EMAIL = os.getenv('MAILGUN_FROM_EMAIL',)
+EMAIL_API_KEY = os.getenv('MAILGUN_API_KEY')
