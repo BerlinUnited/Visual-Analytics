@@ -4,12 +4,20 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import MotionFrame
 from . import serializers
-
+from rest_framework.pagination import PageNumberPagination
 from django.db import connection
 from django.db.models import Q
 from django.apps import apps
 from psycopg2.extras import execute_values
-import json
+from pathlib import Path
+import mmap
+from django.db.models.query import QuerySet
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 50
+    page_size_query_param = "page_size"
+    max_page_size = 100
 
 
 class DynamicModelMixin:
@@ -22,21 +30,62 @@ class DynamicModelMixin:
     def get_queryset(self):
         # Override get_queryset to use the dynamic model
         model = self.get_model()
+
         query_params = self.request.query_params.copy()
 
-        # if log_id was set filter for it
-        log_id = int(query_params.pop("log")[0])
-        queryset = model.objects.filter(frame__log=log_id)
+        # if log was set filter for it
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            queryset = model.objects.filter(frame__log=log_id)
 
         filters = Q()
         for field in model._meta.fields:
             param_value = query_params.get(field.name)
             if param_value:
                 filters &= Q(**{field.name: param_value})
-        return queryset.filter(filters)
+
+        return queryset.filter(filters).order_by("id")
+
+    def list(self, request, *args, **kwargs):
+        # Get the base queryset
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Let pagination do its work first
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            # Now process only the paginated results
+            file_cache = {}
+            try:
+                for item in page:
+                    try:
+                        log_path = str(Path("/mnt/e/logs") / item.frame.log.sensor_log_path)
+
+                        if log_path not in file_cache:
+                            file = open(log_path, "rb")
+                            file_mmap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
+                            file_cache[log_path] = file_mmap
+
+                        print("item.start_pos", item.start_pos)
+                        print("item.size", item.size)
+                        item.binary_data = file_cache[log_path][item.start_pos : item.start_pos + item.size]
+                        print("item.binary_data", item.binary_data)
+                    except Exception as e:
+                        print(f"Error processing item {item.id}: {str(e)}")
+                        item.binary_data = None
+
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            finally:
+                for mmap_obj in file_cache.values():
+                    mmap_obj.close()
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
+    pagination_class = CustomPagination
+
     # No need to define queryset or serializer_class here; they will be set dynamically
     def get_serializer_class(self):
         # Dynamically set the serializer class based on the model
@@ -62,7 +111,7 @@ class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
             query = f"""
             INSERT INTO motion_{model.__name__.lower()} (frame_id, start_pos, size)
             VALUES %s
-            ON CONFLICT (frame_id) DO UPDATE SET representation_data = EXCLUDED.representation_data;
+            ON CONFLICT (frame_id) DO UPDATE SET start_pos = EXCLUDED.start_pos, size = EXCLUDED.size;
             """
             # rows is a list of tuples containing the data
             execute_values(cursor, query, rows_tuples, page_size=500)

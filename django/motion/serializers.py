@@ -18,6 +18,11 @@ class MotionFrameSerializer(serializers.ModelSerializer):
 
 
 class IMUDataSerializer(serializers.ModelSerializer):
+    binary_data = serializers.SerializerMethodField()
+
+    def get_binary_data(self, obj):
+        return getattr(obj, "binary_data", None)
+
     class Meta:
         model = IMUData
         fields = "__all__"
