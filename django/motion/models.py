@@ -27,9 +27,9 @@ class MotionFrame(models.Model):
 
 
 class IMUData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="imudata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="imudata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -37,15 +37,13 @@ class IMUData(models.Model):
 
     class Meta:
         verbose_name_plural = "IMU Data"
-        constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_imudata")
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_imudata")]
 
 
 class FSRData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="fsrdata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="fsrdata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -53,15 +51,13 @@ class FSRData(models.Model):
 
     class Meta:
         verbose_name_plural = "FSR Data"
-        constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_fsrdata")
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_fsrdata")]
 
 
 class ButtonData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="buttondata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="buttondata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -69,15 +65,13 @@ class ButtonData(models.Model):
 
     class Meta:
         verbose_name_plural = "Button Data"
-        constraints = [
-            models.UniqueConstraint(fields=["frame"], name="unique_frame_id_buttondata")
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_buttondata")]
 
 
 class SensorJointData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="sensorjointdata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="sensorjointdata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -85,17 +79,13 @@ class SensorJointData(models.Model):
 
     class Meta:
         verbose_name_plural = "Sensor Joint Data"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_sensorjointdata"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_sensorjointdata")]
 
 
 class AccelerometerData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="accelerometerdata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="accelerometerdata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -103,17 +93,13 @@ class AccelerometerData(models.Model):
 
     class Meta:
         verbose_name_plural = "Accelerometer Data"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_accelerometerdata"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_accelerometerdata")]
 
 
 class InertialSensorData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="inertialsensordata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="inertialsensordata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -121,17 +107,13 @@ class InertialSensorData(models.Model):
 
     class Meta:
         verbose_name_plural = "Inertial Sensor Data"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_inertialsensordata"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_inertialsensordata")]
 
 
 class MotionStatus(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="motionstatus"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="motionstatus")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -139,17 +121,13 @@ class MotionStatus(models.Model):
 
     class Meta:
         verbose_name_plural = "Motion Status"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_motionstatus"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motionstatus")]
 
 
 class MotorJointData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="motorjointdata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="motorjointdata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -157,17 +135,13 @@ class MotorJointData(models.Model):
 
     class Meta:
         verbose_name_plural = "Motor Joint Data"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_motorjointdata"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_motorjointdata")]
 
 
 class GyrometerData(models.Model):
-    frame = models.ForeignKey(
-        MotionFrame, on_delete=models.CASCADE, related_name="gyrometerdata"
-    )
+    frame = models.ForeignKey(MotionFrame, on_delete=models.CASCADE, related_name="gyrometerdata")
+    start_pos = models.IntegerField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     representation_data = models.JSONField(blank=True, null=True)
 
     def __str__(self):
@@ -175,8 +149,4 @@ class GyrometerData(models.Model):
 
     class Meta:
         verbose_name_plural = "Gyrometer Data"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["frame"], name="unique_frame_id_gyrometerdata"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["frame"], name="unique_frame_id_gyrometerdata")]
