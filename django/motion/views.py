@@ -25,7 +25,7 @@ class DynamicModelMixin:
         query_params = self.request.query_params.copy()
 
         # if log_id was set filter for it
-        log_id = int(query_params.pop("log_id")[0])
+        log_id = int(query_params.pop("log")[0])
         queryset = model.objects.filter(frame__log=log_id)
 
         filters = Q()
@@ -56,14 +56,11 @@ class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
         model = self.get_model()
 
         # Prepare the data for bulk insert
-        rows_tuples = [
-            (row["frame"], json.dumps(row["representation_data"]))
-            for row in request.data
-        ]
+        rows_tuples = [(row["frame"], row["start_pos"], row["size"]) for row in request.data]
 
         with connection.cursor() as cursor:
             query = f"""
-            INSERT INTO motion_{model.__name__.lower()} (frame_id, representation_data)
+            INSERT INTO motion_{model.__name__.lower()} (frame_id, start_pos, size)
             VALUES %s
             ON CONFLICT (frame_id) DO UPDATE SET representation_data = EXCLUDED.representation_data;
             """
@@ -155,9 +152,7 @@ class MotionFrameUpdate(APIView):
                     case_when_parts.append(f"WHEN id = {item['id']} THEN %s")
 
             if case_when_parts:
-                case_stmt = (
-                    f"""{field} = (CASE {" ".join(case_when_parts)} ELSE {field} END)"""
-                )
+                case_stmt = f"""{field} = (CASE {" ".join(case_when_parts)} ELSE {field} END)"""
                 case_statements.append(case_stmt)
 
         # Collect all values for the parameterized query
@@ -204,9 +199,7 @@ class MotionFrameViewSet(viewsets.ModelViewSet):
             print("error: input not a list")
             return Response({}, status=status.HTTP_411_LENGTH_REQUIRED)
 
-        rows_tuples = [
-            (row["log"], row["frame_number"], row["frame_time"]) for row in request.data
-        ]
+        rows_tuples = [(row["log"], row["frame_number"], row["frame_time"]) for row in request.data]
 
         with connection.cursor() as cursor:
             query = """
