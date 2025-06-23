@@ -24,9 +24,10 @@ class DynamicModelMixin:
         model = self.get_model()
         query_params = self.request.query_params.copy()
 
-        # if log_id was set filter for it
-        log_id = int(query_params.pop("log")[0])
-        queryset = model.objects.filter(frame__log=log_id)
+        # if log was set filter for it
+        if "log" in query_params.keys():
+            log_id = int(query_params.pop("log")[0])
+            queryset = model.objects.filter(frame__log=log_id)
 
         filters = Q()
         for field in model._meta.fields:
@@ -62,7 +63,7 @@ class DynamicModelViewSet(DynamicModelMixin, viewsets.ModelViewSet):
             query = f"""
             INSERT INTO motion_{model.__name__.lower()} (frame_id, start_pos, size)
             VALUES %s
-            ON CONFLICT (frame_id) DO UPDATE SET representation_data = EXCLUDED.representation_data;
+            ON CONFLICT (frame_id) DO UPDATE SET start_pos = EXCLUDED.start_pos, size = EXCLUDED.size;
             """
             # rows is a list of tuples containing the data
             execute_values(cursor, query, rows_tuples, page_size=500)
