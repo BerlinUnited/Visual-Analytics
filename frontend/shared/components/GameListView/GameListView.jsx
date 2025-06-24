@@ -1,15 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
-//import { loadToken } from '@/store/tauri_store';
 
 import GameCard from "@shared/components/GameCard/GameCard.jsx";
 import SkeletonCard from '@shared/components/SkeletonCard/SkeletonCard';
-
 import styles from './GameListView.module.css';
 
-/*
 const fetch_games = async (id) => {
-    const token = await loadToken();
+    const token = await electronAPI.get_value("apiToken");
     const response = await fetch(`https://vat.berlin-united.com/api/games?event=${id}`, {
         headers: {
             'Authorization': `Token ${token}`
@@ -21,7 +18,7 @@ const fetch_games = async (id) => {
     }
     return await response.json();
 }
-*/
+
 function GameListView() {
     // get the event id from the url
     const { id } = useParams();

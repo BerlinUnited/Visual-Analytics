@@ -1,15 +1,13 @@
 
 import { useQuery } from '@tanstack/react-query';
-//import { loadToken } from '@/store/tauri_store';
-
 import EventCard from '@shared/components/EventCard/EventCard';
 import SkeletonCard from '@shared/components/SkeletonCard/SkeletonCard';
 
 import styles from './EventListView.module.css';
 
-/*
+
 const fetch_events = async () => {
-  const token = await loadToken();
+  const token = await electronAPI.get_value("apiToken");
   const response = await fetch(`https://vat.berlin-united.com/api/events/`, {
     headers: {
       'Authorization': `Token ${token}`
@@ -21,7 +19,7 @@ const fetch_events = async () => {
   }
   return await response.json();
 }
-*/
+
 const EventListView = () => {
 
   const events = useQuery({

@@ -36,9 +36,9 @@ const MOCK_ANNOTATIONS = {
 const FPS = 30;
 
 
-const fetch_logs = async (id) => {
-    const token = await loadToken();
-    const response = await fetch(`https://vat.berlin-united.com/api/logs?game=${id}`, {
+const fetch_logs = async (game_id) => {
+    const token = await electronAPI.get_value("apiToken");
+    const response = await fetch(`https://vat.berlin-united.com/api/logs?game=${game_id}`, {
         headers: {
             'Authorization': `Token ${token}`
         }
@@ -50,9 +50,9 @@ const fetch_logs = async (id) => {
     return await response.json();
 }
 
-const fetch_videos = async (id) => {
-    const token = await loadToken();
-    const response = await fetch(`https://vat.berlin-united.com/api/video?game=${id}`, {
+const fetch_videos = async (game_id) => {
+    const token = await electronAPI.get_value("apiToken");
+    const response = await fetch(`https://vat.berlin-united.com/api/video?game=${game_id}`, {
         headers: {
             'Authorization': `Token ${token}`
         }
