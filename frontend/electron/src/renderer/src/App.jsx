@@ -3,11 +3,11 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import VideoPlayer from '@shared/components/VideoPlayer';
-//import MainLayout from '@shared/components/MainLayout/MainLayout';
+import MainLayout from '@shared/components/MainLayout/MainLayout';
 
-//import './App.css';
-//import './styles/global.css';
-//<MainLayout appVersion={appVersion} />
+import '@shared/styles/App.css';
+import '@shared/styles/global.css';
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
     <div className="App">
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <VideoPlayer />
+          <MainLayout appVersion={appVersion} />
         </BrowserRouter>
       </QueryClientProvider>
     </div>

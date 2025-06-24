@@ -3,7 +3,6 @@ import { resolve } from "path";
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 
-console.log(path.resolve(__dirname, '../../shared'))
 
 export default defineConfig({
 
@@ -16,11 +15,14 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src'),
+        '@renderer': resolve('src/renderer'),
         '@shared': path.resolve('../shared')
       }
     },
-    plugins: [react()]
+    plugins: [react()],
+    optimizeDeps: {
+      include: ['react-konva']
+    }
   },
   build: {
     rollupOptions: {

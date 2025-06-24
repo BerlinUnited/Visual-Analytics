@@ -1,0 +1,89 @@
+.videoanalysis_wrapper {
+    display: grid;
+    grid-gap: 10px;
+
+    grid-template-columns: 30% auto;
+    grid-template-rows: 70% auto;
+
+    grid-template-areas:
+        "videoanalysis_left video"
+        "timeline timeline";
+
+    background-color: #1e1e1e;
+
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+}
+
+.media_view {
+    grid-area: video;
+    display: grid;
+    grid-template-rows: 90% auto;
+    gap: 5px;
+    padding-right: 10px;
+}
+
+.timeline {
+    grid-area: timeline;
+    padding-right: 10px;
+}
+
+.video-annotator-container {
+    background-color: #111827;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.video-annotator-wrapper {
+    width: 100%;
+    max-width: 56rem;
+}
+
+.video-annotator-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+
+
+
+
+
+
+.file-input-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+
+.btn-primary {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 150ms ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #6366f1;
+}
+
+.file-input-hidden {
+    display: none;
+}
