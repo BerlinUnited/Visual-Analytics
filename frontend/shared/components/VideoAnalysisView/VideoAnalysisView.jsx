@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
+import { useQueries } from '@tanstack/react-query';
 
 import VideoPlayer from '@shared/components/VideoPlayer/VideoPlayer';
 import VideoControls from '@shared/components/VideoControls/VideoControls';
@@ -7,8 +8,7 @@ import Timeline from '@shared/components/Timeline/Timeline';
 import ImageView from '@shared/components/ImageView/ImageView';
 import DataExplorer from '@shared/components/DataExplorer/DataExplorer';
 import styles from './VideoAnalysisView.module.css';
-import { useQueries } from '@tanstack/react-query';
-//import { loadToken } from '@/store/tauri_store';
+
 
 const MOCK_ANNOTATIONS = {
     // Frames 30-89: A red box
@@ -98,7 +98,6 @@ const VideoAnalysisView = () => {
     const drawCanvasRef = useRef(null);
 
 
-
     // --- Data Fetching Logic ---
     // In a real app, this effect would fetch data in chunks based on currentTime.
     // For this example, we'll "fetch" all mock data at once.
@@ -112,16 +111,16 @@ const VideoAnalysisView = () => {
         fetchAnnotations();
     }, []);
 
-    const load_video = async (filePath) => {
+    const load_video = async (local_url) => {
         try {
             // Convert the file path to a usable URL
-            const url = convertFileSrc(filePath);
-
+            //const url = convertFileSrc(filePath);
+            console.log("local_url", encodeURI(local_url))
             videoRef.current.currentTime = 0;
             setCurrentTime(0);
             setCurrentFrame(0);
             setIsPlaying(false);
-            setVideoSrc(url);
+            setVideoSrc(local_url);
             videoRef.current.pause()
         } catch (error) {
             console.error('Error loading video:', error);
