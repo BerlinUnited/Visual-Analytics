@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "dev:web": "cd frontend/web && vite",
+        "dev:electron": "cd frontend/electron && vite build --watch & wait-on http://localhost:3000 && electron .",
+        "build:web": "cd frontend/web && vite build",
+        "build:electron": "cd frontend/electron && vite build && electron-builder",
+        "start:django": "cd backend && python manage.py runserver",
+        "dev": "concurrently \"npm:dev:web\" \"npm:start:django\""
+    }
+}
