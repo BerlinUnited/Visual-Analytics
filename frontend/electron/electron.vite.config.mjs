@@ -21,11 +21,12 @@ export default defineConfig({
     },
     plugins: [react()],
     optimizeDeps: {
-      include: ['react-konva']
+      include: ['react-konva', 'electron-conf']
     }
   },
   build: {
     rollupOptions: {
+      external: ['electron', 'electron-conf', 'react-konva'],
       output: {
         entryFileNames: `[name].js`,
         chunkFileNames: `[name].js`,

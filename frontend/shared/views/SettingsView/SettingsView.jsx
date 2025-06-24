@@ -1,23 +1,19 @@
 import { useState, useEffect } from 'react';
-//import { saveToken, loadToken } from '@/store/tauri_store';
-//import { saveLogRoot, loadLogRoot } from '@/store/tauri_store';
-
 import styles from './SettingsView.module.css';
 
 const SettingsView = () => {
   const [token, setToken] = useState('');
   const [log_root, setlogRoot] = useState('');
 
-  /*
   useEffect(() => {
     async function loadSavedToken() {
-      const savedToken = await loadToken();
+      const savedToken = await electronAPI.get_value("apiToken");
       if (savedToken) {
         setToken(savedToken);
       }
     }
     async function loadSavedLogRoot() {
-      const savedLogRoot = await loadLogRoot();
+      const savedLogRoot = await electronAPI.get_value("logRoot");
       if (savedLogRoot) {
         setlogRoot(savedLogRoot);
       }
@@ -27,10 +23,10 @@ const SettingsView = () => {
   }, []);
 
   const handleSave = async () => {
-    await saveToken(token);
-    await saveLogRoot(log_root);
+    await electronAPI.set_value("apiToken", token);
+    await electronAPI.set_value("logRoot", log_root);
     alert('Token saved!');
-  };*/
+  };
 
   return (
     <div className="view-content">
@@ -39,7 +35,7 @@ const SettingsView = () => {
       </div>
       <div className="panel-content">
         <div className={styles.info_card}>
-          <lable>Api Token: </lable>
+          <label>Api Token: </label>
           <input
             type="password"
             value={token}
@@ -49,7 +45,7 @@ const SettingsView = () => {
           <button onClick={handleSave}>Save</button>
         </div>
         <div className={styles.info_card}>
-          <lable>Log Folder: </lable>
+          <label>Log Folder: </label>
           <input
             type="text"
             value={log_root}
