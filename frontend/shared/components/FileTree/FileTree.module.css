@@ -1,0 +1,67 @@
+.div1 {
+    align-items: center;
+    gap: .375rem;
+    flex: 1 1 0%;
+    display: flex;
+}
+
+.pl2 {
+    padding-left: .5rem;
+}
+
+.div2 {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 161 / var(--tw-text-opacity));
+    font-size: .75rem;
+    line-height: 1rem;
+    padding-right: .25rem;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-left: .5rem;
+    border-radius: .25rem;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    user-select: none;
+    position: relative;
+}
+
+.div2:hover {
+    --tw-text-opacity: 1;
+    color: rgb(225 225 225 / var(--tw-text-opacity));
+    background-color: #80808033;
+}
+
+.div3 {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 161 / var(--tw-text-opacity));
+    font-size: .75rem;
+    line-height: 1rem;
+    padding-right: .25rem;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-left: .5rem;
+    border-radius: .25rem;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    gap: 1.5rem;
+}
+
+.div3:hover {
+    --tw-text-opacity: 1;
+    color: rgb(225 225 225 / var(--tw-text-opacity));
+    background-color: #80808033;
+}
+
+.span1 {
+    margin-top: -.5px;
+}
+
+.relative {
+    position: relative;
+}

@@ -1,0 +1,26 @@
+.div1 {
+    /*min-w-80 border-r border-r-vsdark-3 flex flex-col*/
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid darkslateblue;
+}
+
+.div2 {
+    /*px-4 py-2 border-b border-b-vsdark-3*/
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(33 33 33)
+}
+
+.explorer3 {
+    height: 100%;
+    overflow: auto;
+    padding: .5rem;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+}

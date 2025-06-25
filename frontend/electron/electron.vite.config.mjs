@@ -21,7 +21,7 @@ export default defineConfig({
     },
     plugins: [react()],
     optimizeDeps: {
-      include: ['react-konva', 'electron-conf']
+      include: ['react-konva', 'electron-conf', '@primer/octicons-react']
     }
   },
   build: {
