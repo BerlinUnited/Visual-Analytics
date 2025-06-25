@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Game, Log, LogStatus, Experiment, VideoRecording
+from .models import Event, Game, Log, LogStatus, Experiment, VideoRecording, Team
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import (
     DropdownFilter,
@@ -110,6 +110,19 @@ class LogStatusAdmin(ModelAdmin):
     get_log_path.short_description = "Log Path"
 
 
+class TeamAdmin(ModelAdmin):
+    list_display = ["id", "get_team_id", "get_team_name"]
+
+    def get_team_id(self, obj):
+        return obj.team_id
+
+    def get_team_name(self, obj):
+        return obj.name
+
+    get_team_id.short_description = "Team ID"
+    get_team_name.short_description = "Team Name"
+
+
 # this is required for every model
 @admin.register(Event)
 @admin.register(Experiment)
@@ -121,3 +134,4 @@ class CustomAdminClass(ModelAdmin):
 admin.site.register(Game, GameAdmin)
 admin.site.register(Log, LogAdmin)
 admin.site.register(LogStatus, LogStatusAdmin)
+admin.site.register(Team, TeamAdmin)

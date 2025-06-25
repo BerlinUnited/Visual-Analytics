@@ -1,0 +1,64 @@
+.card_wrapper {
+    border-radius: 0.75rem;
+    border: 1px solid #3e3e42;
+    background-color: #252526;
+}
+
+.card_header {
+    padding: 1.5rem;
+    flex-direction: column;
+    display: flex;
+    position: relative;
+}
+
+.imagePlaceholder {
+    display: inline-block;
+    position: relative;
+    background-color: #3e3e42;
+    /* Light gray background */
+    border-radius: 0.5rem;
+    aspect-ratio: 1000 / 563;
+    padding-bottom: 56.25%;
+    /* Common aspect ratio (16:9), adjust as needed */
+}
+
+.card_content {
+    padding-top: 0px;
+    padding: 1.5rem;
+}
+
+
+.card_title {
+    letter-spacing: -0.025em;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.card_footer {
+    padding-top: 0px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding: 1.5rem;
+    align-items: center;
+    display: flex;
+}
+
+.card_progressbar {
+    height: 8px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #3e3e42;
+
+}
+
+.card_progressbar::-webkit-progress-bar {
+    height: 8px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #3e3e42;
+}
+
+.card_progressbar::-webkit-progress-value {
+  background-color: #646467;
+  border-radius: 8px;
+}

@@ -1,0 +1,16 @@
+.video_wrapper{
+  width: 400px;
+}
+
+.wrapper {
+    display: flex;
+    border: 1px solid red;
+}
+
+.image_wrapper{
+    background: pink;
+}
+
+.image{
+    width: 400px;
+}

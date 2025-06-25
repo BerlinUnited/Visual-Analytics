@@ -1,22 +1,17 @@
-import { app, shell, BrowserWindow, ipcMain, protocol, net } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import express from 'express';
 import fs from 'node:fs' // Add fs for checking file existence
-import nodeUrl from 'node:url'
 import path from 'node:path'
+import { Conf } from 'electron-conf/main'
 
-console.log(join(__dirname, '../preload/index.js'))
+// Initialize store
+const conf = new Conf()
+
 let server;
 let serverPort = 3001;
 
-app.disableHardwareAcceleration();
-app.commandLine.appendSwitch('disable-gpu');
-app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('disable-software-rasterizer');
-app.commandLine.appendSwitch('disable-background-timer-throttling');
-app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
-app.commandLine.appendSwitch('disable-renderer-backgrounding');
 function createLocalServer() {
   const app = express();
 
@@ -30,9 +25,10 @@ function createLocalServer() {
   // Serve video files with range support (crucial for seeking)
   app.get('/video/:filename', (req, res) => {
     const filename = req.params.filename;
-    const videoPath = path.join("/home/stella/", filename); // Adjust path
-
+    const videoPath = path.join("E:/logs/", filename); // Adjust path
+    console.log("videoPath", videoPath)
     if (!fs.existsSync(videoPath)) {
+      console.log("video not found")
       return res.status(404).send('Video not found');
     }
 
@@ -71,8 +67,6 @@ function createLocalServer() {
 }
 
 function createWindow() {
-
-
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     resizable: true,
@@ -86,7 +80,6 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      experimentalFeatures: true,
     }
   })
 
@@ -128,6 +121,10 @@ app.whenReady().then(() => {
 
   createWindow()
 
+
+
+
+  console.log(conf.get('apiToken'))
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -145,3 +142,12 @@ app.on('window-all-closed', () => {
   }
 })
 
+// Expose config methods to renderer
+ipcMain.handle('get-config', async (event, key) => {
+  return conf.get(key);
+});
+
+ipcMain.handle('save-config', async (event, key, value) => {
+  conf.set(key, value)
+  return { success: true };
+});

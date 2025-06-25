@@ -1,0 +1,79 @@
+.event_card {
+  border-radius: 0.75rem;
+  border: 1px solid #3e3e42;
+  background-color: #252526;
+  max-width: 300px;
+  padding: 1rem;
+}
+
+.event_header {
+  
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+/* this is really weird why does img need to be a direct child of something that is display flex*/
+.event_header a {
+  flex-direction: column;
+  display: flex;
+}
+
+.event_header h2 {
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;;
+}
+
+.event_header h3 {
+  color: white;
+  text-align: center;
+  font-size: 1.0rem;;
+}
+
+.event_content {
+  padding-top: 1.0rem;
+  padding-bottom: 1.5rem;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+.my_button{
+  background-color: #3e3e42;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.my_button:hover {
+  background-color: #ead1dc;
+  color: black;
+}
+
+.event_content a{
+  color: white;
+  
+}
+
+.event_footer {
+  align-items: center;
+  display: flex;
+}
+
+.event_progressbar {
+  height: 8px;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #3e3e42;
+}
+
+.event_progressbar::-webkit-progress-bar {
+    height: 8px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #3e3e42;
+}
+
+.event_progressbar::-webkit-progress-value {
+  background-color: #ead1dc;
+  border-radius: 8px;
+}

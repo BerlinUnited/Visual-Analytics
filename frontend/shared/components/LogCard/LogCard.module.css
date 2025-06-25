@@ -1,0 +1,44 @@
+.event_card {
+  border-radius: 0.75rem;
+  border: 1px solid #3e3e42;
+  background-color: #252526;
+}
+
+.event_header {
+  padding: 1.5rem;
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+/* this is really weird why does img need to be a direct child of something that is display flex*/
+.event_header a {
+  flex-direction: column;
+  display: flex;
+}
+
+.event_content {
+  padding-top: 0px;
+  padding: 1.5rem;
+}
+
+.event_title {
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.event_footer {
+  padding-top: 0px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding: 1.5rem;
+  align-items: center;
+  display: flex;
+}
+
+.event_progressbar {
+  height: 8px;
+  border-radius: 8px;
+  width: 100%;
+}

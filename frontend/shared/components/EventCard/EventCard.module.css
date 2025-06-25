@@ -1,0 +1,52 @@
+.event_card {
+  border-radius: 0.75rem;
+  border: 1px solid #3e3e42;
+  background-color: #252526;
+  max-width: 300px;
+  padding: 1rem;
+}
+
+.event_header {
+  flex-direction: column;
+  display: flex;
+  position: relative;
+}
+
+.event_content {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+img{
+  border-radius: 0.5rem;
+}
+
+.event_title {
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.event_footer {
+  align-items: center;
+  display: flex;
+}
+
+.event_progressbar {
+  height: 8px;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #3e3e42;
+}
+
+.event_progressbar::-webkit-progress-bar {
+    height: 8px;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #3e3e42;
+}
+
+.event_progressbar::-webkit-progress-value {
+  background-color: #ead1dc;
+  border-radius: 8px;
+}

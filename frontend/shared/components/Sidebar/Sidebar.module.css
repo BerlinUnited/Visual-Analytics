@@ -1,0 +1,41 @@
+.sidebar {
+  background-color: #252526;
+  border-right: 1px solid #3e3e42;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+}
+
+.sidebar_content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar_nav {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.sidebar_item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-left: 3px solid transparent;
+
+  text-decoration: none;
+  color: white;
+}
+
+.sidebar_item:hover {
+  background-color: #2a2d2e;
+  border-left-color: var(--magenta);
+}
+
+.active {
+  background-color: #2a2d2e;
+  border-left-color: var(--magenta);
+  /* TODO use pink color*/
+}

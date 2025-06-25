@@ -1,0 +1,161 @@
+.data_explorer {
+    grid-area: videoanalysis_left;
+
+    background-color: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.header h1 {
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.header p {
+    margin-top: 0.25rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: #6B7280;
+}
+
+.video_recordings {
+    margin-top: 20px;
+}
+
+.video_recordings h2 {
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #3e3e42;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.video_recordings ul {
+    margin-top: 0.75rem;
+    margin-top: 0.875rem;
+
+}
+
+.video_recordings ul li {
+    display: flex;
+    padding: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: #3e3e42;
+    cursor: pointer;
+    
+}
+
+.video_recordings ul li:hover {
+    background-color: #ead1dc;
+    color: black;
+}
+
+.video_recordings ul li svg {
+    margin-right: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #252526;
+}
+
+.video_recordings ul li span {
+    font-weight: 500;
+    color:  white;
+}
+
+.log_table_wrapper {
+    overflow-x: auto;
+}
+
+.log_table_wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+
+.log_table_wrapper::-webkit-scrollbar-track {
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+  border-radius: 8px;
+  margin-block: 0.5em;
+}
+
+.log_table_wrapper::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--magenta);
+}
+
+.log_table_wrapper h2 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #3e3e42;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    color: white;
+    
+}
+
+table {
+    border-collapse: collapse;
+    min-width: 100%;
+}
+
+thead {
+    background-color: #252526;
+}
+
+th {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 1.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-align: left;
+    color: white;
+    text-transform: uppercase;
+}
+
+tr {
+    border-bottom: 1px solid #3e3e42;
+}
+
+.data_row {
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.data_row:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-left: 2px solid var(--magenta);
+}
+
+tbody {
+    background-color: #252526;
+}
+
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: white;
+    white-space: nowrap;
+}
+
+.clickme{
+    cursor: pointer;
+    
+}
+.clickme:hover{
+    color: var(--magenta)
+}
