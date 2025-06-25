@@ -24,8 +24,6 @@ class TestCommonModels:
     @pytest.mark.django_db
     def test_game(self):
         GameFactory.create(
-            team1="Team A",
-            team2="Team B",
             half="half1",
             start_time="2024-01-01 12:00:00+00:00",
         )
@@ -138,8 +136,6 @@ class TestCommonModels:
         assert db_log_status.num_motion_frames == 8000
 
         # Verify some fields are nullable
-        log_status_minimal = LogStatusFactory.create(
-            log=LogFactory.create(), AudioData=None, BallModel=None
-        )
+        log_status_minimal = LogStatusFactory.create(log=LogFactory.create(), AudioData=None, BallModel=None)
         assert log_status_minimal.AudioData is None
         assert log_status_minimal.BallModel is None

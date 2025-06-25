@@ -5,7 +5,7 @@ from django.utils import timezone
 from datetime import timedelta
 import random
 
-from common.models import Event, Game, Experiment, VideoRecording, Log, LogStatus
+from common.models import Event, Game, Experiment, VideoRecording, Log, LogStatus, Team
 
 
 class EventFactory(DjangoModelFactory):
@@ -14,13 +14,27 @@ class EventFactory(DjangoModelFactory):
 
     name = factory.Faker("company")
     start_day = factory.Faker("date_object")
-    end_day = factory.LazyAttribute(
-        lambda o: o.start_day + timedelta(days=random.randint(1, 5))
-    )
+    end_day = factory.LazyAttribute(lambda o: o.start_day + timedelta(days=random.randint(1, 5)))
     timezone = factory.Faker("timezone")
     country = factory.Faker("country")
-    location = '41° 53\'00”,41° 53\'00”,'
+    location = "41° 53'00”,41° 53'00”,"
     comment = factory.Faker("text")
+
+
+class Team1Factory(DjangoModelFactory):
+    class Meta:
+        model = Team
+
+    team_id = 3
+    name = "Random Team 1"
+
+
+class Team2Factory(DjangoModelFactory):
+    class Meta:
+        model = Team
+
+    team_id = 4
+    name = "Random Team 2"
 
 
 class GameFactory(DjangoModelFactory):
@@ -28,17 +42,15 @@ class GameFactory(DjangoModelFactory):
         model = Game
 
     event = factory.SubFactory(EventFactory)
-    team1 = factory.Faker("company")
-    team2 = factory.Faker("company")
+    team1 = factory.SubFactory(Team1Factory)  # FIXME this will lead to unique violations
+    team2 = factory.SubFactory(Team2Factory)  # FIXME this will lead to unique violations
     half = fuzzy.FuzzyChoice(["half1", "half2"])
     is_testgame = factory.Faker("boolean")
     head_ref = factory.Faker("name")
     assistent_ref = factory.Faker("name")
     field = fuzzy.FuzzyChoice(["Field A", "Field B", "Field C"])
     start_time = factory.Faker("date_time", tzinfo=timezone.get_current_timezone())
-    score = factory.LazyAttribute(
-        lambda _: f"{random.randint(0, 10)}:{random.randint(0, 10)}"
-    )
+    score = factory.LazyAttribute(lambda _: f"{random.randint(0, 10)}:{random.randint(0, 10)}")
     comment = factory.Faker("text")
 
 
@@ -79,15 +91,9 @@ class LogFactory(DjangoModelFactory):
     robot_version = fuzzy.FuzzyChoice(["V5", "V6"])
     player_number = fuzzy.FuzzyInteger(1, 11)
     head_number = fuzzy.FuzzyInteger(1, 100)
-    body_serial = factory.LazyAttribute(
-        lambda _: f"B{''.join(random.choices('0123456789', k=8))}"
-    )
-    head_serial = factory.LazyAttribute(
-        lambda _: f"H{''.join(random.choices('0123456789', k=8))}"
-    )
-    representation_list = factory.LazyAttribute(
-        lambda _: ["Image", "BallModel", "TeamState"]
-    )
+    body_serial = factory.LazyAttribute(lambda _: f"B{''.join(random.choices('0123456789', k=8))}")
+    head_serial = factory.LazyAttribute(lambda _: f"H{''.join(random.choices('0123456789', k=8))}")
+    representation_list = factory.LazyAttribute(lambda _: ["Image", "BallModel", "TeamState"])
     log_path = factory.Faker("file_path", extension="log")
     combined_log_path = factory.Faker("file_path", extension="log")
     sensor_log_path = factory.Faker("file_path", extension="log")
