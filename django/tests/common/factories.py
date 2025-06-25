@@ -21,29 +21,21 @@ class EventFactory(DjangoModelFactory):
     comment = factory.Faker("text")
 
 
-class Team1Factory(DjangoModelFactory):
+class TeamFactory(DjangoModelFactory):
     class Meta:
         model = Team
+        # this should ensure that factory treats team_id as unique value
+        django_get_or_create = ('team_id',)
 
-    team_id = 3
-    name = "Random Team 1"
-
-
-class Team2Factory(DjangoModelFactory):
-    class Meta:
-        model = Team
-
-    team_id = 4
-    name = "Random Team 2"
-
-
+    team_id = factory.Sequence(lambda n: n + 1)
+    name = factory.LazyAttribute(lambda obj: f"Team Name {obj.team_id}")
 class GameFactory(DjangoModelFactory):
     class Meta:
         model = Game
 
     event = factory.SubFactory(EventFactory)
-    team1 = factory.SubFactory(Team1Factory)  # FIXME this will lead to unique violations
-    team2 = factory.SubFactory(Team2Factory)  # FIXME this will lead to unique violations
+    team1 = factory.SubFactory(TeamFactory)
+    team2 = factory.SubFactory(TeamFactory)
     half = fuzzy.FuzzyChoice(["half1", "half2"])
     is_testgame = factory.Faker("boolean")
     head_ref = factory.Faker("name")

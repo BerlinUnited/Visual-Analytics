@@ -7,6 +7,7 @@ from .factories import (
     VideoRecordingFactory,
     LogFactory,
     LogStatusFactory,
+    TeamFactory
 )
 
 pytestmark = pytest.mark.unit
@@ -25,13 +26,15 @@ class TestCommonModels:
     def test_game(self):
         GameFactory.create(
             half="half1",
+            team1 = TeamFactory(name="Team A"),
+            team2 = TeamFactory(name="Team B"),
             start_time="2024-01-01 12:00:00+00:00",
         )
         assert Game.objects.count() == 1
         db_game = Game.objects.first()
         assert str(db_game) == "2024-01-01 12:00:00+00:00: Team A vs Team B half1"
-        assert db_game.team1 == "Team A"
-        assert db_game.team2 == "Team B"
+        assert db_game.team1.name == "Team A"
+        assert db_game.team2.name == "Team B"
         assert db_game.half == "half1"
         assert db_game.event is not None
 
@@ -101,8 +104,8 @@ class TestCommonModels:
     @pytest.mark.django_db
     def test_log_properties(self):
         game = GameFactory.create(
-            team1="Team A",
-            team2="Team B",
+            team1=TeamFactory(name="Team A"),
+            team2=TeamFactory(name="Team B"),
             half="half1",
         )
         log = LogFactory.create(game=game)
