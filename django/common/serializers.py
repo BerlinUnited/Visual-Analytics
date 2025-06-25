@@ -78,6 +78,8 @@ class GameSerializer(serializers.ModelSerializer):
     # overwrite team1 and team2 otherwise it will return the db id of the team
     team1 = serializers.CharField(source="team1.name", read_only=True)
     team2 = serializers.CharField(source="team2.name", read_only=True)
+    team1_id = serializers.IntegerField(source="team1.team_id", read_only=True)
+    team2_id = serializers.IntegerField(source="team2.team_id", read_only=True)
 
     class Meta:
         model = models.Game
