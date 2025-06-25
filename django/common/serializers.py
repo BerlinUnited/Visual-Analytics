@@ -26,13 +26,9 @@ class LogSerializer(serializers.ModelSerializer):
             game_id = data.get("game")
             experiment_id = data.get("experiment")
             if not game_id and not experiment_id:
-                raise serializers.ValidationError(
-                    "Either game or experiment is required."
-                )
+                raise serializers.ValidationError("Either game or experiment is required.")
             if game_id and experiment_id:
-                raise serializers.ValidationError(
-                    "Only one of game or experiment is allowed."
-                )
+                raise serializers.ValidationError("Only one of game or experiment is allowed.")
 
         return data
 
@@ -68,20 +64,20 @@ class VideoRecordingSerializer(serializers.ModelSerializer):
             game_id = data.get("game")
             experiment_id = data.get("experiment")
             if not game_id and not experiment_id:
-                raise serializers.ValidationError(
-                    "Either game or experiment is required."
-                )
+                raise serializers.ValidationError("Either game or experiment is required.")
             if game_id and experiment_id:
-                raise serializers.ValidationError(
-                    "Only one of game or experiment is allowed."
-                )
+                raise serializers.ValidationError("Only one of game or experiment is allowed.")
 
         return data
 
 
 class GameSerializer(serializers.ModelSerializer):
+    # those come from the view
     event_name = serializers.CharField(read_only=True)
     recordings = VideoRecordingSerializer(many=True, read_only=True)
+    # overwrite team1 and team2 otherwise it will return the db id of the team
+    team1 = serializers.CharField(source="team1.name", read_only=True)
+    team2 = serializers.CharField(source="team2.name", read_only=True)
 
     class Meta:
         model = models.Game

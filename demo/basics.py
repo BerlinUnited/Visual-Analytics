@@ -11,6 +11,12 @@ def get_logs():
     # response[0].dict()
 
 
+def get_games():
+    response = client.games.list()
+    for game in response:
+        print(game)
+
+
 if __name__ == "__main__":
     client = Vaapi(
         base_url=os.environ.get("VAT_API_URL"),
