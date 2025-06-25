@@ -28,10 +28,8 @@ class Team(models.Model):
 
 class Game(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="games")
-    team1 = models.CharField(max_length=100, blank=True, null=True)
-    team2 = models.CharField(max_length=100, blank=True, null=True)
-    new_team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team1", null=True)
-    new_team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team2", null=True)
+    team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team1", null=True)
+    team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name="team2", null=True)
     half = models.CharField(max_length=100, blank=True, null=True)
     is_testgame = models.BooleanField(blank=True, null=True)
     head_ref = models.CharField(max_length=100, blank=True, null=True)

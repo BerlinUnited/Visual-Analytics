@@ -18,12 +18,12 @@ class GameAdmin(ModelAdmin):
         return obj.id
 
     def get_team1(self, obj):
-        if obj.new_team1:
-            return obj.new_team1.name
+        if obj.team1:
+            return obj.team1.name
 
     def get_team2(self, obj):
-        if obj.new_team2:
-            return obj.new_team2.name
+        if obj.team2:
+            return obj.team2.name
 
     get_id.short_description = "Game ID"
     get_team1.short_description = "Team 1"
