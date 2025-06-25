@@ -1,56 +1,10 @@
 import { Link } from "react-router-dom";
-//import { WebviewWindow } from "@tauri-apps/api/webviewWindow"
-//import { invoke } from '@tauri-apps/api/core'
-//import { store } from '@/store/store';
 import ui_preview from '@shared/assets/home_screen_image.png';
 import large_vat from '@shared/assets/logo.svg';
-
 import styles from './HomeView.module.css';
-/**
- * store usage example
-<button
-        onClick={() => {
-          store.setState((state) => ({
-            ...state,
-            counter: state.counter + 1
-          }));
-        }}
-      >
-        Increment
-      </button>
- */
-
-/*
-//Cool example of how to create a second window 
-const webview = new WebviewWindow('my-label', {
-  url: 'https://github.com/tauri-apps/tauri',
-  width: 200,
-  height: 800
-});
-webview.once('tauri://created', function () {
-  // webview window successfully created
-  console.log("webview window successfully created")
-});
-webview.once('tauri://error', function (e) {
-  // an error happened creating the webview window
-  console.log("an error happened creating the webview window", e)
-});
-
-*/
-/*
-const handleFetchAndBuild = async () => {
-  try {
-
-    const result = await invoke('git_operations');
-
-    console.log(result)
-  } catch (err) {
-    console.log(err)
-  }
-};
-*/
 
 const HomeView = () => {
+
   return (
     <div className={styles.view_content}>
       <div className={styles.panel_content}>
@@ -59,7 +13,7 @@ const HomeView = () => {
         </div>
 
         <div className={styles.info_grid}>
-          <div className={styles.info_card}>
+          <div className={styles.description}>
             <h1 className={styles.h11}>Welcome to the Visual Analytics Toolbox</h1>
             <p className={styles.p1}>
               <strong>Visual Analytics Toolbox</strong> is an interactive tool for viewing, annotating, and debugging robot soccer matches.
@@ -82,7 +36,7 @@ const HomeView = () => {
               Let’s uncover what the robots were thinking—and why.
             </p>
           </div>
-          <div className={styles.info_card}>
+          <div className={styles.image_wrapper}>
             <img src={ui_preview} className={styles.main_img} alt="ui preview image" />
           </div>
         </div>
@@ -91,8 +45,8 @@ const HomeView = () => {
           <p>
             Register now and set up your api token and start getting insights into your robot soccer team.
           </p>
-          <Link to="/settings">
-            Register here:
+          <Link to="/settings" className={styles.link}>
+            Register here
           </Link>
         </div>
       </div>
