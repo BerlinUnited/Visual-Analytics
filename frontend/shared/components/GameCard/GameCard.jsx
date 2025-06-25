@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styles from './GameCard.module.css';
-import robocup_img from '@shared/assets/robocup.jpeg';
+
 import bembelbots from '@shared/assets/logos/3.png';
 import berlin from '@shared/assets/logos/4.png';
 import bhuman from '@shared/assets/logos/5.png';
@@ -10,6 +10,7 @@ import htwk from '@shared/assets/logos/13.png';
 import roboeireann from '@shared/assets/logos/17.png';
 import runswift from '@shared/assets/logos/18.png';
 import spqr from '@shared/assets/logos/19.png';
+import hulks from '@shared/assets/logos/24.png';
 import nomadz from '@shared/assets/logos/33.png';
 import naova from '@shared/assets/logos/45.png';
 import r2 from '@shared/assets/logos/50.png';
@@ -39,21 +40,19 @@ const GameCard = ({ game }) => {
         3: bembelbots,
         4: berlin,
         5: bhuman,
-        8: bembelbots,
-        12: bembelbots,
-        13: bembelbots,
-        17: bembelbots,
-        18: bembelbots,
-        19: bembelbots,
-        33: bembelbots,
-        45: bembelbots,
-        50: bembelbots,
-        51: bembelbots,
-        54: bembelbots,
+        8: dutch,
+        12: naodevils,
+        13: htwk,
+        17: roboeireann,
+        18: runswift,
+        19: spqr,
+        24: hulks,
+        33: nomadz,
+        45: naova,
+        50: r2,
+        51: RedBackBots,
+        54: wistex,
     };
-
-    const team1Name = "B-Human";
-    const team2Name = "B-Human";
 
     return (
         <div className={styles.event_card}>
@@ -65,15 +64,15 @@ const GameCard = ({ game }) => {
                     aria-labelledby="match-title"
                     role="img"
                 >
-                    <title id="match-title">{`${team1Name} vs ${team2Name}`}</title>
+                    <title id="match-title">{`${game.team1} vs ${game.team2}`}</title>
                     {/* Team 1 Logo */}
                     <image
-                        href={bhuman}
+                        href={teamLogos[game.team1_id]}
                         x={team1LogoX}
                         y={team1LogoY}
                         width={logoSize}
                         height={logoSize}
-                        alt={`${team1Name} logo`}
+                        alt={`${game.team1} logo`}
                         // Add an onerror handler for robust image loading
                         onError={(e) => {
                             e.target.onerror = null; // Prevent infinite loop
@@ -83,12 +82,12 @@ const GameCard = ({ game }) => {
 
                     {/* Team 2 Logo */}
                     <image
-                        href={bhuman}
+                        href={teamLogos[game.team2_id]}
                         x={team2LogoX}
                         y={team2LogoY}
                         width={logoSize}
                         height={logoSize}
-                        alt={`${team2Name} logo`}
+                        alt={`${game.team2} logo`}
                         // Add an onerror handler for robust image loading
                         onError={(e) => {
                             e.target.onerror = null; // Prevent infinite loop
