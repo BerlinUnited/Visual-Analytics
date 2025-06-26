@@ -43,8 +43,8 @@ class TestSerializers:
         serializer = GameSerializer(game)
         data = serializer.data
 
-        assert data["team1"] == game.team1
-        assert data["team2"] == game.team2
+        assert data["team1"] == game.team1.name
+        assert data["team2"] == game.team2.name
         assert data["half"] == game.half
         assert data["event"] == game.event.id
 
