@@ -5,8 +5,10 @@ import { fileURLToPath } from 'url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import express from 'express';
 import fs from 'node:fs' // Add fs for checking file existence
-
 import { Conf } from 'electron-conf/main'
+
+const isDev = process.env.NODE_ENV === 'development';
+const isDebug = process.env.ELECTRON_DEBUG === 'true' || isDev;
 
 // Initialize store
 const conf = new Conf()
@@ -88,6 +90,11 @@ function createWindow() {
     }
   })
 
+  // Open the DevTools if in debug mode
+  if (isDebug) {
+    mainWindow.webContents.openDevTools();
+  }
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.maximize()
     mainWindow.show()
@@ -100,10 +107,10 @@ function createWindow() {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev) {
+  if (isDev) {
     mainWindow.loadURL('http://localhost:3000')
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../dist/electron/index.html'))
   }
 }
 
