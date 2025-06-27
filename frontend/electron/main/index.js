@@ -1,13 +1,18 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import express from 'express';
 import fs from 'node:fs' // Add fs for checking file existence
-import path from 'node:path'
+
 import { Conf } from 'electron-conf/main'
 
 // Initialize store
 const conf = new Conf()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let server;
 let serverPort = 3001;
@@ -95,8 +100,8 @@ function createWindow() {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev) {
+    mainWindow.loadURL('http://localhost:3000')
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -122,9 +127,6 @@ app.whenReady().then(() => {
   createWindow()
 
 
-
-
-  console.log(conf.get('apiToken'))
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

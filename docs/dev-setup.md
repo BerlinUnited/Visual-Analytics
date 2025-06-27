@@ -47,7 +47,13 @@ Setup User
 python manage.py createsuperuser
 ```
 
+## Setup Frontend
+https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-22-04
 
+```
+curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+```
 
 
 
