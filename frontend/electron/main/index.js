@@ -32,7 +32,7 @@ function createLocalServer() {
   // Serve video files with range support (crucial for seeking)
   app.get('/video/:filename', (req, res) => {
     const filename = req.params.filename;
-    const videoPath = path.join("E:/logs/", filename); // Adjust path
+    const videoPath = path.join(conf.get("logRoot"), filename); // Adjust path
     console.log("videoPath", videoPath)
     if (!fs.existsSync(videoPath)) {
       console.log("video not found")
