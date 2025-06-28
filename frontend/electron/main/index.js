@@ -1,13 +1,20 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import express from 'express';
 import fs from 'node:fs' // Add fs for checking file existence
-import path from 'node:path'
 import { Conf } from 'electron-conf/main'
+
+const isDev = process.env.NODE_ENV === 'development';
+const isDebug = process.env.ELECTRON_DEBUG === 'true' || isDev;
 
 // Initialize store
 const conf = new Conf()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let server;
 let serverPort = 3001;
@@ -25,7 +32,7 @@ function createLocalServer() {
   // Serve video files with range support (crucial for seeking)
   app.get('/video/:filename', (req, res) => {
     const filename = req.params.filename;
-    const videoPath = path.join("E:/logs/", filename); // Adjust path
+    const videoPath = path.join(conf.get("logRoot"), filename); // Adjust path
     console.log("videoPath", videoPath)
     if (!fs.existsSync(videoPath)) {
       console.log("video not found")
@@ -66,6 +73,61 @@ function createLocalServer() {
   });
 }
 
+function getFolderTree(dirPath, indent = '') {
+  // Check if the directory path exists
+  if (!fs.existsSync(dirPath)) {
+    console.error(`Error: Directory not found at ${dirPath}`);
+    return null;
+  }
+
+  try {
+    // Get basic information about the path (is it a file or directory?)
+    const stats = fs.statSync(dirPath);
+
+    // If it's a file, return an object representing the file
+    if (stats.isFile()) {
+      return {
+        name: path.basename(dirPath),
+        type: 'file',
+        path: dirPath
+      };
+    }
+
+    // If it's a directory, proceed to read its contents
+    if (stats.isDirectory()) {
+      const tree = {
+        name: path.basename(dirPath),
+        type: 'directory',
+        path: dirPath,
+        children: []
+      };
+
+      // Read the contents of the directory
+      const items = fs.readdirSync(dirPath);
+
+      // Iterate over each item in the directory
+      for (const item of items) {
+        const itemPath = path.join(dirPath, item);
+        // Recursively call getFolderTree for each item
+        const child = getFolderTree(itemPath, indent + '  ');
+        if (child) {
+          tree.children.push(child);
+        }
+      }
+      return tree;
+    }
+  } catch (error) {
+    console.error(`Error processing path ${dirPath}:`, error);
+    return null;
+  }
+}
+
+const folderTree = getFolderTree("D:/Repositories/naoth-2020");
+if (folderTree) {
+  // Convert the object to a pretty-printed JSON string for better readability
+  console.log(JSON.stringify(folderTree, null, 2));
+}
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -83,6 +145,11 @@ function createWindow() {
     }
   })
 
+  // Open the DevTools if in debug mode
+  if (isDebug) {
+    mainWindow.webContents.openDevTools();
+  }
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.maximize()
     mainWindow.show()
@@ -95,10 +162,10 @@ function createWindow() {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (isDev) {
+    mainWindow.loadURL('http://localhost:3000')
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../dist/electron/index.html'))
   }
 }
 
@@ -122,9 +189,6 @@ app.whenReady().then(() => {
   createWindow()
 
 
-
-
-  console.log(conf.get('apiToken'))
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
