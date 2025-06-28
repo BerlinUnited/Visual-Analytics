@@ -73,6 +73,61 @@ function createLocalServer() {
   });
 }
 
+function getFolderTree(dirPath, indent = '') {
+  // Check if the directory path exists
+  if (!fs.existsSync(dirPath)) {
+    console.error(`Error: Directory not found at ${dirPath}`);
+    return null;
+  }
+
+  try {
+    // Get basic information about the path (is it a file or directory?)
+    const stats = fs.statSync(dirPath);
+
+    // If it's a file, return an object representing the file
+    if (stats.isFile()) {
+      return {
+        name: path.basename(dirPath),
+        type: 'file',
+        path: dirPath
+      };
+    }
+
+    // If it's a directory, proceed to read its contents
+    if (stats.isDirectory()) {
+      const tree = {
+        name: path.basename(dirPath),
+        type: 'directory',
+        path: dirPath,
+        children: []
+      };
+
+      // Read the contents of the directory
+      const items = fs.readdirSync(dirPath);
+
+      // Iterate over each item in the directory
+      for (const item of items) {
+        const itemPath = path.join(dirPath, item);
+        // Recursively call getFolderTree for each item
+        const child = getFolderTree(itemPath, indent + '  ');
+        if (child) {
+          tree.children.push(child);
+        }
+      }
+      return tree;
+    }
+  } catch (error) {
+    console.error(`Error processing path ${dirPath}:`, error);
+    return null;
+  }
+}
+
+const folderTree = getFolderTree("D:/Repositories/naoth-2020");
+if (folderTree) {
+  // Convert the object to a pretty-printed JSON string for better readability
+  console.log(JSON.stringify(folderTree, null, 2));
+}
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({

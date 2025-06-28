@@ -1,0 +1,105 @@
+.fileeditor_main {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+}
+
+.tabs {
+    border-bottom: 1px solid #3e3e42;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    display: flex;
+    overflow-y: hidden;
+    align-items: center;
+    background-color: #252526;
+    scrollbar-width: thin;
+}
+
+.text_content {
+    scrollbar-width: thin;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    --tw-text-opacity: 1;
+    color: rgb(161 161 161 / var(--tw-text-opacity));
+    font-weight: 600;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    font-family: Geist Mono, monospace;
+    padding: 3rem;
+    white-space: pre;
+    overflow: auto;
+    flex-grow: 1;
+    flex: 1 1 0%;
+    max-height: 100%;
+    height: 100%;
+    background-color: #252526;
+}
+
+.tab_button {
+    --tw-text-opacity: 1;
+    color: rgb(128 128 128 / var(--tw-text-opacity));
+    font-size: .75rem;
+    line-height: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: transparent;
+    --tw-border-opacity: 1;
+    border-color: rgb(33 33 33 / var(--tw-border-opacity));
+    border-right-width: 1px;
+    align-items: center;
+    gap: .75rem;
+    display: flex;
+    cursor: pointer;
+}
+
+.tab_button_selected {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 161 / var(--tw-text-opacity));
+    font-size: .75rem;
+    line-height: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+    --tw-border-opacity: 1;
+    border-color: rgb(33 33 33 / var(--tw-border-opacity));
+    border-right-width: 1px;
+    align-items: center;
+    gap: .75rem;
+    display: flex;
+    cursor: pointer;
+}
+
+
+.tab_button:hover {
+    --tw-text-opacity: 1;
+    color: rgb(161 161 161 / var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+
+.tab_button_close {
+    display: flex;
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: .25rem;
+    appearance: button;
+    -webkit-appearance: button;
+    background-color: transparent;
+    background-image: none;
+}
+
+.tab_button_close:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(33 33 33 / var(--tw-bg-opacity));
+}
