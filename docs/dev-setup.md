@@ -16,8 +16,18 @@ you need to run `direnv allow` in every folder you have an .envrc file after eve
 
 ## Setup Postgres
 Our django application expects a postgres to be available. We are currently running Postgres 16.2 in production. You need to have the same version to not get problems when ingesting a prod backup.
+For Ubuntu 24.04 you can just install postgres via apt to get the same version as the production server.
 
-For Ubuntu you can add the postgres apt repository: https://www.postgresql.org/download/linux/ubuntu/
+Run `utils/dbutils.sh create` to create the postgres database that django expects.
+
+The script and later django expect the variables to be set
+```bash
+export VAT_POSTGRES_DB=
+export VAT_POSTGRES_USER=
+export VAT_POSTGRES_PASS=
+export VAT_POSTGRES_HOST=localhost
+export VAT_POSTGRES_PORT=5432
+```
 
 ## Setup Django
 
