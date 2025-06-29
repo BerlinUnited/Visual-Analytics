@@ -1,0 +1,41 @@
+name: Build Electron App for Windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: frontend  # Set default working directory for all run steps
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: "frontend"
+
+      - name: Install dependencies
+        run: npm install # or npm install or yarn install
+
+      - name: Build Electron app
+        run: npm run package:electron
+        env:
+          CI: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app
+          path: frontend\dist\*.exe
