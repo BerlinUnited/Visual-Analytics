@@ -1,10 +1,11 @@
 name: Build Electron App for Windows
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*' # Trigger on any tag push that starts with 'v'
+  
 
 jobs:
   build-windows:
@@ -34,8 +35,15 @@ jobs:
         env:
           CI: true
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release and Upload Artifact
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: windows-app
-          path: frontend\dist\*.exe
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            frontend/dist/*.exe # Use forward slashes for cross-platform compatibility
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
