@@ -1,6 +1,7 @@
 minio:
   replicas: 2
   pools: 1
+  mode: standalone
 
   resources:
     requests:
