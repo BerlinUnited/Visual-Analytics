@@ -1,5 +1,6 @@
 from django.db import models
 from image.models import NaoImage
+from common.models import VideoRecording
 from django.utils.translation import gettext_lazy as _
 
 
@@ -58,6 +59,37 @@ class Annotation(models.Model):
     # labels = models.JSONField(blank=True, null=True)
     validated = models.BooleanField(default=False)
     data = models.JSONField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+
+
+class VideoFrame(models.Model):
+    video = models.ForeignKey(
+        VideoRecording, on_delete=models.CASCADE, related_name="frame"
+    )
+    frame_number = models.IntegerField(blank=True, null=True)
+
+
+class VideoAnnotation(models.Model):
+    """
+    type can be encoded in the json as box = {data} or mask = {data} or kpts = {data} allowing for flexibility in the data we represent.
+    it could happen that we have a couple different mask formats down the line
+
+    In the end we can have a bounding box, mask and keypoint for each instance of a class. For example a Nao robot might first be annotated with a single keypoint
+    which will be used as input for a bounding box detection model and which then will be used as input for an segmentation model. For classes like
+    Nao and Ball this makes sense. It makes less sense for lines.
+
+    there are no unique constraints here but on insert we should try to check if something with a high IOU already exist
+    """
+    frame = models.ForeignKey(
+        VideoFrame, on_delete=models.CASCADE, related_name="videoannotation"
+    )
+    class_name = models.CharField(max_length=30, blank=True, null=True)
+    confidence = models.FloatField(blank=True, null=True)
+    data = models.JSONField(blank=True, null=True)
+    concealed = models.BooleanField(default=False)
+    validated = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
