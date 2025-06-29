@@ -13,7 +13,7 @@
         "build:electron-main": "electron-builder --dir",
         "build:all": "npm run build:web && npm run build:electron-renderer && npm run build:electron-main",
         "package:electron": "npm run build:electron-renderer && electron-builder",
-        "start": "electron ."
+        "start": "electron . --dev"
     },
     "build": {
         "linux": {

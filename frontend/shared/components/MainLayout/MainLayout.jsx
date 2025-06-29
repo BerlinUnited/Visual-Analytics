@@ -8,6 +8,7 @@ import GameListView from '@shared/components/GameListView/GameListView';
 import LogListView from '@shared/components/LogListView/LogListView';
 import VideoAnalysisView from '@shared/components/VideoAnalysisView/VideoAnalysisView';
 import DebuggerView from '@shared/components/DebuggerView/DebuggerView';
+import VideoPlayerCanvas from '@shared/components/VideoPlayerCanvas/VideoPlayerCanvas'
 
 import { Routes, Route } from "react-router-dom";
 
@@ -50,6 +51,8 @@ const ResizableLayoutContent = ({ appVersion }) => {
           />
           <Route path="/settings" element={<SettingsView />} />
           <Route path="/debug" element={<DebuggerView />} />
+          <Route path="/test" element={<VideoPlayerCanvas />} />
+
         </Routes>
       </div>
     </div>

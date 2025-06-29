@@ -7,7 +7,9 @@ import express from 'express';
 import fs from 'node:fs' // Add fs for checking file existence
 import { Conf } from 'electron-conf/main'
 
-const isDev = process.env.NODE_ENV === 'development';
+function isDev() {
+  return process.argv[2] == '--dev';
+}
 const isDebug = process.env.ELECTRON_DEBUG === 'true' || isDev;
 
 // Initialize store
