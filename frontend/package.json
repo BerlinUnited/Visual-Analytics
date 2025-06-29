@@ -17,7 +17,8 @@
     },
     "build": {
         "linux": {
-            "target": "AppImage"
+            "target": "AppImage",
+            "category": "public.app-category.developer-tools"
         }
     },
     "dependencies": {
