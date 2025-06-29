@@ -1,12 +1,10 @@
 import pytest
-import json
 from ..common.factories import EventFactory
 from common.models import Event
 pytestmark = pytest.mark.unit
 
 class TestPermissions:
     event_url = "/api/events/"
-
 
     def test_no_user(self,client):
         response = client.get(self.event_url)
