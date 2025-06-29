@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    /* Sidebar width, remaining for content */
+    grid-template-rows: auto 1fr;
+    /* Header height, remaining for content, timeline height */
+    grid-template-areas:
+        "header header"
+        "nav content";
+    min-height: 100vh;
+    box-sizing: border-box;
+    background: radial-gradient(circle at 50% 50%,
+            rgb(159, 232, 253) 20%,
+            transparent 80%),
+        conic-gradient(from 45deg at 50% 50%,
+            rgb(255, 129, 170) 0%,
+            rgb(159, 232, 253) 25%,
+            rgb(255, 129, 170) 50%,
+            rgb(159, 232, 253) 75%,
+            rgb(255, 129, 170) 100%);
+}
+
+.header {
+    grid-column: 1 / -1;
+    /* Span across all columns */
+
+    color: black;
+    padding-left: 16px;
+    align-items: center;
+    display: flex;
+    height: 50px;
+}
+
+.header-logo {
+    height: 80%;
+}
+
+.sidebar_container {
+    grid-row: 2 / -1;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+    /* Match body background */
+}
+
+.sidebar {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    color: #000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    border-bottom: 1px solid #4a6572;
+}
+
+.sidebar li:last-child {
+    border-bottom: none;
+}
+
+.sidebar a {
+    color: #555;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+}
+
+.sidebar a:hover {
+    color: rgb(255, 129, 170);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #f4f4f4;
+    /* Match body background */
+    padding: 20px;
+    /* Prevent scrolling within content area */
+    overflow: hidden;
+}
+
+input {
+    padding: 8px;
+    width: 100%;
+}
+
+.save_button {
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    background-color: #ddd;
+    color: white;
+}
+
+.save_button:hover {
+    background-color: rgb(159, 232, 253);
+}
+
+.status {
+    margin-top: 10px;
+    color: rgb(159, 232, 253);
+    ;
+}
