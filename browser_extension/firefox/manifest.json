@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Visual Analytics Validator",
+  "version": "1.0",
+  "action": {
+    "default_icon": "vat_48.png",
+    "default_title": "Visual Analytics Validator"
+  },
+  "icons": {
+    "16": "vat_16.png",
+    "32": "vat_32.png",
+    "48": "vat_48.png",
+    "128": "vat_128.png"
+  },
+  "background": {
+    "scripts": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting"
+  ],
+  "options_page": "options.html",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
