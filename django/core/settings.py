@@ -9,6 +9,9 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT.mkdir(exist_ok=True)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -31,9 +34,9 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "vat.berlin-united.com"]
 # users need to authenticate with session or token to use any endpoint
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "user.permission.IsBerlinUnitedOrReadOnly",
