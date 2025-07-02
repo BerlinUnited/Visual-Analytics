@@ -7,6 +7,8 @@ app_name = "common"
 urlpatterns = [
     path("", views.scalar_doc, name="scalar_doc"),
     path("health/", views.health_check, name="health_check"),
+    path('upload/model/', views.ModelUploadView.as_view(), name='upload-model'),
+    path('upload/dataset/', views.DatasetUploadView.as_view(), name='upload-dataset'),
 ]
 
 router = routers.DefaultRouter()

@@ -1,3 +1,4 @@
+import os
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from . import serializers
@@ -12,7 +13,10 @@ from django.db import connection
 from psycopg2.extras import execute_values
 from django.db import models as django_models
 from django.template import loader
-
+from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
+from rest_framework.authentication import TokenAuthentication
 User = get_user_model()
 
 
@@ -332,3 +336,70 @@ class VideoViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status_code)
+    
+class FileUploadBaseView(APIView):
+    """
+    A base class for file uploads to avoid code duplication.
+    Subclasses must define 'destination_folder'.
+    """
+    parser_classes = [MultiPartParser]
+    destination_folder = None # MUST be overridden by subclasses
+    authentication_classes=[TokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        # Check for 'file' key in the request
+        # The client must send the file using the 'file' key in a multipart/form-data request.
+        if 'file' not in request.FILES:
+            return Response(
+                {"error": "No file provided. Please use the 'file' key."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        uploaded_file = request.FILES['file']
+
+        # Sanitize the filename
+        filename = os.path.basename(uploaded_file.name)
+
+        # Create the destination directory if it doesn't exist
+        destination_dir = settings.MEDIA_ROOT / self.destination_folder
+        destination_dir.mkdir(parents=True, exist_ok=True)
+        
+        file_path = destination_dir / filename
+
+        # Handle potential file overwrites
+        if file_path.exists():
+            return Response(
+                {"error": f"File with name '{filename}' already exists."},
+                status=status.HTTP_409_CONFLICT
+            )
+
+        # 5. Write the file to the destination in chunks (memory-efficient)
+        try:
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+        except IOError as e:
+            return Response(
+                {"error": f"Failed to save file: {e}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        return Response(
+            {
+                "message": "File uploaded successfully.",
+                "filename": filename,
+                "path": str(file_path)
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+class ModelUploadView(FileUploadBaseView):
+    """
+    Handles file uploads to the 'models/' directory.
+    """
+    destination_folder = 'models'
+
+class DatasetUploadView(FileUploadBaseView):
+    """
+    Handles file uploads to the 'datasets/' directory.
+    """
+    destination_folder = 'datasets'
