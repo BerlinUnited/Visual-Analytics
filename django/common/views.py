@@ -16,7 +16,7 @@ from django.template import loader
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
-
+from rest_framework.authentication import TokenAuthentication
 User = get_user_model()
 
 
@@ -344,6 +344,7 @@ class FileUploadBaseView(APIView):
     """
     parser_classes = [MultiPartParser]
     destination_folder = None # MUST be overridden by subclasses
+    authentication_classes=[TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
         # Check for 'file' key in the request
